@@ -92,27 +92,27 @@ class App extends Component {
         }
         await TicketDataService.getUserDetails(obj)
           .then(async (response) => {
-            if (response.data.helpdeskRole === null || response.data.helpdeskRole === "") {
+            if (response?.data?.helpdeskRole === null || response?.data?.helpdeskRole === "") {
               sessionStorage.setItem("isCentralPoolAgent", "false");
               sessionStorage.setItem("isTeamLead", "false");
               sessionStorage.setItem("isCentralAdmin", "false");
               sessionStorage.setItem("isAgent", "false");
-            } else if (await response.data.helpdeskRole.toLowerCase() === "central agent") {
+            } else if (await response?.data?.helpdeskRole?.toLowerCase() === "central agent") {
               sessionStorage.setItem("isCentralPoolAgent", "true");
               sessionStorage.setItem("isTeamLead", "false");
               sessionStorage.setItem("isCentralAdmin", "false");
               sessionStorage.setItem("isAgent", "false");
-            } else if( await response.data.helpdeskRole.toLowerCase()==="team lead"){
+            } else if( await response?.data?.helpdeskRole?.toLowerCase()==="team lead"){
               sessionStorage.setItem("isCentralPoolAgent", "true");
               sessionStorage.setItem("isTeamLead", "true");
               sessionStorage.setItem("isCentralAdmin", "false");
               sessionStorage.setItem("isAgent", "false");
-            }  else if( await response.data.helpdeskRole.toLowerCase()==="central admin"){
+            }  else if( await response?.data?.helpdeskRole?.toLowerCase()==="central admin"){
               sessionStorage.setItem("isCentralPoolAgent", "true");
               sessionStorage.setItem("isTeamLead", "true");
               sessionStorage.setItem("isCentralAdmin", "true");
               sessionStorage.setItem("isAgent", "false");
-            } else if (await response.data.helpdeskRole.toLowerCase() === "agent") {
+            } else if (await response?.data?.helpdeskRole?.toLowerCase() === "agent") {
               sessionStorage.setItem("isCentralPoolAgent", "false");
               sessionStorage.setItem("isTeamLead", "false");
               sessionStorage.setItem("isCentralAdmin", "false");
