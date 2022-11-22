@@ -133,37 +133,37 @@ class Users extends Component {
   
   async saveUpdateUsers() {
     //Validation starts
-    if (data.email === undefined || data.email === "") {
+    if (this.state.email === undefined || this.state.email === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.fullName === undefined || data.fullName === "") {
+    if (this.state.fullName === undefined || this.state.fullName === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.openId === undefined || data.openId === "") {
+    if (this.state.openId === undefined || this.state.openId === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.mobile === undefined || data.mobile === "") {
+    if (this.state.mobile === undefined || this.state.mobile === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.officeType === undefined || data.officeType === "") {
+    if (this.state.officeType === undefined || this.state.officeType === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.designation === undefined || data.designation === "") {
+    if (this.state.designation === undefined || this.state.designation === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.helpdeskRole === undefined || data.helpdeskRole === "") {
+    if (this.state.helpdeskRole === undefined || this.state.helpdeskRole === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
     // if (data.isAgent === undefined || data.isAgent === "") {
     //   return this.showWarningToast("Please fill mandatory information");
     // }
-    if (data.branch === undefined || data.branch === "") {
+    if (this.state.branch === undefined || this.state.branch === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.openDepartmentId === undefined || data.openDepartmentId === "") {
+    if (this.state.openDepartmentId === undefined || this.state.openDepartmentId === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.employeeId === undefined || data.employeeId === "") {
+    if (this.state.employeeId === undefined || this.state.employeeId === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
     // if (data.password === undefined || data.password === "") {
