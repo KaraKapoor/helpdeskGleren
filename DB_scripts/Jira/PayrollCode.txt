@@ -1,0 +1,10 @@
+Alter Table schoolescalations Add Column payrollCode varchar(255) Default Null;
+Alter Table schoolescalations_log Add Column payrollCode varchar(255) Default Null;
+Alter Table collegeescalations Add Column payrollCode varchar(255) Default Null;
+Alter Table collegeescalations_log Add Column payrollCode varchar(255) Default Null;
+Alter Table administrativeescalations Add Column payrollCode varchar(255) Default Null;
+Alter Table administrativeescalations_log Add Column payrollCode varchar(255) Default Null;
+Alter Table tickets Add Column payrollCode varchar(255) Default Null;
+Alter Table tickets_log Add Column payrollCode varchar(255) Default Null;
+Alter Table tickethistories Add Column payrollCode varchar(255) Default Null;
+Alter Table tickethistories_log Add Column payrollCode varchar(255) Default Null;

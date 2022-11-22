@@ -1,0 +1,21 @@
+Alter Table schoolescalations Add Column nspiraCode varchar(255) Default Null;
+Alter Table schoolescalations_log Add Column nspiraCode varchar(255) Default Null;
+Alter Table collegeescalations Add Column nspiraCode varchar(255) Default Null;
+Alter Table collegeescalations_log Add Column nspiraCode varchar(255) Default Null;
+Alter Table administrativeescalations Add Column nspiraCode varchar(255) Default Null;
+Alter Table administrativeescalations_log Add Column nspiraCode varchar(255) Default Null;
+
+Alter Table tickets Add Column nspiraCode varchar(255) Default Null;
+Alter Table tickets_log Add Column nspiraCode varchar(255) Default Null;
+Alter Table tickethistories Add Column nspiraCode varchar(255) Default Null;
+Alter Table tickethistories_log Add Column nspiraCode varchar(255) Default Null;
+
+Alter Table tickets Add Column state varchar(255) Default Null;
+Alter Table tickets_log Add Column state varchar(255) Default Null;
+Alter Table tickethistories Add Column state varchar(255) Default Null;
+Alter Table tickethistories_log Add Column state varchar(255) Default Null;
+
+Alter Table tickets Add Column district varchar(255) Default Null;
+Alter Table tickets_log Add Column district varchar(255) Default Null;
+Alter Table tickethistories Add Column district varchar(255) Default Null;
+Alter Table tickethistories_log Add Column district varchar(255) Default Null;
