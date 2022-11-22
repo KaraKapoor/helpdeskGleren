@@ -64,13 +64,13 @@ class App extends Component {
     // sessionStorage.setItem("openId", "ou_10935bd375c25d0b32112f4e2957d4b2");
 
 
-    sessionStorage.setItem("email", "sravankumarreddy.kunchala@cbd.nspira.in");
-    sessionStorage.setItem("mobile", "+919963904689");
-    sessionStorage.setItem("userDepartment", "od-01cda749fdb9f196ac1ed4c37fde9730");
-    sessionStorage.setItem("employeeId", "299981");
-    sessionStorage.setItem("userId", "57");
-    sessionStorage.setItem("token", "u-sYJsPofun3IfIQoGP8Um2f");
-    sessionStorage.setItem("openId", "ou_4ac604bee368ceee17e8ed00f5220a2b");
+    // sessionStorage.setItem("email", "sravankumarreddy.kunchala@cbd.nspira.in");
+    // sessionStorage.setItem("mobile", "+919963904689");
+    // sessionStorage.setItem("userDepartment", "od-01cda749fdb9f196ac1ed4c37fde9730");
+    // sessionStorage.setItem("employeeId", "299981");
+    // sessionStorage.setItem("userId", "57");
+    // sessionStorage.setItem("token", "u-sYJsPofun3IfIQoGP8Um2f");
+    // sessionStorage.setItem("openId", "ou_4ac604bee368ceee17e8ed00f5220a2b");
     /*End-For Development Purpose only */
 
     // window.onload = function() {
