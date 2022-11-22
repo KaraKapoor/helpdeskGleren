@@ -131,63 +131,12 @@ class Users extends Component {
   }
 
   
-    async saveUpdateUsers() {
-      let data = {};
-      if (this.state.userId) {
-          data = {
-             id: this.state.userId,
-              email: this.state.email,
-        fullName: this.state.fullName,
-        openId: this.state.openId,
-        mobile: this.state.mobile,
-        officeType: this.state.officeType,
-        designation: this.state.designation,
-        helpdeskRole: this.state.helpdeskRole,
-       // isAgent: this.state.isAgent,
-        branch: this.state.branch,
-        openDepartmentId: this.state.openDepartmentId,
-        employeeId: this.state.employeeId,
-       //  password: this.state.password,
-          }
-          await TicketDataService.create(data).then((resp) => {
-              if (resp) {
-                this.showSuccessToast(" Details Submitted Successfully");
-                  this.props.history.push("/usersList");
-              } else {
-                  this.showErrorToast(resp.data.message);
-              }
-          })
-      } else {
-          data = {
-              email: this.state.email,
-        fullName: this.state.fullName,
-        openId: this.state.openId,
-        mobile: this.state.mobile,
-        officeType: this.state.officeType,
-        designation: this.state.designation,
-        helpdeskRole: this.state.helpdeskRole,
-        //isAgent: this.state.isAgent,
-        branch: this.state.branch,
-        openDepartmentId: this.state.openDepartmentId,
-        employeeId: this.state.employeeId,
-         password: this.state.password,
-          }
-          await TicketDataService.create(data).then((resp) => {
-              if (resp) {
-                this.showSuccessToast("User details submitted");
-                  this.props.history.push("/usersList");
-              } else {
-                  this.showErrorToast(resp.data.message);
-              }
-          })
-      }
-  
-
+  async saveUpdateUsers() {
     //Validation starts
     if (data.email === undefined || data.email === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
-    if (data.fullName=== undefined || data.fullName=== "") {
+    if (data.fullName === undefined || data.fullName === "") {
       return this.showWarningToast("Please fill mandatory information");
     }
     if (data.openId === undefined || data.openId === "") {
@@ -220,6 +169,55 @@ class Users extends Component {
     // if (data.password === undefined || data.password === "") {
     //   return this.showWarningToast("Please fill mandatory information");
     // }
+    let data = {};
+    if (this.state.userId) {
+      data = {
+        id: this.state.userId,
+        email: this.state.email,
+        fullName: this.state.fullName,
+        openId: this.state.openId,
+        mobile: this.state.mobile,
+        officeType: this.state.officeType,
+        designation: this.state.designation,
+        helpdeskRole: this.state.helpdeskRole,
+        // isAgent: this.state.isAgent,
+        branch: this.state.branch,
+        openDepartmentId: this.state.openDepartmentId,
+        employeeId: this.state.employeeId,
+        //  password: this.state.password,
+      }
+      await TicketDataService.create(data).then((resp) => {
+        if (resp) {
+          this.showSuccessToast(" Details Submitted Successfully");
+          this.props.history.push("/usersList");
+        } else {
+          this.showErrorToast(resp.data.message);
+        }
+      })
+    } else {
+      data = {
+        email: this.state.email,
+        fullName: this.state.fullName,
+        openId: this.state.openId,
+        mobile: this.state.mobile,
+        officeType: this.state.officeType,
+        designation: this.state.designation,
+        helpdeskRole: this.state.helpdeskRole,
+        //isAgent: this.state.isAgent,
+        branch: this.state.branch,
+        openDepartmentId: this.state.openDepartmentId,
+        employeeId: this.state.employeeId,
+        password: this.state.password,
+      }
+      await TicketDataService.create(data).then((resp) => {
+        if (resp) {
+          this.showSuccessToast("User details submitted");
+          this.props.history.push("/usersList");
+        } else {
+          this.showErrorToast(resp.data.message);
+        }
+      })
+    }
   }
 
     async getUserDetails(){

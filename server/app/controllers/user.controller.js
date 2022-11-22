@@ -65,6 +65,17 @@ exports.create = async (req, res) => {
       previousUserResponse=await User.findByPk (req.body.id);
       isNew=false;
     }
+    if(req?.body?.email){
+      await User.findOne({ where: {[Op.and]:[{ email: `${req.body.email}` }]} })
+      .then((response) => {
+        if (response != null) {
+          res.status(200).send({
+            message: "User with same email already exist",
+          });
+        } 
+
+      })
+    }
     if(isNew){
       const encryptedPassword = await bcrypt.hash(req.body.password, 10);
       const user = {

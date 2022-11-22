@@ -99,14 +99,14 @@ class Header extends Component {
           <Navbar className="backgroundColor" expand="lg">
             <Navbar.Brand href="">
               <img
-                src="../NARAYANA EDU LOGO.jpg"
+                src="../glerenLogo.png"
                 width="100%"
                 height="auto"
                 className="d-inline-block align-top"
                 alt="HelpDesk Mini App"
               />
             </Navbar.Brand>
-            <Navbar.Text className="ml-auto version"><span style={{fontWeight:"bold"}}>Version:</span> {Constants.APPLICATION_VERSION_NUMBER}<br></br><span style={{fontWeight:"bold"}}>Helpdesk number:</span> 040-47257777</Navbar.Text>
+            <Navbar.Text className="ml-auto version"><span style={{fontWeight:"bold"}}>Version:</span> {Constants.APPLICATION_VERSION_NUMBER}<br></br><span style={{fontWeight:"bold"}}>Helpdesk number:</span> 251-2566353</Navbar.Text>
           </Navbar>
         </div>
 
