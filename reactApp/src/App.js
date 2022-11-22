@@ -80,7 +80,7 @@ class App extends Component {
     //   }
     // }
 
-    if (!window.location.href.includes("feedbackForm")) {
+    if (!window.location.href.includes("feedbackForm") && !window.location.href.includes("login")) {
       let params= new Object();
       params= this.get_Query_Params_From_URL();  
       
@@ -152,7 +152,21 @@ class App extends Component {
     return result;
   }
   render() {
-    if (this.state.displayCountResponse === null) {
+     if(window.location.href.includes("login")){
+      return (
+        <div style={{backgroundImage: `url("../Login_BG.jpg")`,backgroundSize:"cover",minHeight:"100vh"}}>
+        <React.Fragment>
+        <ToastContainer />
+            <Router>
+              <Switch>
+                <Route path="/login" component={Login}></Route>
+              </Switch>
+            </Router>
+        </React.Fragment>
+        </div>
+
+      );
+    } else if (this.state.displayCountResponse === null) {
       return (
         <React.Fragment>
           {
@@ -168,20 +182,6 @@ class App extends Component {
             </Router>
           </Layout>
         </React.Fragment>
-      );
-    } else if(window.location.href.includes("login")){
-      return (
-        <div style={{backgroundImage: `url("../Login_BG.jpg")`,backgroundSize:"cover",minHeight:"100vh"}}>
-        <React.Fragment>
-        <ToastContainer />
-            <Router>
-              <Switch>
-                <Route path="/login" component={Login}></Route>
-              </Switch>
-            </Router>
-        </React.Fragment>
-        </div>
-
       );
     } else {
       return (<React.Fragment>
