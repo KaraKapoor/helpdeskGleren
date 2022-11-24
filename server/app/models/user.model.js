@@ -1,47 +1,39 @@
 module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define("user", {
-    email: {
-      type: Sequelize.STRING,
-    },
-    fullName: {
-      type: Sequelize.STRING,
-    },
-    openId: {
-      type: Sequelize.STRING,
-    },
-    mobile: {
-      type: Sequelize.STRING,
-    },
-    officeType: {
-      type: Sequelize.STRING,
-    },
-    designation: {
-      type: Sequelize.STRING,
-    },
-    helpdeskRole: {
-      type: Sequelize.STRING,
-    },
-    isAgent: {
-      type: Sequelize.STRING
-    },
-    branch: {
-      type: Sequelize.STRING
-    },
-    openDepartmentId: {
-      type: Sequelize.STRING
-    },
-    employeeId:{
-      type:Sequelize.INTEGER
-    },
-    password: {
-      type: Sequelize.STRING
-    },
-    isActive:{
-      type: Sequelize.BOOLEAN
-    },
-    updatedBy:{
-      type: Sequelize.STRING
-    }
-  });
-  return User;
+    const User = sequelize.define("user", {
+        email: {
+            type: Sequelize.STRING,
+        },
+        password: {
+            type: Sequelize.STRING,
+        },
+        is_email_verified: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
+        },
+        first_name: {
+            type: Sequelize.STRING
+        },
+        last_name: {
+            type: Sequelize.STRING
+        },
+        mobile: {
+            type: Sequelize.STRING
+        },
+        designation: {
+            type: Sequelize.STRING
+        },
+        role: {
+            type: Sequelize.STRING
+        },
+        is_active: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: true
+        },
+        last_login_dt: {
+            type: Sequelize.DATE,
+            defaultValue: null
+        }
+    });
+
+    return User;
 };
