@@ -111,6 +111,8 @@ export const AuthProvider = ({ children }) => {
                     userId: get(data, 'user.id'),
                     role: get(data, 'user.role'),
                     email: get(data, 'user.email'),
+                    firstName: get(data, 'user.first_name'),
+                    lastName: get(data, 'user.last_name'),
                     avatar: '/assets/images/face-3.jpg', //dummy
                 }
         
