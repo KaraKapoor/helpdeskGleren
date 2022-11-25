@@ -144,3 +144,33 @@ exports.getStatusById = async (req, res) => {
         });
     }
 }
+exports.getAllStatus = async (req, res) => {
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    const input = req.query;
+    const { page, size } = req.query;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.page) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PAGE_NO_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.size) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PAGE_SIZE_ERROR,
+            status: false
+        });
+    }
+    try {
+        const response = await adminAPIService.getAllStatussWithPagination(page, size, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}

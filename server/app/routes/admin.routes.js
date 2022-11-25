@@ -9,5 +9,6 @@ module.exports = (app) => {
     router.get("/project/getAllProjects", adminController.getAllProjects);
     router.post("/status/create", adminController.createStatus);
     router.post("/status/getById", adminController.getStatusById);
+    router.get("/status/getAllStatus", adminController.getAllStatus);
     app.use("/api/admin", auth, router);
 };

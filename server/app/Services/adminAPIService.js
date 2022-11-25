@@ -38,7 +38,6 @@ exports.getAllProjectsWithPagination = async (page, size, tenantid) => {
         })
     return response;
 }
-
 exports.getStatusByName = async (statusName, tenantId) => {
     return await status.findOne({ where: { [Op.and]: [{ name: statusName }, { tenant_id: tenantId }] } });
 }
@@ -60,4 +59,14 @@ exports.createStatus = async (name, tenantId) => {
     }
 
     return response
-}   
+}  
+exports.getAllStatussWithPagination = async (page, size, tenantid) => {
+    let response = null;
+    const { limit, offset } = await generalMethodService.getPagination(page, size);
+    await status.findAndCountAll({ limit, offset,where:{tenant_id:tenantid} })
+        .then(async (data) => {
+            const res = await generalMethodService.getPagingData(data, page, limit);
+            response = res;
+        })
+    return response;
+} 
