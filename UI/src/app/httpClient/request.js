@@ -26,9 +26,8 @@ export  const RequestMethod ={
 
   appClient.interceptors.request.use(
   function (config) {
-    config.headers["Cache-Control"] = "no-cache";
-    config.headers["Pragma"] = "no-cache";
-    config.headers["Expires"] = "0";
+    const value = localStorage.getItem("accessToken");
+    config.headers["Authorization"] =`Bearer ${value}`;
     return config;
   },
   function (error) {

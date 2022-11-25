@@ -16,4 +16,6 @@ module.exports = {
     STATUS_NAME_ERROR:"Status Name is mandatory",
     STATUS_NAME_SAME_ERROR:"Status with same name already exist",
     ID_ERROR:"ID is mandatory",
+    PAGE_NO_ERROR:"Page Number is mandatory",
+    PAGE_SIZE_ERROR:"Page Size is mandatory",
 };

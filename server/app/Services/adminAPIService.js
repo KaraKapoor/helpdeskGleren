@@ -3,6 +3,7 @@ const db = require("../models");
 const project = db.project;
 const status = db.status;
 const Op = db.Sequelize.Op;
+const generalMethodService = require("../Services/generalMethodAPIService");
 exports.getProjectByName = async (projectName, tenantId) => {
 
     return await project.findOne({ where: { [Op.and]: [{ name: projectName }, { tenant_id: tenantId }] } });
@@ -27,6 +28,16 @@ exports.createProject = async (name, tenantId) => {
 
     return response
 }   
+exports.getAllProjectsWithPagination = async (page, size, tenantid) => {
+    let response = null;
+    const { limit, offset } = await generalMethodService.getPagination(page, size);
+    await project.findAndCountAll({ limit, offset,where:{tenant_id:tenantid} })
+        .then(async (data) => {
+            const res = await generalMethodService.getPagingData(data, page, limit);
+            response = res;
+        })
+    return response;
+}
 
 exports.getStatusByName = async (statusName, tenantId) => {
     return await status.findOne({ where: { [Op.and]: [{ name: statusName }, { tenant_id: tenantId }] } });

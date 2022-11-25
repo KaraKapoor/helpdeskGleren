@@ -7,5 +7,10 @@
         "register":"api/public/registerTenant",
         "generateOTPEmail":"api/public/sendOTPEmail",
         "verifyOTPEmail":"api/public/verifyOTP"
+    },
+    "project":{
+        "create":"api/admin/project/create",
+        "getById":"api/admin/project/getById",
+        "getAllProjects":"api/admin/project/getAllProjects"
     }
 }

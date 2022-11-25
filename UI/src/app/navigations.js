@@ -15,6 +15,8 @@ export const navigations = [
       { name: 'Teams',icon:'people',path:'/ticket'},
       { name: 'Users',icon:'group',path:'/ticket'},
       { name: 'Escalation Configurations',icon:'perm_data_setting',path:'/ticket'},
+      { name: 'Projects',icon:'assignment',path:'/project'},
+      { name: 'Status',icon:'do_not_disturb',path:'/status'},
       { name: 'Change Logo',icon:'image',path:'/ticket'},
     ],
   },
