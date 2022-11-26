@@ -62,7 +62,7 @@ const BugReport = (props) => {
             <label className="issueDescription">Issue Description</label><br></br>
             <TextareaAutosize
               type="textarea"
-              style={{ width: '100%',outline:'none' }}
+              style={{ width: '100%',outline:'none',borderRadius:"5px" }}
               name="issueDescription"
               placeholder="Please tell us in some words which issue you are facing"
               id="standard-basic"
