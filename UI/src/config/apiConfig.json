@@ -12,5 +12,8 @@
         "create":"api/admin/project/create",
         "getById":"api/admin/project/getById",
         "getAllProjects":"api/admin/project/getAllProjects"
+    },
+    "reportBug":{
+        "reportBug":"api/admin/bugReport"
     }
 }

@@ -48,7 +48,7 @@ module.exports = {
     
     <body>
         <div>
-            <p class="heading3">HI Support Team</p>
+            <p class="heading3">Hi Support Team</p>
             <p class="para">
                 Following Bug is reported by <strong>Tenant ID: {tenantId}</strong>
             </p>

@@ -77,6 +77,6 @@ export const navigations = [
   {
     name: 'Report Bug',
     icon: 'bug_report',
-    path: 'http://demos.ui-lib.com/matx-react-doc/',
+    path: '/bugReport',
   },
 ];
