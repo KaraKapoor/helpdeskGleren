@@ -30,7 +30,7 @@ const UpgradeCard = () => {
         <img src="/assets/images/illustrations/upgrade.svg" alt="upgrade" />
 
         <Paragraph>
-          Upgrade to <b>MatX PRO</b> for <br /> more resources
+          Upgrade to <b>BASIC</b> OR <b> PREMIUM Plan</b>  for <br /> more features and unlimited user access
         </Paragraph>
 
         <Button

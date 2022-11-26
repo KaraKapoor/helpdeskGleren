@@ -12,6 +12,8 @@ import {
     TableRow,
   } from "@mui/material";
 import { getAllProjects } from "app/services/projectService";
+import MaterialTable from "material-table";
+import "./projectList.css";
   import { useEffect, useState } from "react";
   
   const StyledTable = styled(Table)(() => ({
@@ -23,6 +25,32 @@ import { getAllProjects } from "app/services/projectService";
       "& tr": { "& td": { paddingLeft: 0, textTransform: "capitalize" } },
     },
   }));
+  const ProjectsTable = styled(Table)(() => ({
+    marginTop: '20px',
+    whiteSpace: 'pre',
+    '& small': {
+        height: 15,
+        width: 50,
+        borderRadius: 500,
+        boxShadow:
+            '0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)',
+    },
+    '& td': {
+        borderBottom: 'none',
+    },
+    '& td:first-of-type': {
+        paddingLeft: '16px !important',
+    },
+    '& th:first-of-type': {
+        paddingLeft: '16px !important',
+    },
+    '& tfoot tr td div:nth-child(1)': {
+        justifyContent: 'center',
+        alignItems:'center',
+        flex: 'initial',
+        margin: '0.5rem 0',
+    },
+}))
   
   const ProjectList = () => {
     const [data, setData] = useState([])
@@ -33,6 +61,9 @@ import { getAllProjects } from "app/services/projectService";
     const handleChangePage =async (_, newPage) => {
       setPage(newPage);
     };
+    const onEditClick=async()=>{
+      console.log("Edit Clicked");
+    }
   
     const handleChangeRowsPerPage = (event) => {
       setRowsPerPage(+event.target.value);
@@ -55,32 +86,67 @@ import { getAllProjects } from "app/services/projectService";
   
     return (
       <Box width="100%" overflow="auto">
-        <Fab size="small" color="secondary" aria-label="Add" className="button">
+        <Fab size="small" color="secondary" aria-label="Add" className="button addBtn">
             <Icon>add</Icon>
         </Fab>
         <StyledTable>
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Project Name</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((project, index) => (
-                <TableRow key={index}>
-                  <TableCell align="left">{project.name}</TableCell>
-                  <TableCell align="center">{project.is_active?"True":"False"}</TableCell>
-                  <TableCell align="center">
-                    <Fab size="small" color="secondary" aria-label="Edit" className="button">
-                        <Icon>edit</Icon>
-                    </Fab>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
+          <ProjectsTable>
+          <MaterialTable
+                            title="Projects"
+                            columns={[
+                                { title: 'Project Name', field: 'projectName', cellStyle: { wordBreak: "break-word" } },
+                                { title: 'Status', field: 'status', cellStyle: { wordBreak: "break-word" } }
+                            ]}
+                            data={data.map((e) => {
+                                return {
+                                    projectName: e.name,
+                                    status: e.is_active
+                                }
+                            })}
+                            actions={[
+                                {
+                                    icon: 'edit',
+                                    tooltip: 'Edit Project',
+                                    onClick: (event, rowData) => {
+                                        onEditClick &&
+                                            onEditClick(rowData.propertyId)
+                                    },
+                                }                            
+                            ]}
+                            options={{
+                                actionsColumnIndex: -1,
+                                emptyRowsWhenPaging: false,
+                                showTitle: false,
+                                search: false,
+                                toolbar: false,
+                                 pageSizeOptions: [],
+                                pageSize: rowsPerPage,
+                                headerStyle: {
+                                    fontSize: '14px',
+                                    fontWeight: '700',
+                                    textAlign: 'left',
+                                },
+                                cellStyle: {
+                                    fontSize: '14px',
+                                    fontWeight: '400',
+                                    textAlign: 'left',
+                                },
+                            }}
+                            components={{
+                                Pagination: (props) => (
+                                    <TablePagination
+                                        {...props}
+                                        count={totalRecords}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        onPageChange={handleChangePage}
+                                        labelDisplayedRows={() => ''}
+                                    />
+                                ),
+                            }}
+                        />
+          </ProjectsTable>
+
         </StyledTable>
   
         <TablePagination

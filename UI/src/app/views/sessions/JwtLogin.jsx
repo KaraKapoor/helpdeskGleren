@@ -22,8 +22,7 @@ const ContentBox = styled(Box)(() => ({
 }));
 
 const JWTRoot = styled(JustifyBox)(({ imgUrl }) => ({
-  backgroundSize: 'cover',
-  backgroundImage: `url(${imgUrl})`,
+  background: '#1A2038',
   minHeight: '100% !important',
   '& .card': {
       maxWidth: 800,
@@ -66,7 +65,7 @@ const JwtLogin = () => {
   };
 
   return (
-    <JWTRoot imgUrl="/assets/modified/Login_BG.jpg">
+    <JWTRoot>
       <Card className="card">
         <Grid container>
           <Grid item sm={6} xs={12}>
