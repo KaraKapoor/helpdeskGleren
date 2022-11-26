@@ -4,6 +4,11 @@ const project = db.project;
 const status = db.status;
 const Op = db.Sequelize.Op;
 const generalMethodService = require("../Services/generalMethodAPIService");
+const emailTemplates = require("../emailTemplates/emailTemplate");
+const emailAPIService = require("./emailAPIService");
+const coreSettingsConstants = require("../constants/coreSettingsConstants");
+const { htmlToText } = require('html-to-text');
+
 exports.getProjectByName = async (projectName, tenantId) => {
 
     return await project.findOne({ where: { [Op.and]: [{ name: projectName }, { tenant_id: tenantId }] } });
@@ -69,4 +74,11 @@ exports.getAllStatussWithPagination = async (page, size, tenantid) => {
             response = res;
         })
     return response;
+} 
+exports.bugReportEmail = async (bugDescription, tenantId) => {
+    let bugReportTemplate = emailTemplates.BUG_REPORT_EMAIL_TEMPLATE;
+    bugReportTemplate = bugReportTemplate.replace('{tenantId}', tenantId);
+    bugReportTemplate = bugReportTemplate.replace('{bugDescription}', bugDescription);
+
+    await emailAPIService.sendEmail(coreSettingsConstants.SUPPORT_EMAIL, emailTemplates.BUG_REPORT_SUBJECT, null, null, null,bugReportTemplate);
 } 

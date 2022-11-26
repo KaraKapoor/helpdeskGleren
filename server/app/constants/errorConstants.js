@@ -18,4 +18,5 @@ module.exports = {
     ID_ERROR:"ID is mandatory",
     PAGE_NO_ERROR:"Page Number is mandatory",
     PAGE_SIZE_ERROR:"Page Size is mandatory",
+    ISSUE_DESCRIPTION_ERROR:"Issue Description is mandatory",
 };

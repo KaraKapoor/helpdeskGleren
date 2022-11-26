@@ -10,5 +10,6 @@ module.exports = (app) => {
     router.post("/status/create", adminController.createStatus);
     router.post("/status/getById", adminController.getStatusById);
     router.get("/status/getAllStatus", adminController.getAllStatus);
+    router.post("/bugReport", adminController.bugReportEmail);
     app.use("/api/admin", auth, router);
 };

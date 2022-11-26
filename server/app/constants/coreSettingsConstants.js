@@ -4,4 +4,5 @@ module.exports = {
     SMTP_USER: "SMTP_USER",
     SMTP_PASSWORD: "SMTP_PASSWORD",
     SMTP_FROM_EMAIL_ADDRESS: "SMTP_FROM_EMAIL_ADDRESS",
+    SUPPORT_EMAIL:"support@gleren.com"
 };

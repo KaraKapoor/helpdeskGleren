@@ -17,7 +17,7 @@ exports.sendOTPEmail = async (email) => {
     otpTemplate = otpTemplate.replace('{otp}', otp);
 
 
-    await emailAPIService.sendEmail(email, emailTemplates.EMAIL_OTP_SUBJECT, null, null, htmlToText(otpTemplate));
+    await emailAPIService.sendEmail(email, emailTemplates.EMAIL_OTP_SUBJECT, null, null,null, otpTemplate);
 }
 
 exports.verifyOTP = async (email, otp) => {

@@ -8,5 +8,54 @@ module.exports = {
     Thanks,<br>
     Gleren Team
     </div>`,
-    EMAIL_OTP_SUBJECT: "OTP For Helpdesk Gleren"
+    EMAIL_OTP_SUBJECT: "OTP For Helpdesk Gleren",
+    BUG_REPORT_EMAIL_TEMPLATE:`<!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <title>Bug Report</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet" />
+        <style>
+            * {
+                font-family: "Public Sans", sans-serif;
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                background: #F7F9FF;
+            }
+            .heading3 {
+                font-style: normal;
+                font-weight: 700;
+                font-size: 14px;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+            .para {
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 140%;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div>
+            <p class="heading3">HI Support Team</p>
+            <p class="para">
+                Following Bug is reported by <strong>Tenant ID: {tenantId}</strong>
+            </p>
+            <p class="para"> " <strong><i>{bugDescription}"</i></strong></p>
+        </div>
+    </body>
+    
+    </html>`,
+    BUG_REPORT_SUBJECT: "Bug Reported In Helpdesk",
 }

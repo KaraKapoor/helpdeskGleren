@@ -1,3 +1,5 @@
+import { Strings } from "config/strings";
+
 export const navigations = [
   { name: 'Dashboard', path: '/dashboard/default', icon: 'dashboard' },
 
@@ -70,7 +72,7 @@ export const navigations = [
     name: 'Contact Us',
     type: 'extLink',
     icon: 'contacts',
-    path: 'https://gleren.com/',
+    path: Strings.GLEREN_WEBSITE + Strings.GLEREN_CONTACT_US_PATH,
   },
   {
     name: 'Report Bug',
