@@ -71,11 +71,11 @@ export  const RequestMethod ={
           width:400,}
         )
       }
-
-  
+      
       if (errorMessage.httpStatusCode == 401) {
         // clear storage and redux
         localStorage.clear();
+        window.location='/session/signin';
    
       }
       return Promise.reject(errorMessage);

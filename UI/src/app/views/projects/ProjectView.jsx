@@ -1,6 +1,9 @@
 import { Grid } from "@mui/material"
 import { styled } from "@mui/system"
-import { Fragment, useState } from "react"
+import { getById } from "app/services/projectService";
+import { Fragment, useEffect, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom";
+import AddEditProject from "./addEditProject";
 import ProjectList from "./projectList";
 
 
@@ -31,23 +34,73 @@ const H4 = styled('h4')(({ theme }) => ({
 }));
 
 const ProjectView = () => {
-    const [currentView, setCurrentView] = useState('List');
-    const onItemLClick = (project) => {
-        setCurrentView('Details');
-    };
-    const addNewLClick = () => {
-        setCurrentView('Details');
+    const [currentView, setCurrentView] = useState('Project');
+    const navigate = useNavigate()
+    const [query] = useSearchParams()
+    const [editDetails, setEditDetails] = useState()
+
+    useEffect(() => {
+        if (query.get('type') === 'create-project') {
+            setCurrentView('Create')
+        } else if (query?.get('type')?.split('/')[0] === 'edit-project') {
+            onEditClick(query.get('type').split('/')[1])
+        } else {
+            setCurrentView('Project')
+            setEditDetails();
+        }
+    }, [query])
+
+    const onEditClick = async(projectId) => {
+        await getById({id:projectId}).then((response) => {
+            setEditDetails(response.data)
+        })
+        setCurrentView('Edit')
+        navigate({
+            search: `?type=edit-project/${projectId}`,
+        })
     }
+    const onCreateClick = () => {
+        setCurrentView('Create')
+        navigate({
+            search: `?type=create-project`,
+        })
+    }
+
     return (
         <Fragment>
             <ContentBox>
-                <Grid container spacing={3}>
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <ProjectList onItemLClick={onItemLClick} addNewLClick={addNewLClick} ></ProjectList>
-                        {/* {currentView === 'List' ? <ProjectList onItemLClick={onItemLClick} addNewLClick={addNewLClick} ></ProjectList> : ""} */}
-                        {/* {currentView === 'Details' ? <ProjectDetails onClose={() => setCurrentView('List')}></ProjectDetails> : ""} */}
-                    </Grid>
-                </Grid>
+            {currentView === 'Project' && (
+                    <ProjectList
+                        onEditClick={onEditClick}
+                        onCreateClick={onCreateClick}
+                        setEditDetails={setEditDetails}
+                        setCurrentView={setCurrentView}
+                    />
+                )}
+                {currentView === 'Create' && (
+                    <AddEditProject
+                        onClose={() => {
+                            setCurrentView('List')
+                            navigate({
+                                search: '',
+                            })
+                            setEditDetails()
+                        }}
+                        editDetails={editDetails}
+                    />
+                )}
+                {currentView === 'Edit' && editDetails && (
+                    <AddEditProject
+                        onClose={() => {
+                            setCurrentView('List')
+                            navigate({
+                                search: '',
+                            })
+                            setEditDetails()
+                        }}
+                        editDetails={editDetails}
+                    />
+                )}
             </ContentBox>
         </Fragment>
     )

@@ -17,14 +17,21 @@ exports.getProjectByName = async (projectName, tenantId) => {
 exports.getProjectById = async (id, tenantId) => {
     return await project.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
-exports.createProject = async (name, tenantId) => {
+exports.createProject = async (name, id, active, tenantId) => {
     let response = null;
     const obj = {
         name: name,
         tenant_id: tenantId,
         is_active: true
     }
-    await project.create(obj);
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
+        obj.id = id;
+        obj.is_active = active;
+        await project.update(obj, { where: { id: id } });
+    } else {
+        await project.create(obj);
+    }
+
     const createdProject = await this.getProjectByName(name, tenantId);
     response = {
         status: true,
@@ -32,11 +39,11 @@ exports.createProject = async (name, tenantId) => {
     }
 
     return response
-}   
+}
 exports.getAllProjectsWithPagination = async (page, size, tenantid) => {
     let response = null;
     const { limit, offset } = await generalMethodService.getPagination(page, size);
-    await project.findAndCountAll({ limit, offset,where:{tenant_id:tenantid} })
+    await project.findAndCountAll({ limit, offset, where: { tenant_id: tenantid } })
         .then(async (data) => {
             const res = await generalMethodService.getPagingData(data, page, limit);
             response = res;
@@ -64,21 +71,21 @@ exports.createStatus = async (name, tenantId) => {
     }
 
     return response
-}  
+}
 exports.getAllStatussWithPagination = async (page, size, tenantid) => {
     let response = null;
     const { limit, offset } = await generalMethodService.getPagination(page, size);
-    await status.findAndCountAll({ limit, offset,where:{tenant_id:tenantid} })
+    await status.findAndCountAll({ limit, offset, where: { tenant_id: tenantid } })
         .then(async (data) => {
             const res = await generalMethodService.getPagingData(data, page, limit);
             response = res;
         })
     return response;
-} 
+}
 exports.bugReportEmail = async (bugDescription, tenantId) => {
     let bugReportTemplate = emailTemplates.BUG_REPORT_EMAIL_TEMPLATE;
     bugReportTemplate = bugReportTemplate.replace('{tenantId}', tenantId);
     bugReportTemplate = bugReportTemplate.replace('{bugDescription}', bugDescription);
 
-    await emailAPIService.sendEmail(coreSettingsConstants.SUPPORT_EMAIL, emailTemplates.BUG_REPORT_SUBJECT, null, null, null,bugReportTemplate);
+    await emailAPIService.sendEmail(coreSettingsConstants.SUPPORT_EMAIL, emailTemplates.BUG_REPORT_SUBJECT, null, null, null, bugReportTemplate);
 } 

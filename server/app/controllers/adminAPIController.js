@@ -10,6 +10,7 @@ exports.createProject = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
+    let isNew = false;
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.projectName) == null) {
 
         return res.status(200).send({
@@ -17,18 +18,28 @@ exports.createProject = async (req, res) => {
             status: false
         });
     }
-
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
+        isNew = true;
+    }
     try {
         const response = await adminAPIService.getProjectByName(input.projectName, tenantId);
-        if (response && response.id) {
+        if (isNew && response?.name) {
+            return res.status(200).send({
+                error: errorConstants.PROJECT_NAME_SAME_ERROR,
+                status: false
+            });
+        } else if (!isNew && input?.projectName === response?.name && response.id != input.id) {
             return res.status(200).send({
                 error: errorConstants.PROJECT_NAME_SAME_ERROR,
                 status: false
             });
         } else {
-            const response = await adminAPIService.createProject(input.projectName, tenantId);
-            return res.status(200).send(response);
+            const resp = await adminAPIService.createProject(input.projectName, input.id, input.is_active, tenantId);
+            return res.status(200).send(resp);
         }
+
+
+
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
