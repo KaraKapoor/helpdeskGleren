@@ -223,6 +223,7 @@ const JwtRegister = () => {
               <Formik
                 onSubmit={handleFormSubmit}
                 validationSchema={validationSchema}
+                initialValues={initialValues}
               >
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                   <form onSubmit={handleSubmit}>
