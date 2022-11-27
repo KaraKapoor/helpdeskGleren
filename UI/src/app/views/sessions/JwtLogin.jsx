@@ -95,6 +95,7 @@ const JwtLogin = () => {
                       onChange={handleChange}
                       helperText={touched.email && errors.email}
                       error={Boolean(errors.email && touched.email)}
+                      required={true}
                       sx={{ mb: 3 }}
                     />
 
@@ -108,6 +109,7 @@ const JwtLogin = () => {
                       onBlur={handleBlur}
                       value={values.password}
                       onChange={handleChange}
+                      required={true}
                       helperText={touched.password && errors.password}
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 1.5 }}
