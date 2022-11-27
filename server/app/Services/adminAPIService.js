@@ -56,14 +56,21 @@ exports.getStatusByName = async (statusName, tenantId) => {
 exports.getStatusById = async (id, tenantId) => {
     return await status.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
-exports.createStatus = async (name, tenantId) => {
+exports.createStatus = async (name, id, active, tenantId) => {
     let response = null;
     const obj = {
         name: name,
         tenant_id: tenantId,
         is_active: true
     }
-    await status.create(obj);
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
+        obj.id = id;
+        obj.is_active = active;
+        await status.update(obj, { where: { id: id } });
+    } else {
+        await status.create(obj);
+    }
+
     const createdStatus = await this.getStatusByName(name, tenantId);
     response = {
         status: true,

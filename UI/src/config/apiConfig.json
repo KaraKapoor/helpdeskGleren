@@ -18,5 +18,10 @@
     },
     "reportBug":{
         "reportBug":"api/admin/bugReport"
+    },
+    "status":{
+        "create":"api/admin/status/create",
+        "getById":"api/admin/status/getById",
+        "getAllStatus":"api/admin/status/getAllStatus"
     }
 }

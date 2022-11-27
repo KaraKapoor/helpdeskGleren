@@ -9,6 +9,7 @@ import MatxLayout from './components/MatxLayout/MatxLayout';
 import bugReportRoutes from './views/bugReport/bugReportRoutes';
 import myProfileRoutes from './views/myProfile/myProfileRoutes';
 import projectRoutes from './views/projects/projectRoutes';
+import statusRoutes from './views/status/statusRoutes';
 
 const routes = [
   {
@@ -17,7 +18,7 @@ const routes = [
         <MatxLayout />
       </AuthGuard>
     ),
-    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes,...projectRoutes,...bugReportRoutes,...myProfileRoutes],
+    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes,...projectRoutes,...bugReportRoutes,...myProfileRoutes,...statusRoutes],
   },
   ...sessionRoutes,
   { path: '/', element: <Navigate to="dashboard/default" /> },
