@@ -125,8 +125,31 @@ exports.registerTenant = async (req, res) => {
     }
 
     try {
-        const response = await publicAPIService.registerTenant(input.email, input.tenantName,input.password,input.firstName,input.lastName,input.mobile,input.designation,"admin");
+        const response = await publicAPIService.registerTenant(input.email, input.tenantName, input.password, input.firstName, input.lastName, input.mobile, input.designation, "admin");
         return res.status(200).send(response);
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+
+exports.forgetPasswordEmail = async (req, res) => {
+    const input = req.body;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.email) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.EMAIL_MANDATORY_ERROR,
+            status: false
+        });
+    }
+    try {
+        await publicAPIService.forgetPasswordEmail(input.email);
+        return res.status(200).send({
+            status: true
+        })
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({

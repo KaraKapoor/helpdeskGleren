@@ -10,6 +10,7 @@ const { htmlToText } = require('html-to-text');
 const apiConstants = require("../constants/apiConstants");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require('uuid');
 
 exports.sendOTPEmail = async (email) => {
     let otpTemplate = emailTemplates.EMAIL_OTP_TEMPLATE;
@@ -17,7 +18,7 @@ exports.sendOTPEmail = async (email) => {
     otpTemplate = otpTemplate.replace('{otp}', otp);
 
 
-    await emailAPIService.sendEmail(email, emailTemplates.EMAIL_OTP_SUBJECT, null, null,null, otpTemplate);
+    await emailAPIService.sendEmail(email, emailTemplates.EMAIL_OTP_SUBJECT, null, null, null, otpTemplate);
 }
 
 exports.verifyOTP = async (email, otp) => {
@@ -130,4 +131,17 @@ exports.registerTenant = async (email, tenant_name, password, firstName, lastNam
         }
     }
     return response;
+}
+
+exports.forgetPasswordEmail = async (email) => {
+    let forgetEmailTemplate = emailTemplates.FORGET_PASSWORD_EMAIL_TEMPLATE;
+    const userDetails = await userAPIService.getByEmail(email);
+    const resetPasswordId = uuidv4();
+    const resetLink = process.env.BASE_URL + 'reset-password' + `/${resetPasswordId}`;
+    forgetEmailTemplate = forgetEmailTemplate.replace('{firstName}', userDetails.first_name);
+    forgetEmailTemplate = forgetEmailTemplate.replace('{passwordResetLink}', resetLink);
+
+
+    await emailAPIService.sendEmail(email, emailTemplates.FORGET_PASSWORD_SUBJECT, null, null, null, forgetEmailTemplate);
+    await userAPIService.updateUser(userDetails.id,{reset_password_id:resetPasswordId},userDetails.tenant_id);
 }

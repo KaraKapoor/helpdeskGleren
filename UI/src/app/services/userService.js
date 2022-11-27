@@ -43,3 +43,10 @@ export const updateUserProfile=(data)=>{
         data: data
     })
 }
+export const forgetPasswordEmail=(data)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.user.forgetPassword,
+        data: data
+    })
+}

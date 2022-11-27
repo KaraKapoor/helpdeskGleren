@@ -32,6 +32,10 @@ module.exports = (sequelize, Sequelize) => {
         last_login_dt: {
             type: Sequelize.DATE,
             defaultValue: null
+        },
+        reset_password_id: {
+            type: Sequelize.STRING,
+            defaultValue: null
         }
     });
 

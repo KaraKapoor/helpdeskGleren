@@ -7,5 +7,6 @@ module.exports = (app) => {
     router.post("/verifyOTP", publicController.verifyOTP);
     router.post("/login", publicController.login);
     router.post("/registerTenant", publicController.registerTenant);
+    router.post("/forgetPassword", publicController.forgetPasswordEmail);
     app.use("/api/public", router);
 };
