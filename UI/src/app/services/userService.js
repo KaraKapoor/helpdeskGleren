@@ -50,3 +50,10 @@ export const forgetPasswordEmail=(data)=>{
         data: data
     })
 }
+export const changePassword=(data)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.user.changePassword,
+        data: data
+    })
+}

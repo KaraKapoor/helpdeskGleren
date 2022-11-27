@@ -1,5 +1,6 @@
 import Loadable from 'app/components/Loadable';
 import { lazy } from 'react';
+import ChangePassword from './ChangePassword';
 
 const NotFound = Loadable(lazy(() => import('./NotFound')));
 const ForgotPassword = Loadable(lazy(() => import('./ForgotPassword')));
@@ -10,6 +11,7 @@ const sessionRoutes = [
   { path: '/session/signup', element: <JwtRegister /> },
   { path: '/session/signin', element: <JwtLogin /> },
   { path: '/session/forgot-password', element: <ForgotPassword /> },
+  { path: '/session/reset-password/*', element: <ChangePassword /> },
   { path: '/session/404', element: <NotFound /> },
 ];
 

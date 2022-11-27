@@ -9,7 +9,8 @@
         "verifyOTPEmail":"api/public/verifyOTP",
         "getLoggedInUserDetails":"api/user/getLoggedInUser",
         "updateUserProfile":"api/user/updateUserProfile",
-        "forgetPassword":"api/public/forgetPassword"
+        "forgetPassword":"api/public/forgetPassword",
+        "changePassword":"api/public/changePassword"
         
     },
     "project":{

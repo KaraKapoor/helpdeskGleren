@@ -19,4 +19,6 @@ module.exports = {
     PAGE_NO_ERROR:"Page Number is mandatory",
     PAGE_SIZE_ERROR:"Page Size is mandatory",
     ISSUE_DESCRIPTION_ERROR:"Issue Description is mandatory",
+    RESET_PASSWORD_TOKEN_ERROR:"Reset Password Token Id is mandatory",
+    INVALID_RESET_PASSWORD_LINK_ERROR:"Invalid or reset password link is expired",
 };

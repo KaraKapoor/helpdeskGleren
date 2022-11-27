@@ -158,3 +158,31 @@ exports.forgetPasswordEmail = async (req, res) => {
         });
     }
 }
+
+exports.changePassword = async (req, res) => {
+    const input = req.body;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.resetTokenId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.RESET_PASSWORD_TOKEN_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.password) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PASSWORD_MANDATORY_ERROR,
+            status: false
+        });
+    }
+    try {
+        const response = await publicAPIService.changePassword(input.resetTokenId,input.password);
+        return res.status(200).send(response)
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}

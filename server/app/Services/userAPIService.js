@@ -36,3 +36,6 @@ exports.updateUser = async (id, updateObj, tenantid) => {
     await user.update(updateObj, { where: { [Op.and]: [{ id: id }, { tenant_id: tenantid }] } });
     return this.getUserById(id);
 }
+exports.getUserByResetTokenId = async (resetTokenId) => {
+    return user.findOne(({ where: { reset_password_id: resetTokenId } }));
+}

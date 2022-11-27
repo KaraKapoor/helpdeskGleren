@@ -8,5 +8,6 @@ module.exports = (app) => {
     router.post("/login", publicController.login);
     router.post("/registerTenant", publicController.registerTenant);
     router.post("/forgetPassword", publicController.forgetPasswordEmail);
+    router.post("/changePassword", publicController.changePassword);
     app.use("/api/public", router);
 };

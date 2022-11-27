@@ -137,11 +137,32 @@ exports.forgetPasswordEmail = async (email) => {
     let forgetEmailTemplate = emailTemplates.FORGET_PASSWORD_EMAIL_TEMPLATE;
     const userDetails = await userAPIService.getByEmail(email);
     const resetPasswordId = uuidv4();
-    const resetLink = process.env.BASE_URL + 'reset-password' + `/${resetPasswordId}`;
+    const resetLink = process.env.BASE_URL + 'session/reset-password' + `/${resetPasswordId}`;
     forgetEmailTemplate = forgetEmailTemplate.replace('{firstName}', userDetails.first_name);
     forgetEmailTemplate = forgetEmailTemplate.replace('{passwordResetLink}', resetLink);
 
 
     await emailAPIService.sendEmail(email, emailTemplates.FORGET_PASSWORD_SUBJECT, null, null, null, forgetEmailTemplate);
-    await userAPIService.updateUser(userDetails.id,{reset_password_id:resetPasswordId},userDetails.tenant_id);
+    await userAPIService.updateUser(userDetails.id, { reset_password_id: resetPasswordId }, userDetails.tenant_id);
+}
+exports.changePassword = async (resetPasswordToken, password) => {
+    let response = null;
+    const userDetails = await userAPIService.getUserByResetTokenId(resetPasswordToken);
+    if (userDetails === null) {
+        response = {
+            status: false,
+            error: errorConstants.INVALID_RESET_PASSWORD_LINK_ERROR
+        }
+    } else {
+        const userObj = {
+            updatedAt: new Date(),
+            password: await bcrypt.hash(password, 10),
+            reset_password_id: null
+        }
+        await userAPIService.updateUser(userDetails.id, userObj, userDetails.tenant_id);
+        response = {
+            status: true
+        }
+    }
+    return response;
 }
