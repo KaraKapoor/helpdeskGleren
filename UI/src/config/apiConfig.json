@@ -12,7 +12,8 @@
         "forgetPassword":"api/public/forgetPassword",
         "changePassword":"api/public/changePassword",
         "getAllUsers":"api/user/getAllUsers",
-        "getUserById":"api/user/getById"
+        "getUserById":"api/user/getById",
+        "createUpdateUser":"api/user/createUpdateUser"
         
     },
     "project":{

@@ -98,7 +98,7 @@ import { Strings } from "config/strings";
                                 lastName: e.last_name,
                                 status: e.is_active,
                                 projectId: e.id,
-                                loginDate: moment(e.last_login_dt).format(Strings.DATE_FORMAT)
+                                loginDate: e.last_login_dt!==null?moment(e.last_login_dt).format(Strings.DATE_FORMAT):"-"
                             }
                         })}
                         actions={[

@@ -107,3 +107,82 @@ exports.getUserById = async (req, res) => {
         });
     }
 }
+exports.createUpdateUser = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    let isNew = false;
+    try {
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.email) == null) {
+
+            return res.status(200).send({
+                error: errorConstants.EMAIL_MANDATORY_ERROR,
+                status: false
+            });
+        }
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.firstName) == null) {
+
+            return res.status(200).send({
+                error: errorConstants.FIRST_NAME_MANDATORY_ERROR,
+                status: false
+            });
+        }
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lastName) == null) {
+
+            return res.status(200).send({
+                error: errorConstants.LAST_NAME_MANDATORY_ERROR,
+                status: false
+            });
+        }
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.mobile) == null) {
+
+            return res.status(200).send({
+                error: errorConstants.MOBILE_MANDATORY_ERROR,
+                status: false
+            });
+        }
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.designation) == null) {
+
+            return res.status(200).send({
+                error: errorConstants.DESIGNATION_MANDATORY_ERROR,
+                status: false
+            });
+        }
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.role) == null) {
+
+            return res.status(200).send({
+                error: errorConstants.ROLE_MANDATORY_ERROR,
+                status: false
+            });
+        }
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.active) == null) {
+
+            return res.status(200).send({
+                error: errorConstants.ACTIVE_MANDATORY_ERROR,
+                status: false
+            });
+        }
+
+        const response = await userAPIService.getByEmail(input.email, tenantId);
+        if (isNew && response?.email) {
+            return res.status(200).send({
+                error: errorConstants.USER_ALREADY_EXISTS,
+                status: false
+            });
+        } else if (!isNew && input?.email === response?.email && response.id != input.id) {
+            return res.status(200).send({
+                error: errorConstants.USER_ALREADY_EXISTS,
+                status: false
+            });
+        } else {
+            const resp = await userAPIService.createUpdateUser(input.email, input.firstName, input.lastName, input.mobile, input.designation, input.role, input.active, input.id, tenantId);
+            return res.status(200).send(resp);
+        }
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}

@@ -8,5 +8,6 @@ module.exports = (app) => {
     router.post("/updateUserProfile", userController.updateUser);
     router.get("/getAllUsers", userController.getAllUsers);
     router.post("/getById", userController.getUserById);
+    router.post("/createUpdateUser", userController.createUpdateUser);
     app.use("/api/user", auth, router);
 };

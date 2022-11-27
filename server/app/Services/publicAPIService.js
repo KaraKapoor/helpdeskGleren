@@ -158,7 +158,8 @@ exports.changePassword = async (resetPasswordToken, password) => {
         const userObj = {
             updatedAt: new Date(),
             password: await bcrypt.hash(password, 10),
-            reset_password_id: null
+            reset_password_id: null,
+            is_email_verified: true
         }
         await userAPIService.updateUser(userDetails.id, userObj, userDetails.tenant_id);
         response = {

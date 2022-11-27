@@ -2,6 +2,7 @@ import { styled } from "@mui/system"
 import { getUserById } from "app/services/userService";
 import { Fragment, useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
+import AddEditUser from "./addEditUser";
 import UsersList from "./userList";
 
 
@@ -31,7 +32,7 @@ const H4 = styled('h4')(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const StatusView = () => {
+const UserView = () => {
     const [currentView, setCurrentView] = useState('Users');
     const navigate = useNavigate()
     const [query] = useSearchParams()
@@ -48,19 +49,19 @@ const StatusView = () => {
         }
     }, [query])
 
-    const onEditClick = async(userId) => {
-        await getUserById({id:userId}).then((response) => {
+    const onEditClick = (userId) => {
+        getUserById({id:userId}).then((response) => {
             setEditDetails(response.data)
         })
         setCurrentView('Edit')
         navigate({
-            search: `?type=edit-status/${userId}`,
+            search: `?type=edit-user/${userId}`,
         })
     }
     const onCreateClick = () => {
         setCurrentView('Create')
         navigate({
-            search: `?type=create-status`,
+            search: `?type=create-user`,
         })
     }
 
@@ -75,8 +76,8 @@ const StatusView = () => {
                         setCurrentView={setCurrentView}
                     />
                 )}
-                {/* {currentView === 'Create' && (
-                    <AddEditStatus
+                {currentView === 'Create' && (
+                    <AddEditUser
                         onClose={() => {
                             setCurrentView('List')
                             navigate({
@@ -88,7 +89,7 @@ const StatusView = () => {
                     />
                 )}
                 {currentView === 'Edit' && editDetails && (
-                    <AddEditStatus
+                    <AddEditUser
                         onClose={() => {
                             setCurrentView('List')
                             navigate({
@@ -98,10 +99,10 @@ const StatusView = () => {
                         }}
                         editDetails={editDetails}
                     />
-                )} */}
+                )}
             </ContentBox>
         </Fragment>
     )
 }
 
-export default StatusView
+export default UserView

@@ -70,3 +70,10 @@ export const getUserById=(data)=>{
         data:data
     })
 }
+export const createUpdateUser=(data)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.user.createUpdateUser,
+        data:data
+    })
+}

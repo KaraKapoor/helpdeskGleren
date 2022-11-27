@@ -3,8 +3,13 @@ const db = require("../models");
 const user = db.user;
 const bcrypt = require("bcryptjs");
 const { now } = require('moment');
+const emailTemplates = require("../emailTemplates/emailTemplate");
+const emailAPIService = require("./emailAPIService");
+const tenantAPIService = require("./tenantAPIService");
 const Op = db.Sequelize.Op;
 const generalMethodService = require("../Services/generalMethodAPIService");
+const { v4: uuidv4 } = require('uuid');
+const errorConstants = require('../constants/errorConstants');
 exports.getByEmail = async (email) => {
     let response = null;
     response = await user.findOne({ where: { email: email } });
@@ -30,6 +35,53 @@ exports.createUser = async (email, password, isEmailVerified, firstName, lastNam
     response = await this.getByEmail(email);
     return response;
 }
+exports.createUpdateUser = async (email, firstName, lastName, mobile, designation, role, active, id, tenantId) => {
+    let response = null;
+    const obj = {
+        email: email,
+        first_name: firstName,
+        last_name: lastName,
+        role: role,
+        mobile: mobile,
+        designation: designation,
+        is_active: active,
+        tenant_id: tenantId
+    }
+
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
+        obj.id = id;
+        await user.update(obj, { where: { id: id } });
+    } else {
+        const tenantSettings = await tenantAPIService.getTenantInfo(tenantId);
+        const userCount = await this.getCountOfUsersForTenant(tenantId);
+        if (userCount !== null && userCount >= tenantSettings?.max_user) {
+            let errorMessage = errorConstants.MAX_USER_ERROR;
+            errorMessage = errorMessage.replace('{userCount}', tenantSettings.max_user)
+            response = {
+                status: false,
+                error: errorMessage,
+            }
+            return response;
+        }
+        const resetPasswordId = uuidv4();
+        const resetLink = process.env.BASE_URL + 'session/reset-password' + `/${resetPasswordId}`;
+        obj.reset_password_id = resetPasswordId;
+        await user.create(obj);
+        let registerEmailTemplate = emailTemplates.NEW_USER_REGISTER_EMAIL_TEMPLATE;
+        registerEmailTemplate = registerEmailTemplate.replace('{firstName}', firstName);
+        registerEmailTemplate = registerEmailTemplate.replace('{passwordResetLink}', resetLink);
+
+        await emailAPIService.sendEmail(email, emailTemplates.NEW_USER_SUBJECT, null, null, null, registerEmailTemplate);
+    }
+
+    const createdUser = await this.getByEmail(email);
+    response = {
+        status: true,
+        data: createdUser
+    }
+
+    return response
+}
 exports.getUserById = async (id) => {
     return user.findOne(({ where: { id: id } }));
 }
@@ -52,4 +104,7 @@ exports.getAllUsersWithPagination = async (page, size, tenantid) => {
 }
 exports.getUserByIdWithTenant = async (id, tenantId) => {
     return user.findOne(({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } }));
+}
+exports.getCountOfUsersForTenant = async (tenantId) => {
+    return user.count({ where: { tenant_id: tenantId } });
 }
