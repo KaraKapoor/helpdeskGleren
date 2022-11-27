@@ -6,7 +6,10 @@
         "login": "api/public/login",
         "register":"api/public/registerTenant",
         "generateOTPEmail":"api/public/sendOTPEmail",
-        "verifyOTPEmail":"api/public/verifyOTP"
+        "verifyOTPEmail":"api/public/verifyOTP",
+        "getLoggedInUserDetails":"api/user/getLoggedInUser",
+        "updateUserProfile":"api/user/updateUserProfile"
+        
     },
     "project":{
         "create":"api/admin/project/create",

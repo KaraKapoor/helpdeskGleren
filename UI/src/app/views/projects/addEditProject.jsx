@@ -122,7 +122,7 @@ const AddEditProject = ({ onClose, editDetails }) => {
                                     <div>
                                         <TextField
                                             fullWidth
-                                            size="small"
+                                            size="large"
                                             name="projectName"
                                             type="text"
                                             label="Project Name"

@@ -30,3 +30,16 @@ export const verifyOTPEmail=(formData)=>{
         data: formData,
     })
 }
+export const getLoggedInUserDetails=()=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.user.getLoggedInUserDetails
+    })
+}
+export const updateUserProfile=(data)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.user.updateUserProfile,
+        data: data
+    })
+}

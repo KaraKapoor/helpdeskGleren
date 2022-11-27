@@ -161,16 +161,16 @@ const LogoContainer= styled('div')(()=>({
             </StyledItem>
 
             <StyledItem>
-              <Link to="/page-layouts/user-profile">
+              <Link to="/user-profile">
                 <Icon> person </Icon>
                 <Span> Profile </Span>
               </Link>
             </StyledItem>
 
-            <StyledItem>
+            {/* <StyledItem>
               <Icon> settings </Icon>
               <Span> Settings </Span>
-            </StyledItem>
+            </StyledItem> */}
 
             <StyledItem onClick={logout}>
               <Icon> power_settings_new </Icon>

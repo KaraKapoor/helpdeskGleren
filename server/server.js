@@ -32,6 +32,7 @@ db.sequelize.sync();
 require("./app/routes/public.routes")(app);
 require("./app/routes/tenant.routes")(app);
 require("./app/routes/admin.routes")(app);
+require("./app/routes/user.routes")(app);
 
 
 // set port, listen for requests
