@@ -4,6 +4,7 @@ const user = db.user;
 const bcrypt = require("bcryptjs");
 const { now } = require('moment');
 const Op = db.Sequelize.Op;
+const generalMethodService = require("../Services/generalMethodAPIService");
 exports.getByEmail = async (email) => {
     let response = null;
     response = await user.findOne({ where: { email: email } });
@@ -38,4 +39,17 @@ exports.updateUser = async (id, updateObj, tenantid) => {
 }
 exports.getUserByResetTokenId = async (resetTokenId) => {
     return user.findOne(({ where: { reset_password_id: resetTokenId } }));
+}
+exports.getAllUsersWithPagination = async (page, size, tenantid) => {
+    let response = null;
+    const { limit, offset } = await generalMethodService.getPagination(page, size);
+    await user.findAndCountAll({ limit, offset, where: { tenant_id: tenantid } })
+        .then(async (data) => {
+            const res = await generalMethodService.getPagingData(data, page, limit);
+            response = res;
+        })
+    return response;
+}
+exports.getUserByIdWithTenant = async (id, tenantId) => {
+    return user.findOne(({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } }));
 }

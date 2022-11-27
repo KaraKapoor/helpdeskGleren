@@ -10,6 +10,7 @@ import bugReportRoutes from './views/bugReport/bugReportRoutes';
 import myProfileRoutes from './views/myProfile/myProfileRoutes';
 import projectRoutes from './views/projects/projectRoutes';
 import statusRoutes from './views/status/statusRoutes';
+import userRoutes from './views/users/userRoutes';
 
 const routes = [
   {
@@ -18,7 +19,7 @@ const routes = [
         <MatxLayout />
       </AuthGuard>
     ),
-    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes,...projectRoutes,...bugReportRoutes,...myProfileRoutes,...statusRoutes],
+    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes,...projectRoutes,...bugReportRoutes,...myProfileRoutes,...statusRoutes,...userRoutes],
   },
   ...sessionRoutes,
   { path: '/', element: <Navigate to="dashboard/default" /> },

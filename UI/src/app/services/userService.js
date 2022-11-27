@@ -57,3 +57,16 @@ export const changePassword=(data)=>{
         data: data
     })
 }
+export const getAllUsers=(page,size)=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.user.getAllUsers +`?page=${page}&size=${size}`
+    })
+}
+export const getUserById=(data)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.user.getUserById,
+        data:data
+    })
+}

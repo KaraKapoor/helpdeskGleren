@@ -71,6 +71,7 @@ exports.login = async (email, password) => {
                     expiresIn: "2h",
                 }
             );
+            await userAPIService.updateUser(user.id,{ last_login_dt: new Date() }, user.tenant_id)
             response = {
                 status: true,
                 data: {

@@ -10,7 +10,9 @@
         "getLoggedInUserDetails":"api/user/getLoggedInUser",
         "updateUserProfile":"api/user/updateUserProfile",
         "forgetPassword":"api/public/forgetPassword",
-        "changePassword":"api/public/changePassword"
+        "changePassword":"api/public/changePassword",
+        "getAllUsers":"api/user/getAllUsers",
+        "getUserById":"api/user/getById"
         
     },
     "project":{

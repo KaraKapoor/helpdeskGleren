@@ -98,7 +98,7 @@ return (
 							</Grid>
 							<Grid item lg={6} md={6} sm={12} xs={12}>
 								<TextField fullWidth size="large" name="email" type="email" label="Email"
-									disabled="true" variant="outlined" onBlur={handleBlur} value={values.email}
+									disabled={true} variant="outlined" onBlur={handleBlur} value={values.email}
 									onChange={handleChange} sx={{ mb: 1.5 }} />
 							</Grid>
 							<Grid item lg={6} md={6} sm={12} xs={12}>
@@ -113,7 +113,7 @@ return (
 
 							</Grid>
 							<Grid item lg={6} md={6} sm={12} xs={12}>
-								<TextField fullWidth size="large" name="role" type="text" label="Role" disabled="true"
+								<TextField fullWidth size="large" name="role" type="text" label="Role" disabled={true}
 									variant="outlined" onBlur={handleBlur} value={values.role} onChange={handleChange}
 									sx={{ mb: 1.5 }} />
 							</Grid>

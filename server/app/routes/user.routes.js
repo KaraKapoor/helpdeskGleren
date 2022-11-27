@@ -6,5 +6,7 @@ module.exports = (app) => {
 
     router.get("/getLoggedInUser", userController.getLoggedInUserDetails);
     router.post("/updateUserProfile", userController.updateUser);
+    router.get("/getAllUsers", userController.getAllUsers);
+    router.post("/getById", userController.getUserById);
     app.use("/api/user", auth, router);
 };
