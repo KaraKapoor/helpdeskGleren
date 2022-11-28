@@ -1,0 +1,673 @@
+{
+	"info": {
+		"_postman_id": "b3e7d511-abce-452c-9d70-e66346dd56a8",
+		"name": "glerenHelpdesk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "sendOTPEmail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/public/sendOTPEmail",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"public",
+								"sendOTPEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verifyOTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\",\r\n    \"otp\":\"6545 \"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/public/verifyOTP",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"public",
+								"verifyOTP"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registerTenant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karan.kapoor+4@gleren.com\",\r\n    \"tenantName\":\"karan12qqw2\",\r\n    \"password\":\"124\",\r\n    \"firstName\":\"Karan\",\r\n    \"lastName\":\"Kapoor\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/public/registerTenant",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"public",
+								"registerTenant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\",\r\n    \"password\":\"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/public/login",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"public",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "createStatus",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"statusName\":\"To Do\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/status/create",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"status",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "StatusGetById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/status/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"status",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTenantInfo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/tenant/getTenantInfo",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"tenant",
+								"getTenantInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllStatus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/admin/status/getAllStatus?page=0&size=10",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"status",
+								"getAllStatus"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createProject",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"projectName\":\"Test1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/project/create",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"project",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createDepartment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"departmentName\":\"IT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/department/create",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"department",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DepartmentGetById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/department/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"department",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProjectGetById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/project/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"project",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllProjects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/admin/project/getAllProjects?page=0&size=10",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"project",
+								"getAllProjects"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllDepartments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/admin/department/getAllDepartments?page=0&size=10",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"department",
+								"getAllDepartments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bugReportEmail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"issueDescription\":\"TESTING\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/bugReport",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"bugReport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "masterDropdownData",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/admin/masterDropdownData",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"masterDropdownData"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "getLoggedInUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/user/getLoggedInUser",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"user",
+								"getLoggedInUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUserProfile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1,\r\n    \"designation\":\"Admin\",\r\n    \"mobile\":\"\",\r\n    \"firstName\":\"\",\r\n    \"lastName\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/user/updateUserProfile",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"user",
+								"updateUserProfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/public/forgetPassword",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"public",
+								"forgetPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"resetTokenId\":\"1fb9aa46-7742-490c-b5d0-bde6ae74f95c\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/public/changePassword",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"public",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/user/getAllUsers?page=0&size=10",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"user",
+								"getAllUsers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/user/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"user",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUpdateUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karan.kapoor+5@gleren.com\",\r\n    \"firstName\":\"Karan1\",\r\n    \"lastName\":\"Kapoor1\",\r\n    \"mobile\":\"7011238983\",\r\n    \"designation\":\"Lead\",\r\n    \"role\":\"user\",\r\n    \"active\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/user/createUpdateUser",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"user",
+								"createUpdateUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
