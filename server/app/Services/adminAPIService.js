@@ -136,3 +136,9 @@ exports.getAllDepartmentsWithPagination = async (page, size, tenantid) => {
         })
     return response;
 }
+exports.masterDropdownData = async (tenantId) => {
+    let responseArray = [];
+    const departmentData = await department.findAll({ where: { tenant_id: tenantId } });
+    responseArray.push({ departments: departmentData });
+    return responseArray;
+}

@@ -317,3 +317,19 @@ exports.getAllDepartments = async (req, res) => {
         });
     }
 }
+exports.masterDropDownData = async (req, res) => {
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+
+    try {
+        const response = await adminAPIService.masterDropdownData(tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+
+}

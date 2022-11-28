@@ -38,4 +38,8 @@ db.status.belongsTo(db.tenant, {
 db.department.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
+db.user.belongsTo(db.department, {
+    foreignKey: "department_id", //1:1
+});
+
 module.exports = db;

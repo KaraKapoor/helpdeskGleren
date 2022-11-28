@@ -14,5 +14,6 @@ module.exports = (app) => {
     router.post("/department/create", adminController.createDepartment);
     router.post("/department/getById", adminController.getDepartmentById);
     router.get("/department/getAllDepartments", adminController.getAllDepartments);
+    router.get("/masterDropdownData", adminController.masterDropDownData);
     app.use("/api/admin", auth, router);
 };
