@@ -7,6 +7,7 @@ import sessionRoutes from 'app/views/sessions/SessionRoutes';
 import { Navigate } from 'react-router-dom';
 import MatxLayout from './components/MatxLayout/MatxLayout';
 import bugReportRoutes from './views/bugReport/bugReportRoutes';
+import departmentRoutes from './views/Departments/departmentRoutes';
 import myProfileRoutes from './views/myProfile/myProfileRoutes';
 import projectRoutes from './views/projects/projectRoutes';
 import statusRoutes from './views/status/statusRoutes';
@@ -19,7 +20,7 @@ const routes = [
         <MatxLayout />
       </AuthGuard>
     ),
-    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes,...projectRoutes,...bugReportRoutes,...myProfileRoutes,...statusRoutes,...userRoutes],
+    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes,...projectRoutes,...bugReportRoutes,...myProfileRoutes,...statusRoutes,...userRoutes,...departmentRoutes],
   },
   ...sessionRoutes,
   { path: '/', element: <Navigate to="dashboard/default" /> },

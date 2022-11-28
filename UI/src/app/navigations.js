@@ -19,6 +19,7 @@ export const navigations = [
       { name: 'Escalation Configurations',icon:'perm_data_setting',path:'/ticket'},
       { name: 'Projects',icon:'assignment',path:'/project'},
       { name: 'Status',icon:'do_not_disturb',path:'/status'},
+      { name: 'Departments',icon:'assistant',path:'/departments'},
       { name: 'Change Logo',icon:'image',path:'/ticket'},
     ],
   },

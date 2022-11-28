@@ -21,6 +21,11 @@
         "getById":"api/admin/project/getById",
         "getAllProjects":"api/admin/project/getAllProjects"
     },
+    "department":{
+        "create":"api/admin/department/create",
+        "getById":"api/admin/department/getById",
+        "getAllDepartments":"api/admin/department/getAllDepartments"
+    },
     "reportBug":{
         "reportBug":"api/admin/bugReport"
     },

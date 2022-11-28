@@ -2,6 +2,7 @@
 const db = require("../models");
 const project = db.project;
 const status = db.status;
+const department = db.department;
 const Op = db.Sequelize.Op;
 const generalMethodService = require("../Services/generalMethodAPIService");
 const emailTemplates = require("../emailTemplates/emailTemplate");
@@ -13,7 +14,6 @@ exports.getProjectByName = async (projectName, tenantId) => {
 
     return await project.findOne({ where: { [Op.and]: [{ name: projectName }, { tenant_id: tenantId }] } });
 }
-
 exports.getProjectById = async (id, tenantId) => {
     return await project.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
@@ -95,4 +95,44 @@ exports.bugReportEmail = async (bugDescription, tenantId) => {
     bugReportTemplate = bugReportTemplate.replace('{bugDescription}', bugDescription);
 
     await emailAPIService.sendEmail(coreSettingsConstants.SUPPORT_EMAIL, emailTemplates.BUG_REPORT_SUBJECT, null, null, null, bugReportTemplate);
-} 
+}
+exports.getDepartmentByName = async (departmentName, tenantId) => {
+
+    return await department.findOne({ where: { [Op.and]: [{ name: departmentName }, { tenant_id: tenantId }] } });
+}
+exports.createDepartment = async (name, id, active, tenantId) => {
+    let response = null;
+    const obj = {
+        name: name,
+        tenant_id: tenantId,
+        is_active: true
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
+        obj.id = id;
+        obj.is_active = active;
+        await department.update(obj, { where: { id: id } });
+    } else {
+        await department.create(obj);
+    }
+
+    const createdDepartment = await this.getDepartmentByName(name, tenantId);
+    response = {
+        status: true,
+        data: createdDepartment
+    }
+
+    return response
+}
+exports.getDepartmentById = async (id, tenantId) => {
+    return await department.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
+}
+exports.getAllDepartmentsWithPagination = async (page, size, tenantid) => {
+    let response = null;
+    const { limit, offset } = await generalMethodService.getPagination(page, size);
+    await department.findAndCountAll({ limit, offset, where: { tenant_id: tenantid } })
+        .then(async (data) => {
+            const res = await generalMethodService.getPagingData(data, page, limit);
+            response = res;
+        })
+    return response;
+}

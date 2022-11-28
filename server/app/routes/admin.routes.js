@@ -11,5 +11,8 @@ module.exports = (app) => {
     router.post("/status/getById", adminController.getStatusById);
     router.get("/status/getAllStatus", adminController.getAllStatus);
     router.post("/bugReport", adminController.bugReportEmail);
+    router.post("/department/create", adminController.createDepartment);
+    router.post("/department/getById", adminController.getDepartmentById);
+    router.get("/department/getAllDepartments", adminController.getAllDepartments);
     app.use("/api/admin", auth, router);
 };

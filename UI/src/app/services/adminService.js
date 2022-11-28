@@ -29,3 +29,23 @@ export const getAllStatus=(page,size)=>{
         url: BASE_URL + config.status.getAllStatus +`?page=${page}&size=${size}`
     })
 }
+export const createDepartment=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.department.create,
+        data: formData,
+    })
+}
+export const getDepartmentById=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.department.getById,
+        data: formData,
+    })
+}
+export const getAllDepartment=(page,size)=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.department.getAllDepartments +`?page=${page}&size=${size}`
+    })
+}

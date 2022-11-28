@@ -24,6 +24,7 @@ db.user = require("./user.model.js")(sequelize, Sequelize);
 db.tenant = require("./tenant.model.js")(sequelize, Sequelize);
 db.project = require("./project.model.js")(sequelize, Sequelize);
 db.status = require("./status.model.js")(sequelize, Sequelize);
+db.department = require("./department.model.js")(sequelize, Sequelize);
 
 db.user.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
@@ -32,6 +33,9 @@ db.project.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
 db.status.belongsTo(db.tenant, {
+    foreignKey: "tenant_id", //1:1
+});
+db.department.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
 module.exports = db;

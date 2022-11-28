@@ -13,6 +13,8 @@ module.exports = {
     TENANT_SAME_NAME_ERROR: "Tenant with name already exist",
     PROJECT_NAME_ERROR: "Project Name is mandatory",
     PROJECT_NAME_SAME_ERROR: "Project with same name already exist",
+    DEPARTMENT_NAME_ERROR: "Department Name is mandatory",
+    DEPARTMENT_NAME_SAME_ERROR: "Department with same name already exist",
     STATUS_NAME_ERROR: "Status Name is mandatory",
     STATUS_NAME_SAME_ERROR: "Status with same name already exist",
     ID_ERROR: "ID is mandatory",
