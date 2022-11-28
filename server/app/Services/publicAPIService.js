@@ -61,7 +61,13 @@ exports.login = async (email, password) => {
     let response = null;
     const user = await userAPIService.getByEmail(email);
     if (user && user.id) {
-
+        if (user.is_active === false) {
+            response = {
+                status: false,
+                error: errorConstants.INACTIVE_ACCOUNT_ERROR
+            }
+            return response;
+        }
         if (user && (await bcrypt.compare(password, user.password))) {
             // Create token
             const JWTtoken = await jwt.sign(
@@ -71,7 +77,7 @@ exports.login = async (email, password) => {
                     expiresIn: "2h",
                 }
             );
-            await userAPIService.updateUser(user.id,{ last_login_dt: new Date() }, user.tenant_id)
+            await userAPIService.updateUser(user.id, { last_login_dt: new Date() }, user.tenant_id)
             response = {
                 status: true,
                 data: {

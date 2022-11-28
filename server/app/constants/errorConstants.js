@@ -28,4 +28,5 @@ module.exports = {
     ROLE_MANDATORY_ERROR: "Role is mandatory",
     ACTIVE_MANDATORY_ERROR: "ACtive is mandatory",
     MAX_USER_ERROR: "Your current plan supports only {userCount} Users. Please upgrade your plan.",
+    INACTIVE_ACCOUNT_ERROR: "Your account is Inactive. Please contact your system administrator"
 };
