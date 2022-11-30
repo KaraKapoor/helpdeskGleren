@@ -49,3 +49,9 @@ export const getAllDepartment=(page,size)=>{
         url: BASE_URL + config.department.getAllDepartments +`?page=${page}&size=${size}`
     })
 }
+export const getMasterDropdownData=()=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.master.getDropdownData
+    })
+}

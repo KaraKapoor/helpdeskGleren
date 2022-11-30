@@ -32,7 +32,8 @@ const MyProfileView = () => {
                 mobile:data?.mobile?data.mobile: '',
                 designation:data?.designation?data.designation: '',
                 role: data?.role?data.role: '',
-                id: data?.id?data.id:''
+                id: data?.id?data.id:'',
+                department: data?.department_id?data.department_id:''
                 })
                 setLoadPage(true);
           }

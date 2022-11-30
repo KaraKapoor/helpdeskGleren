@@ -40,6 +40,9 @@ exports.updateUser = async (req, res) => {
         if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.mobile) !== null) {
             updateObj.mobile = input.mobile;
         }
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) !== null) {
+            updateObj.department_id = input.departmentId;
+        }
 
         const response = await userAPIService.updateUser(input.id, updateObj, userDetails.tenant_id)
         return res.status(200).send({
@@ -175,7 +178,7 @@ exports.createUpdateUser = async (req, res) => {
                 status: false
             });
         } else {
-            const resp = await userAPIService.createUpdateUser(input.email, input.firstName, input.lastName, input.mobile, input.designation, input.role, input.active, input.id, tenantId);
+            const resp = await userAPIService.createUpdateUser(input.email, input.firstName, input.lastName, input.mobile, input.designation, input.role, input.active, input.id, tenantId,input.departmentId);
             return res.status(200).send(resp);
         }
     } catch (exception) {

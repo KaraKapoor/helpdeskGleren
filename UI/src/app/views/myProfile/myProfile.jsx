@@ -1,7 +1,7 @@
 import { LoadingButton } from "@mui/lab";
 import React, { useEffect } from 'react'
-import { Box, Divider, FormControlLabel, Grid, Icon, TextareaAutosize, TextField } from "@mui/material";
-import { reportBug } from "app/services/adminService";
+import { Box, Divider, FormControl, FormControlLabel, Grid, Icon, InputLabel, MenuItem, Select, TextareaAutosize, TextField } from "@mui/material";
+import { getMasterDropdownData, reportBug } from "app/services/adminService";
 import { Formik } from "formik";
 import { useState } from "react";
 import { Card } from "react-bootstrap";
@@ -14,6 +14,9 @@ import { Strings } from "config/strings";
 const MyProfile = ({onClose,editData}) => {
 const [valid, setValid] = React.useState(false)
 const [initialValues,setInitialValues]=React.useState(editData)
+const [masterDropdownData,setMasterDropdownData]= React.useState();
+const [departments,setDepartments]= React.useState();
+const [selectedDepartment, setSelectedDepartment]= React.useState();
 const navigate = useNavigate();
 const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
 const HeaderTitle = styled.div`
@@ -36,7 +39,8 @@ designation: values.designation,
 firstName: values.firstName,
 lastName: values.lastName,
 mobile: values.mobile,
-id: values.id
+id: values.id,
+departmentId: selectedDepartment
 };
 updateUserProfile(reqBody).then((resp)=>{
 if (resp?.status === false) {
@@ -60,6 +64,28 @@ width: 400,
 return navigate('/dashboard/default');
 }
 })
+}
+useEffect(() => {
+	getMasterDropdownData().then((resp)=>{
+		if (resp?.status === false) {
+			return Swal.fire({
+			icon: 'error',
+			title: 'Error',
+			text: resp.error,
+			showCloseButton: true,
+			showConfirmButton: false,
+			width: 400,
+			})
+			} else {
+				setDepartments(resp?.data?.departments);
+				setMasterDropdownData(resp.data);
+				setSelectedDepartment(editData?.department);
+		}
+	})
+}, [])
+
+const handleDepartmentChange=(event)=>{
+	setSelectedDepartment(event.target.value);
 }
 
 return (
@@ -117,6 +143,25 @@ return (
 									variant="outlined" onBlur={handleBlur} value={values.role} onChange={handleChange}
 									sx={{ mb: 1.5 }} />
 							</Grid>
+							<Grid item lg={6} md={6} sm={12} xs={12}>
+							<FormControl fullWidth>
+                        <InputLabel id="role">Department</InputLabel>
+                        <Select
+                          labelId="department"
+                          id="department"
+                          value={selectedDepartment}
+                          label="Department"
+                          onChange={handleDepartmentChange}
+                          defaultValue={selectedDepartment}
+                        >
+							{
+								departments?.map((d,i)=>{
+									return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+								})
+							}
+                        </Select>
+                      </FormControl>
+							</Grid>
 
 						</Grid>
 
@@ -133,7 +178,6 @@ return (
 			</Formik>
 		</Card>
 	</div>
-
 </>
 )
 }

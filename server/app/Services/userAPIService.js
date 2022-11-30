@@ -35,7 +35,7 @@ exports.createUser = async (email, password, isEmailVerified, firstName, lastNam
     response = await this.getByEmail(email);
     return response;
 }
-exports.createUpdateUser = async (email, firstName, lastName, mobile, designation, role, active, id, tenantId) => {
+exports.createUpdateUser = async (email, firstName, lastName, mobile, designation, role, active, id, tenantId,departmentId) => {
     let response = null;
     const obj = {
         email: email,
@@ -45,7 +45,8 @@ exports.createUpdateUser = async (email, firstName, lastName, mobile, designatio
         mobile: mobile,
         designation: designation,
         is_active: active,
-        tenant_id: tenantId
+        tenant_id: tenantId,
+        department_id: departmentId
     }
 
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
