@@ -333,3 +333,99 @@ exports.masterDropDownData = async (req, res) => {
     }
 
 }
+exports.createEscalationMatrix = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    let isNew = false;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.DEPARTMENT_NAME_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
+        isNew = true;
+    }
+    try {
+        const response = await adminAPIService.getEscalationByDepartmentId(input.departmentId, tenantId);
+        if (isNew && response?.department_id) {
+            return res.status(200).send({
+                error: errorConstants.SAME_ESCALATION_ERROR,
+                status: false
+            });
+        } else if (!isNew && input?.departmentId === response?.department_id && response.id != input.id) {
+            return res.status(200).send({
+                error: errorConstants.SAME_ESCALATION_ERROR,
+                status: false
+            });
+        }
+        else {
+            const resp = await adminAPIService.createEscalations(input.departmentId, input.l1Id, input.l2Id, input.l3Id, input.l4Id, input.l5Id, input.l6Id, input.id, input.is_active, tenantId);
+            return res.status(200).send(resp);
+        }
+
+
+
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.getEscalationById = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.ID_ERROR,
+            status: false
+        });
+    }
+
+    try {
+        const response = await adminAPIService.getEscalationById(input.id, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.getAllEscalations = async (req, res) => {
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    const input = req.query;
+    const { page, size } = req.query;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.page) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PAGE_NO_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.size) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PAGE_SIZE_ERROR,
+            status: false
+        });
+    }
+    try {
+        const response = await adminAPIService.getAllEscalationsWithPagination(page, size, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}

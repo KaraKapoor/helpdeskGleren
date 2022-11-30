@@ -3,6 +3,7 @@ const db = require("../models");
 const project = db.project;
 const status = db.status;
 const department = db.department;
+const escalations = db.escalations;
 const Op = db.Sequelize.Op;
 const generalMethodService = require("../Services/generalMethodAPIService");
 const emailTemplates = require("../emailTemplates/emailTemplate");
@@ -139,6 +140,52 @@ exports.getAllDepartmentsWithPagination = async (page, size, tenantid) => {
 exports.masterDropdownData = async (tenantId) => {
     let response = {};
     const departmentData = await department.findAll({ where: { tenant_id: tenantId } });
-    response["departments"]= departmentData;
+    response["departments"] = departmentData;
+    return response;
+}
+exports.getEscalationByDepartmentId = async (departmentId, tenantId) => {
+
+    return await escalations.findOne({ where: { [Op.and]: [{ department_id: departmentId }, { tenant_id: tenantId }] } });
+}
+exports.createEscalations = async (departmentId, l1Id, l2Id, l3Id, l4Id, l5Id, l6Id, id, active, tenantId) => {
+    let response = null;
+    const obj = {
+        l1_id: l1Id,
+        l2_id: l2Id,
+        l3_id: l3Id,
+        l4_id: l4Id,
+        l5_id: l5Id,
+        l6_id: l6Id,
+        tenant_id: tenantId,
+        is_active: true,
+        department_id: departmentId
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
+        obj.id = id;
+        obj.is_active = active;
+        await escalations.update(obj, { where: { id: id } });
+    } else {
+        await escalations.create(obj);
+    }
+
+    const createdEscalations = await this.getEscalationByDepartmentId(departmentId, tenantId);
+    response = {
+        status: true,
+        data: createdEscalations
+    }
+
+    return response
+}
+exports.getEscalationById = async (id, tenantId) => {
+    return await escalations.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
+}
+exports.getAllEscalationsWithPagination = async (page, size, tenantid) => {
+    let response = null;
+    const { limit, offset } = await generalMethodService.getPagination(page, size);
+    await escalations.findAndCountAll({ limit, offset, where: { tenant_id: tenantid } })
+        .then(async (data) => {
+            const res = await generalMethodService.getPagingData(data, page, limit);
+            response = res;
+        })
     return response;
 }

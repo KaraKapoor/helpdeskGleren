@@ -15,5 +15,8 @@ module.exports = (app) => {
     router.post("/department/getById", adminController.getDepartmentById);
     router.get("/department/getAllDepartments", adminController.getAllDepartments);
     router.get("/masterDropdownData", adminController.masterDropDownData);
+    router.post("/escalations/createEscalation", adminController.createEscalationMatrix);
+    router.post("/escalations/getById", adminController.getEscalationById);
+    router.get("/escalations/getAllEscalations", adminController.getAllEscalations);
     app.use("/api/admin", auth, router);
 };
