@@ -129,7 +129,7 @@ exports.createStatus = async (req, res) => {
                 status: false
             });
         } else {
-            const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId);
+            const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId,input.statusType);
             return res.status(200).send(resp);
         }
 

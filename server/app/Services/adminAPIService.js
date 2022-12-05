@@ -61,11 +61,12 @@ exports.getStatusByName = async (statusName, tenantId) => {
 exports.getStatusById = async (id, tenantId) => {
     return await status.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
-exports.createStatus = async (name, id, active, tenantId) => {
+exports.createStatus = async (name, id, active, tenantId,statusType) => {
     let response = null;
     const obj = {
         name: name,
         tenant_id: tenantId,
+        status_type: statusType,
         is_active: true
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
@@ -151,6 +152,10 @@ exports.masterDropdownData = async (tenantId) => {
     response["projects"] = projectsData;
     const onlyUsersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.notIn]: ['admin', 'agent', 'teamLead'] } }] } });
     response["users"] = onlyUsersData;
+    const statusType=["ToDo","InProgress","Close"];
+    response["statusTypes"] = statusType;
+    const roles=["admin","agent","teamLead","user"];
+    response["roles"] = roles;
     return response;
 }
 exports.getEscalationByDepartmentId = async (departmentId, tenantId) => {

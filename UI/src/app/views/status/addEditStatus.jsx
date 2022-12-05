@@ -3,16 +3,18 @@ import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2'
 import moment from 'moment'
 import { Formik } from 'formik';
-import { Card, Checkbox, Divider, FormControlLabel, Icon, TextField } from '@mui/material'
+import { Card, Checkbox, Divider, FormControl, FormControlLabel, Icon, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
-import { createStatus } from 'app/services/adminService';
+import { createStatus, getMasterDropdownData } from 'app/services/adminService';
 import "./statusList.css";
 
 const AddEditStatus = ({ onClose, editDetails }) => {
     const [valid, setValid] = React.useState(false)
     const [isActive, setIsActive] = React.useState(editDetails?.is_active ? editDetails.is_active : true);
+    const [statusTypes, setStatusType] = React.useState([]);
+    const [selectedStatusType, setSelectedStatusType] = React.useState();
     const handleClose = (event) => !!onClose && onClose(event) && setValid(false)
     const navigate = useNavigate();
 
@@ -35,14 +37,32 @@ const AddEditStatus = ({ onClose, editDetails }) => {
 `
 
     React.useEffect(() => {
-        if(editDetails){{
-            setIsActive(editDetails?.is_active);
-        }}
+        if (editDetails) {
+            {
+                setIsActive(editDetails?.is_active);
+                setSelectedStatusType(editDetails?.status_type);
+            }
+        }
+        getMasterDropdownData().then((resp) => {
+            if (resp?.status === false) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: resp.error,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: 400,
+                })
+            } else {
+                setStatusType(resp?.data?.statusTypes);
+            }
+        })
     }, [])
 
     const onSubmit = (values) => {
         const reqBody = {
             statusName: values.statusName,
+            statusType: selectedStatusType,
             is_active: isActive
         };
         if (editDetails?.id) {
@@ -91,6 +111,9 @@ const AddEditStatus = ({ onClose, editDetails }) => {
             setIsActive(true);
         }
     }
+    const handleStatusType = (event) => {
+        setSelectedStatusType(event.target.value);
+    }
     return (
         <>
             <div>
@@ -134,6 +157,26 @@ const AddEditStatus = ({ onClose, editDetails }) => {
                                         />
                                         <br />
 
+                                    </div>
+                                    <div>
+                                        <FormControl fullWidth>
+                                            <InputLabel required={true} id="statusTypes">Status Type</InputLabel>
+                                            <Select
+                                                labelId="statusTypes"
+                                                id="statusTypes"
+                                                required={true}
+                                                value={selectedStatusType}
+                                                label="statusTypes"
+                                                onChange={handleStatusType}
+                                                defaultValue={selectedStatusType}
+                                            >
+                                                {
+                                                    statusTypes?.map((d, i) => {
+                                                        return <MenuItem key={i} value={d}>{d}</MenuItem>
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
                                     </div>
                                     <div>
                                         <FormControlLabel

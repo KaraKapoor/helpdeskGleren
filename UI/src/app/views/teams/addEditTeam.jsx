@@ -135,7 +135,11 @@ const AddEditTeam = ({ onClose, editDetails }) => {
     );
   }
   const handleLeadChange= (event)=>{
-    setSelectedLeads(event.target.value);
+    const {target: { value },} = event;
+    setSelectedLeads(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
   }
   const handleAgentsChange= (event)=>{
     const {target: { value },} = event;

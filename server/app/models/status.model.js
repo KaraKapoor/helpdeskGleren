@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
         is_active: {
             type: Sequelize.BOOLEAN,
             defaultValue: true
+        },
+        status_type:{
+            type: Sequelize.ENUM("ToDo", "InProgress", "Close"),
         }
     });
 
