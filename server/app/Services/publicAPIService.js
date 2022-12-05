@@ -68,6 +68,13 @@ exports.login = async (email, password) => {
             }
             return response;
         }
+        if(user.is_email_verified === false){
+            response = {
+                status: false,
+                error: errorConstants.EMAIL_NOT_VERIFIED
+            }
+            return response;
+        }
         if (user && (await bcrypt.compare(password, user.password))) {
             // Create token
             const JWTtoken = await jwt.sign(

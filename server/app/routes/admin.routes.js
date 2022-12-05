@@ -18,5 +18,8 @@ module.exports = (app) => {
     router.post("/escalations/createEscalation", adminController.createEscalationMatrix);
     router.post("/escalations/getById", adminController.getEscalationById);
     router.get("/escalations/getAllEscalations", adminController.getAllEscalations);
+    router.get("/teams/getAllTeams", adminController.getAllTeams);
+    router.post("/teams/create", adminController.createTeam);
+    router.post("/teams/getById", adminController.getTeamById);
     app.use("/api/admin", auth, router);
 };

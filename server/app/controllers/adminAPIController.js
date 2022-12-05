@@ -429,3 +429,134 @@ exports.getAllEscalations = async (req, res) => {
         });
     }
 }
+exports.getAllTeams = async (req, res) => {
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    const input = req.query;
+    const { page, size } = req.query;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.page) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PAGE_NO_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.size) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PAGE_SIZE_ERROR,
+            status: false
+        });
+    }
+    try {
+        const response = await adminAPIService.getAllTeamsWithPagination(page, size, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.createTeam = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    let isNew = false;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.teamName) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.TEAM_NAME_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.DEPARTMENT_NAME_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.projectId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PROJECT_NAME_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.users) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.USERS_EMPTY_ARRAY_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.leads) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.LEADS_EMPTY_ARRAY_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.agents) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.AGENT_EMPTY_ARRAY_ERROR,
+            status: false
+        });
+    }
+
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
+        isNew = true;
+    }
+    try {
+        const response = await adminAPIService.getTeamByName(input.teamName, tenantId);
+        if (isNew && response?.name) {
+            return res.status(200).send({
+                error: errorConstants.TEAM_NAME_SAME_ERROR,
+                status: false
+            });
+        } else if (!isNew && input?.teamName === response?.name && response.id != input.id) {
+            return res.status(200).send({
+                error: errorConstants.TEAM_NAME_SAME_ERROR,
+                status: false
+            });
+        } else {
+            const resp = await adminAPIService.createTeam(input.id, input.teamName, input.active, input.departmentId, input.projectId, input.users, input.leads, input.agents, tenantId, userDetails.id);
+            return res.status(200).send(resp);
+        }
+
+
+
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.getTeamById = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.ID_ERROR,
+            status: false
+        });
+    }
+
+    try {
+        const response = await adminAPIService.getTeamById(input.id, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}

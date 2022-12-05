@@ -26,6 +26,8 @@ db.project = require("./project.model.js")(sequelize, Sequelize);
 db.status = require("./status.model.js")(sequelize, Sequelize);
 db.department = require("./department.model.js")(sequelize, Sequelize);
 db.escalations = require("./escalation.model.js")(sequelize, Sequelize);
+db.team = require("./team.model.js")(sequelize, Sequelize);
+db.teamAgentAssociation = require("./teamAgentAssociation.model.js")(sequelize, Sequelize);
 
 db.user.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
@@ -65,6 +67,36 @@ db.escalations.belongsTo(db.user, {
 });
 db.escalations.belongsTo(db.user, {
     foreignKey: "l6_id", //1:1
+});
+db.team.belongsTo(db.user, {
+    foreignKey: "created_by", //1:1
+});
+db.team.belongsTo(db.user, {
+    foreignKey: "updated_by", //1:1
+});
+db.team.belongsTo(db.tenant, {
+    foreignKey: "tenant_id", //1:1
+});
+db.teamAgentAssociation.belongsTo(db.team, {
+    foreignKey: "team_id", //1:1
+});
+db.teamAgentAssociation.belongsTo(db.user, {
+    foreignKey: "team_lead_id", //1:1
+});
+db.teamAgentAssociation.belongsTo(db.user, {
+    foreignKey: "agent_id", //1:1
+});
+db.teamAgentAssociation.belongsTo(db.user, {
+    foreignKey: "user_id", //1:1
+});
+db.teamAgentAssociation.belongsTo(db.department, {
+    foreignKey: "department_id", //1:1
+});
+db.teamAgentAssociation.belongsTo(db.project, {
+    foreignKey: "project_id", //1:1
+});
+db.teamAgentAssociation.belongsTo(db.tenant, {
+    foreignKey: "tenant_id", //1:1
 });
 
 module.exports = db;

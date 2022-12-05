@@ -30,4 +30,9 @@ module.exports = {
     MAX_USER_ERROR: "Your current plan supports only {userCount} Users. Please upgrade your plan.",
     INACTIVE_ACCOUNT_ERROR: "Your account is Inactive. Please contact your system administrator",
     SAME_ESCALATION_ERROR: "Escalation Details for same department already exist.",
+    TEAM_NAME_ERROR: "Team Name is mandatory",
+    TEAM_NAME_SAME_ERROR: "Team with same name already exist",
+    USERS_EMPTY_ARRAY_ERROR: "Users cannot be null",
+    LEADS_EMPTY_ARRAY_ERROR: "Leads cannot be null",
+    AGENT_EMPTY_ARRAY_ERROR: "Agents cannot be null"
 };

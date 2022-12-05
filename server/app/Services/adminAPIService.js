@@ -4,6 +4,8 @@ const project = db.project;
 const status = db.status;
 const user = db.user;
 const department = db.department;
+const team = db.team;
+const teamAgentAssociation = db.teamAgentAssociation;
 const escalations = db.escalations;
 const Op = db.Sequelize.Op;
 const generalMethodService = require("../Services/generalMethodAPIService");
@@ -145,6 +147,10 @@ exports.masterDropdownData = async (tenantId) => {
     response["departments"] = departmentData;
     const usersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.in]: ['admin', 'agent', 'teamLead'] } }] } });
     response["agents"] = usersData;
+    const projectsData = await project.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { is_active: true }] } });
+    response["projects"] = projectsData;
+    const onlyUsersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.notIn]: ['admin', 'agent', 'teamLead'] } }] } });
+    response["users"] = onlyUsersData;
     return response;
 }
 exports.getEscalationByDepartmentId = async (departmentId, tenantId) => {
@@ -214,5 +220,145 @@ exports.getAllEscalationsWithPagination = async (page, size, tenantid) => {
             const res = await generalMethodService.getPagingData(data, page, limit);
             response = res;
         })
+    return response;
+}
+exports.getAllTeamsWithPagination = async (page, size, tenantid) => {
+    let response = null;
+    const { limit, offset } = await generalMethodService.getPagination(page, size);
+    await team.findAndCountAll({ limit, offset, where: { tenant_id: tenantid } })
+        .then(async (data) => {
+            const res = await generalMethodService.getPagingData(data, page, limit);
+            response = res;
+        })
+    return response;
+}
+exports.getTeamByName = async (teamName, tenantId) => {
+
+    return await team.findOne({ where: { [Op.and]: [{ name: teamName }, { tenant_id: tenantId }] } });
+}
+exports.createTeam = async (id, teamName, active, departmentId, projectId, users, leads, agents, tenantId, loggedInUserId) => {
+    let response = null;
+    const obj = {
+        name: teamName,
+        tenant_id: tenantId,
+        is_active: true,
+        updated_by: loggedInUserId
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
+        obj.id = id;
+        obj.is_active = active;
+        await team.update(obj, { where: { id: id } });
+
+        //Delete all associations and recreate it.
+        await teamAgentAssociation.destroy({ where: { [Op.and]: [{ team_id: id }, { tenant_id: tenantId }] } });
+        //Insert Leads
+        for (let i of leads) {
+            const obj = {
+                team_id: id,
+                team_lead_id: i,
+                department_id: departmentId,
+                project_id: projectId,
+                tenant_id: tenantId
+            }
+            await teamAgentAssociation.create(obj);
+        }
+        //Insert Agents
+        for (let i of agents) {
+            const obj = {
+                team_id: id,
+                agent_id: i,
+                department_id: departmentId,
+                project_id: projectId,
+                tenant_id: tenantId
+            }
+            await teamAgentAssociation.create(obj);
+        }
+        //Insert users
+        for (let i of users) {
+            const obj = {
+                team_id: id,
+                user_id: i,
+                department_id: departmentId,
+                project_id: projectId,
+                tenant_id: tenantId
+            }
+            await teamAgentAssociation.create(obj);
+        }
+        const createdTeam = await this.getTeamByName(teamName, tenantId);
+        response = {
+            status: true,
+            data: createdTeam
+        }
+    } else {
+        obj.created_by = loggedInUserId
+        await team.create(obj);
+        const createdTeam = await this.getTeamByName(teamName, tenantId);
+        //Insert Leads
+        for (let i of leads) {
+            const obj = {
+                team_id: createdTeam.id,
+                team_lead_id: i,
+                department_id: departmentId,
+                project_id: projectId,
+                tenant_id: tenantId
+            }
+            await teamAgentAssociation.create(obj);
+        }
+        //Insert Agents
+        for (let i of agents) {
+            const obj = {
+                team_id: createdTeam.id,
+                agent_id: i,
+                department_id: departmentId,
+                project_id: projectId,
+                tenant_id: tenantId
+            }
+            await teamAgentAssociation.create(obj);
+        }
+        //Insert users
+        for (let i of users) {
+            const obj = {
+                team_id: createdTeam.id,
+                user_id: i,
+                department_id: departmentId,
+                project_id: projectId,
+                tenant_id: tenantId
+            }
+            await teamAgentAssociation.create(obj);
+        }
+        response = {
+            status: true,
+            data: createdTeam
+        }
+    }
+
+    return response
+}
+exports.getTeamById = async (id, tenantId) => {
+    let response = null;
+    let agentsArray = [];
+    let leadsArray = [];
+    let usersArray = [];
+    const teamResp = await team.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
+    if (teamResp !== null) {
+        response = teamResp.dataValues;
+
+        const associationResp = await teamAgentAssociation.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { team_id: id }] } });
+        console.log(associationResp);
+        for (let i of associationResp) {
+            response.department_id = i.department_id;
+            response.project_id = i.project_id;
+            if (i.agent_id !== null) {
+                agentsArray.push(i.agent_id);
+            } else if (i.team_lead_id !== null) {
+                leadsArray.push(i.team_lead_id);
+            } else if (i.user_id !== null) {
+                usersArray.push(i.user_id);
+            }
+        }
+        response.users = usersArray;
+        response.leads = leadsArray;
+        response.agents = agentsArray;
+    }
     return response;
 }
