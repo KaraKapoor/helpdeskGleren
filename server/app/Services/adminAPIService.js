@@ -2,12 +2,14 @@
 const db = require("../models");
 const project = db.project;
 const status = db.status;
+const user = db.user;
 const department = db.department;
 const escalations = db.escalations;
 const Op = db.Sequelize.Op;
 const generalMethodService = require("../Services/generalMethodAPIService");
 const emailTemplates = require("../emailTemplates/emailTemplate");
 const emailAPIService = require("./emailAPIService");
+const userAPIService = require("./userAPIService");
 const coreSettingsConstants = require("../constants/coreSettingsConstants");
 const { htmlToText } = require('html-to-text');
 
@@ -141,6 +143,8 @@ exports.masterDropdownData = async (tenantId) => {
     let response = {};
     const departmentData = await department.findAll({ where: { tenant_id: tenantId } });
     response["departments"] = departmentData;
+    const usersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.in]: ['admin', 'agent', 'teamLead'] } }] } });
+    response["agents"] = usersData;
     return response;
 }
 exports.getEscalationByDepartmentId = async (departmentId, tenantId) => {
@@ -177,12 +181,35 @@ exports.createEscalations = async (departmentId, l1Id, l2Id, l3Id, l4Id, l5Id, l
     return response
 }
 exports.getEscalationById = async (id, tenantId) => {
-    return await escalations.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
+    let response = null;
+    const data = await escalations.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
+    if (data !== null) {
+        response = data.dataValues;
+        if (data.l1_id != null) {
+            response.l1User = await userAPIService.getUserById(data.l1_id);
+        }
+        if (data.l2_id != null) {
+            response.l2User = await userAPIService.getUserById(data.l2_id);
+        }
+        if (data.l3_id != null) {
+            response.l3User = await userAPIService.getUserById(data.l3_id);
+        }
+        if (data.l4_id != null) {
+            response.l4User = await userAPIService.getUserById(data.l4_id);
+        }
+        if (data.l5_id != null) {
+            response.l5User = await userAPIService.getUserById(data.l5_id);
+        }
+        if (data.l6_id != null) {
+            response.l6User = await userAPIService.getUserById(data.l6_id);
+        }
+    }
+    return response;
 }
 exports.getAllEscalationsWithPagination = async (page, size, tenantid) => {
     let response = null;
     const { limit, offset } = await generalMethodService.getPagination(page, size);
-    await escalations.findAndCountAll({ limit, offset, where: { tenant_id: tenantid } })
+    await escalations.findAndCountAll({ limit, offset, where: { tenant_id: tenantid }, include: [{ model: db.department }] })
         .then(async (data) => {
             const res = await generalMethodService.getPagingData(data, page, limit);
             response = res;

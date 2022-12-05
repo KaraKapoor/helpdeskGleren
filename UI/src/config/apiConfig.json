@@ -34,6 +34,11 @@
         "getById":"api/admin/status/getById",
         "getAllStatus":"api/admin/status/getAllStatus"
     },
+    "escalation":{
+        "create":"api/admin/escalations/createEscalation",
+        "getById":"api/admin/escalations/getById",
+        "getAllEscalation":"api/admin/escalations/getAllEscalations"
+    },
     "master":{
         "getDropdownData":"api/admin/masterDropdownData"
     }

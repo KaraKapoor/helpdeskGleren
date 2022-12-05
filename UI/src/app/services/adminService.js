@@ -55,3 +55,23 @@ export const getMasterDropdownData=()=>{
         url: BASE_URL + config.master.getDropdownData
     })
 }
+export const getAllEscalations=(page,size)=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.escalation.getAllEscalation +`?page=${page}&size=${size}`
+    })
+}
+export const getEscalationById=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.escalation.getById,
+        data: formData,
+    })
+}
+export const createEscalationMatrix=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.escalation.create,
+        data: formData,
+    })
+}

@@ -48,5 +48,23 @@ db.escalations.belongsTo(db.tenant, {
 db.escalations.belongsTo(db.department, {
     foreignKey: "department_id", //1:1
 });
+db.escalations.belongsTo(db.user, {
+    foreignKey: "l1_id", //1:1
+});
+db.escalations.belongsTo(db.user, {
+    foreignKey: "l2_id", //1:1
+});
+db.escalations.belongsTo(db.user, {
+    foreignKey: "l3_id", //1:1
+});
+db.escalations.belongsTo(db.user, {
+    foreignKey: "l4_id", //1:1
+});
+db.escalations.belongsTo(db.user, {
+    foreignKey: "l5_id", //1:1
+});
+db.escalations.belongsTo(db.user, {
+    foreignKey: "l6_id", //1:1
+});
 
 module.exports = db;
