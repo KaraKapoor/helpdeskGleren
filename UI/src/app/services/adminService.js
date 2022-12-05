@@ -75,3 +75,23 @@ export const createEscalationMatrix=(formData)=>{
         data: formData,
     })
 }
+export const getAllTeams=(page,size)=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.teams.getAllTeams +`?page=${page}&size=${size}`
+    })
+}
+export const getTeamById=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.teams.getById,
+        data: formData,
+    })
+}
+export const createTeam=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.teams.create,
+        data: formData,
+    })
+}

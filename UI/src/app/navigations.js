@@ -14,7 +14,7 @@ export const navigations = [
     name: 'Core Configurations',
     icon: 'security',
     children: [
-      { name: 'Teams',icon:'people',path:'/ticket'},
+      { name: 'Teams',icon:'people',path:'/teams'},
       { name: 'Users',icon:'group',path:'/users'},
       { name: 'Escalation Configurations',icon:'perm_data_setting',path:'/escalations'},
       { name: 'Projects',icon:'assignment',path:'/project'},

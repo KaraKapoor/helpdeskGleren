@@ -39,6 +39,11 @@
         "getById":"api/admin/escalations/getById",
         "getAllEscalation":"api/admin/escalations/getAllEscalations"
     },
+    "teams":{
+        "create":"api/admin/teams/create",
+        "getById":"api/admin/teams/getById",
+        "getAllTeams":"api/admin/teams/getAllTeams"
+    },
     "master":{
         "getDropdownData":"api/admin/masterDropdownData"
     }
