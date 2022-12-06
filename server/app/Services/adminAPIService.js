@@ -156,6 +156,10 @@ exports.masterDropdownData = async (tenantId) => {
     response["statusTypes"] = statusType;
     const roles=["admin","agent","teamLead","user"];
     response["roles"] = roles;
+    const ticketPriorites=["Minor","Major","Critical","Blocker"];
+    response["ticketPriorites"] = ticketPriorites;
+    const ticketCategory=["Bug","Improvement","Task","New Feature"];
+    response["ticketCategory"] = ticketCategory;
     return response;
 }
 exports.getEscalationByDepartmentId = async (departmentId, tenantId) => {
