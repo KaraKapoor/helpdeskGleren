@@ -20,7 +20,6 @@ exports.saveTicketHistory = async (tenantId, ticketId, text) => {
     })
     return response;
 }
-
 exports.getTicketHistoryMessage = async (type, userName, status, assignee) => {
     let response = null;
     switch (type) {
