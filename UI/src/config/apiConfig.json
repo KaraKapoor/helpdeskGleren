@@ -44,6 +44,9 @@
         "getById":"api/admin/teams/getById",
         "getAllTeams":"api/admin/teams/getAllTeams"
     },
+    "ticket":{
+        "create":"api/ticket/create"
+    },
     "master":{
         "getDropdownData":"api/admin/masterDropdownData"
     }

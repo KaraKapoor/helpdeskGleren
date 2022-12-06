@@ -322,7 +322,7 @@ exports.masterDropDownData = async (req, res) => {
     const tenantId = userDetails.tenant_id;
 
     try {
-        const response = await adminAPIService.masterDropdownData(tenantId);
+        const response = await adminAPIService.masterDropdownData(tenantId,req.user.user_id);
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
         console.log(exception);

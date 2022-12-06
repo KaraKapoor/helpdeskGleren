@@ -4,7 +4,7 @@ export const navigations = [
   { name: 'Dashboard', path: '/dashboard/default', icon: 'dashboard' },
 
   { label: 'TICKETS', type: 'label' },
-  { name: 'My Tickets',icon:'assignment',path:'/ticket'},
+  { name: 'My Tickets',icon:'assignment',path:'/tickets'},
   { name: 'Escalated Tickets',icon:'trending_down',path:'/ticket'},
   { name: 'All Tickets',icon:'trending_up',path:'/ticket'},
   { name: 'My Team',icon:'people',path:'/ticket'},
@@ -20,7 +20,7 @@ export const navigations = [
       { name: 'Projects',icon:'assignment',path:'/project'},
       { name: 'Status',icon:'do_not_disturb',path:'/status'},
       { name: 'Departments',icon:'assistant',path:'/departments'},
-      { name: 'Change Logo',icon:'image',path:'/ticket'},
+      // { name: 'Change Logo',icon:'image',path:'/ticket'},
     ],
   },
 

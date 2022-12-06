@@ -14,6 +14,7 @@ const emailAPIService = require("./emailAPIService");
 const userAPIService = require("./userAPIService");
 const coreSettingsConstants = require("../constants/coreSettingsConstants");
 const { htmlToText } = require('html-to-text');
+const queries = require("../constants/queries");
 
 exports.getProjectByName = async (projectName, tenantId) => {
 
@@ -61,7 +62,7 @@ exports.getStatusByName = async (statusName, tenantId) => {
 exports.getStatusById = async (id, tenantId) => {
     return await status.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
-exports.createStatus = async (name, id, active, tenantId,statusType) => {
+exports.createStatus = async (name, id, active, tenantId, statusType) => {
     let response = null;
     const obj = {
         name: name,
@@ -142,7 +143,7 @@ exports.getAllDepartmentsWithPagination = async (page, size, tenantid) => {
         })
     return response;
 }
-exports.masterDropdownData = async (tenantId) => {
+exports.masterDropdownData = async (tenantId,currentUserId) => {
     let response = {};
     const departmentData = await department.findAll({ where: { tenant_id: tenantId } });
     response["departments"] = departmentData;
@@ -150,16 +151,25 @@ exports.masterDropdownData = async (tenantId) => {
     response["agents"] = usersData;
     const projectsData = await project.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { is_active: true }] } });
     response["projects"] = projectsData;
+
+    let currenUserProjectsQuery= queries.GET_LOGGED_IN_USER_PROJECTS;
+    currenUserProjectsQuery=currenUserProjectsQuery.replace(/:id/g,currentUserId);
+    currenUserProjectsQuery=currenUserProjectsQuery.replace(/:tenantId/g,tenantId)
+    const currenUserProjects = await this.executeRawSelectQuery(currenUserProjectsQuery);
+    response["currentUserProjects"] = currenUserProjects;
     const onlyUsersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.notIn]: ['admin', 'agent', 'teamLead'] } }] } });
     response["users"] = onlyUsersData;
-    const statusType=["ToDo","InProgress","Close"];
+    const statusType = ["ToDo", "InProgress", "Close"];
     response["statusTypes"] = statusType;
-    const roles=["admin","agent","teamLead","user"];
+    const roles = ["admin", "agent", "teamLead", "user"];
     response["roles"] = roles;
-    const ticketPriorites=["Minor","Major","Critical","Blocker"];
+    const ticketPriorites = ["Minor", "Major", "Critical", "Blocker"];
     response["ticketPriorites"] = ticketPriorites;
-    const ticketCategory=["Bug","Improvement","Task","New Feature"];
+    const ticketCategory = ["Bug", "Improvement", "Task", "New Feature"];
     response["ticketCategory"] = ticketCategory;
+
+    const activeStatus = await status.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { is_active: true }] } });
+    response["activeStatus"] = activeStatus;
     return response;
 }
 exports.getEscalationByDepartmentId = async (departmentId, tenantId) => {
@@ -370,4 +380,10 @@ exports.getTeamById = async (id, tenantId) => {
         response.agents = agentsArray;
     }
     return response;
+}
+exports.executeRawSelectQuery = async (query) => {
+    const queryResp = await db.sequelize.query(query, {
+        type: db.sequelize.QueryTypes.SELECT,
+    });
+    return queryResp;
 }

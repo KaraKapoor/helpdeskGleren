@@ -94,13 +94,13 @@ const Layout1Topbar = () => {
   };
   const IMG = styled('img')(() => ({
     width: '100%',
-    height:'auto'
-}))
+    height: 'auto'
+  }))
 
-const LogoContainer= styled('div')(()=>({
-  width:"260px",
-  height:"40px"
-}))
+  const LogoContainer = styled('div')(() => ({
+    width: "260px",
+    height: "40px"
+  }))
 
   return (
     <TopbarRoot>
@@ -110,11 +110,14 @@ const LogoContainer= styled('div')(()=>({
             <Icon>menu</Icon>
           </StyledIconButton>
           <IconBox>
-          <StyledIconButton>
-          <Fab size="small" color="secondary" aria-label="Add" className="button">
-          <Icon>add</Icon>
-        </Fab>
-          </StyledIconButton>
+            <StyledIconButton>
+              <Link to="/create-ticket">
+                <Fab size="small" color="secondary" aria-label="Add" className="button">
+                  <Icon>add</Icon>
+                </Fab>
+              </Link>
+
+            </StyledIconButton>
             {/* <StyledIconButton>
               <Icon>mail_outline</Icon>
             </StyledIconButton>
@@ -129,7 +132,7 @@ const LogoContainer= styled('div')(()=>({
           </IconBox>
         </Box>
         <LogoContainer>
-            {/* <IMG src="/assets/modified/glerenLogo.png" alt="" className='mx-auto' /> */}
+          {/* <IMG src="/assets/modified/glerenLogo.png" alt="" className='mx-auto' /> */}
         </LogoContainer>
 
 

@@ -34,5 +34,10 @@ module.exports = {
     TEAM_NAME_SAME_ERROR: "Team with same name already exist",
     USERS_EMPTY_ARRAY_ERROR: "Users cannot be null",
     LEADS_EMPTY_ARRAY_ERROR: "Leads cannot be null",
-    AGENT_EMPTY_ARRAY_ERROR: "Agents cannot be null"
+    AGENT_EMPTY_ARRAY_ERROR: "Agents cannot be null",
+    ASSIGNEE_NAME_ERROR: "Assignee name is mandatory",
+    CATEGORY_ERROR: "Category is mandatory",
+    PRIORITY_ERROR: "Priority is mandatory",
+    ISSUE_DETAILS_ERROR: "Issue Details is mandatory",
+    ISSUE_SUMMARY_ERROR: "Issue Summary is mandatory"
 };
