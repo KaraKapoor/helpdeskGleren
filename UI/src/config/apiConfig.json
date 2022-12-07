@@ -1,53 +1,55 @@
 {
-    "general":{
-        "baseUrl":"http://localhost:8080/"
+    "general": {
+        "baseUrl": "http://localhost:8080/"
     },
     "user": {
         "login": "api/public/login",
-        "register":"api/public/registerTenant",
-        "generateOTPEmail":"api/public/sendOTPEmail",
-        "verifyOTPEmail":"api/public/verifyOTP",
-        "getLoggedInUserDetails":"api/user/getLoggedInUser",
-        "updateUserProfile":"api/user/updateUserProfile",
-        "forgetPassword":"api/public/forgetPassword",
-        "changePassword":"api/public/changePassword",
-        "getAllUsers":"api/user/getAllUsers",
-        "getUserById":"api/user/getById",
-        "createUpdateUser":"api/user/createUpdateUser"
-        
+        "register": "api/public/registerTenant",
+        "generateOTPEmail": "api/public/sendOTPEmail",
+        "verifyOTPEmail": "api/public/verifyOTP",
+        "getLoggedInUserDetails": "api/user/getLoggedInUser",
+        "updateUserProfile": "api/user/updateUserProfile",
+        "forgetPassword": "api/public/forgetPassword",
+        "changePassword": "api/public/changePassword",
+        "getAllUsers": "api/user/getAllUsers",
+        "getUserById": "api/user/getById",
+        "createUpdateUser": "api/user/createUpdateUser"
     },
-    "project":{
-        "create":"api/admin/project/create",
-        "getById":"api/admin/project/getById",
-        "getAllProjects":"api/admin/project/getAllProjects"
+    "project": {
+        "create": "api/admin/project/create",
+        "getById": "api/admin/project/getById",
+        "getAllProjects": "api/admin/project/getAllProjects"
     },
-    "department":{
-        "create":"api/admin/department/create",
-        "getById":"api/admin/department/getById",
-        "getAllDepartments":"api/admin/department/getAllDepartments"
+    "department": {
+        "create": "api/admin/department/create",
+        "getById": "api/admin/department/getById",
+        "getAllDepartments": "api/admin/department/getAllDepartments"
     },
-    "reportBug":{
-        "reportBug":"api/admin/bugReport"
+    "reportBug": {
+        "reportBug": "api/admin/bugReport"
     },
-    "status":{
-        "create":"api/admin/status/create",
-        "getById":"api/admin/status/getById",
-        "getAllStatus":"api/admin/status/getAllStatus"
+    "status": {
+        "create": "api/admin/status/create",
+        "getById": "api/admin/status/getById",
+        "getAllStatus": "api/admin/status/getAllStatus"
     },
-    "escalation":{
-        "create":"api/admin/escalations/createEscalation",
-        "getById":"api/admin/escalations/getById",
-        "getAllEscalation":"api/admin/escalations/getAllEscalations"
+    "escalation": {
+        "create": "api/admin/escalations/createEscalation",
+        "getById": "api/admin/escalations/getById",
+        "getAllEscalation": "api/admin/escalations/getAllEscalations"
     },
-    "teams":{
-        "create":"api/admin/teams/create",
-        "getById":"api/admin/teams/getById",
-        "getAllTeams":"api/admin/teams/getAllTeams"
+    "teams": {
+        "create": "api/admin/teams/create",
+        "getById": "api/admin/teams/getById",
+        "getAllTeams": "api/admin/teams/getAllTeams"
     },
-    "ticket":{
-        "create":"api/ticket/create"
+    "ticket": {
+        "create": "api/ticket/create"
     },
-    "master":{
-        "getDropdownData":"api/admin/masterDropdownData"
+    "file": {
+        "upload": "api/file/uploadFile"
+    },
+    "master": {
+        "getDropdownData": "api/admin/masterDropdownData"
     }
 }

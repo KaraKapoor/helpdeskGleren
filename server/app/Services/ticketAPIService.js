@@ -5,6 +5,8 @@ const ticket = db.ticket;
 const emailTemplates = require("../emailTemplates/emailTemplate");
 const coreSettingsService = require("./coreSettingAPIService");
 const emailAPIService = require("./emailAPIService");
+const fileAPIService = require("./fileAPIService");
+const generalMethodAPIService = require("./generalMethodAPIService");
 const { user } = require("../models");
 
 exports.saveTicketHistory = async (tenantId, ticketId, text) => {
@@ -54,7 +56,7 @@ exports.saveComments = async (tenantId, ticketId, plainText, htmlText, createdBy
     return response;
 }
 exports.createTicket = async (departmentId, projectId, assigneeId, category, statusId, priority, fixVersion, issueDetails, issueSummary, dueDate, storyPoints, loggedInId,
-    tenantId) => {
+    tenantId, files) => {
     let response = null;
     const obj = {
         created_by: loggedInId,
@@ -74,11 +76,19 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     }
 
     const createdTicket = await ticket.create(obj);
-    const userDetails= await user.findOne({where:{id:loggedInId}});
+    const userDetails = await user.findOne({ where: { id: loggedInId } });
 
     //<Start>Insert Entry in ticket history
-    await this.saveTicketHistory(tenantId,createdTicket.id,await this.getTicketHistoryMessage('newTicket',userDetails.first_name +' ' + userDetails.last_name,null,null));
+    await this.saveTicketHistory(tenantId, createdTicket.id, await this.getTicketHistoryMessage('newTicket', userDetails.first_name + ' ' + userDetails.last_name, null, null));
     //<End>Insert Entry in ticket history
+
+    //<Start>Insert entry into ticketFiles table
+    if (generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(files) !== null) {
+        for (let i of files) {
+            await fileAPIService.saveTicketFiles(createdTicket.id, i.id, tenantId);
+        }
+    }
+    //<End>Insert entry into ticketFiles table
 
 
     //<Start>Send Email for Ticket Creation

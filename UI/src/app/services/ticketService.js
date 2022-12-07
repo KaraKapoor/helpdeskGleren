@@ -9,3 +9,10 @@ export const createTicket = (formData) => {
         data: formData,
     })
 }
+export const fileUpload = (formData) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.file.upload,
+        data: formData,
+    })
+}

@@ -4,14 +4,14 @@ import Swal from 'sweetalert2'
 import moment from 'moment'
 import { Formik } from 'formik';
 import './ticketsList.css'
-import { Card, Checkbox, Divider, FormControl, FormControlLabel, Grid, Icon, InputLabel, MenuItem, Select, TextareaAutosize, TextField }
+import { Card, Checkbox, Divider, Fab, FormControl, FormControlLabel, Grid, Icon, InputLabel, MenuItem, Select, TextareaAutosize, TextField }
     from '@mui/material'
 import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
 import { authRoles } from 'app/auth/authRoles';
 import { getMasterDropdownData } from 'app/services/adminService';
-import { createTicket } from 'app/services/ticketService';
+import { createTicket, fileUpload } from 'app/services/ticketService';
 
 const CreateTicket = ({ onClose }) => {
     const [valid, setValid] = React.useState(false)
@@ -28,6 +28,7 @@ const CreateTicket = ({ onClose }) => {
     const [category, setCategory] = React.useState([]);
     const [status, setStatus] = React.useState([]);
     const [priority, setPriority] = React.useState([]);
+    const [selectedFiles, setSelectedFiles] = React.useState([]);
     const navigate = useNavigate();
 
     const HeaderTitle = styled.div`
@@ -60,7 +61,8 @@ font-size: 13px;
             "issueDetails": values.issueDetails,
             "issueSummary": values.issueSummary,
             "dueDate": values.dueDate,
-            "storyPoints": values.storyPoints
+            "storyPoints": values.storyPoints,
+            "files": selectedFiles
 
         };
         createTicket(reqBody).then((resp) => {
@@ -133,6 +135,29 @@ font-size: 13px;
     }
     const handlePriorityChange = (event) => {
         setSelectedPriority(event.target.value);
+    }
+    const onChangeFile = (event) => {
+        if (!event?.target?.files[0]) {
+            return null;
+        }
+        let data = new FormData();
+        data.append('file', event?.target?.files[0]);
+        fileUpload(data).then((resp) => {
+            if (resp?.status === false) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: resp.error,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: 400,
+                })
+            } else {
+                let existingArray = selectedFiles;
+                existingArray.push(resp.data)
+                setSelectedFiles(existingArray);
+            }
+        })
     }
 
     return (
@@ -303,6 +328,26 @@ font-size: 13px;
                                             <TextareaAutosize fullWidth size="large" style={{ width: '100%', outline: 'none', borderRadius: "5px" }} minRows={10} required={true} name="issueSummary" type="textarea" label="Issue Summary"
                                                 placeholder="Issue Description" variant="outlined" onBlur={handleBlur} value={values.issueSummary}
                                                 onChange={handleChange} sx={{ mb: 1.5 }} />
+                                        </Grid>
+                                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                                            <TextField fullWidth size="large" name="files" type="file"
+                                                variant="outlined" onBlur={handleBlur}
+                                                onChange={onChangeFile} sx={{ mb: 1.5 }} value="" />
+                                            <br></br>
+                                        </Grid>
+                                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                                            {
+                                                selectedFiles.map((f) => {
+                                                    return (
+                                                        <div>
+                                                            <p>{f.original_name}
+                                                                <Icon className="icon deleteIcon">delete</Icon>
+                                                            </p>
+                                                        </div>
+                                                    )
+
+                                                })
+                                            }
                                         </Grid>
                                     </Grid>
 
