@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2'
 import moment from 'moment'
@@ -11,7 +11,7 @@ import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
 import { authRoles } from 'app/auth/authRoles';
 import { getMasterDropdownData } from 'app/services/adminService';
-import { createTicket, fileUpload } from 'app/services/ticketService';
+import { createTicket, deleteFile, fileUpload } from 'app/services/ticketService';
 
 const CreateTicket = ({ onClose }) => {
     const [valid, setValid] = React.useState(false)
@@ -153,9 +153,7 @@ font-size: 13px;
                     width: 400,
                 })
             } else {
-                let existingArray = selectedFiles;
-                existingArray.push(resp.data)
-                setSelectedFiles(existingArray);
+                setSelectedFiles([...selectedFiles, resp.data]);
             }
         })
     }
@@ -334,21 +332,42 @@ font-size: 13px;
                                                 variant="outlined" onBlur={handleBlur}
                                                 onChange={onChangeFile} sx={{ mb: 1.5 }} value="" />
                                             <br></br>
+                                            {
+                                                selectedFiles.map((f, index) => {
+                                                    return <Fragment>
+                                                        <div id={f.id}>
+                                                            <span>{f.original_name}</span>
+                                                            <span onClick={(e) => {
+                                                                const obj = {
+                                                                    "uploadId": f.id,
+                                                                    "keyName": f.key
+                                                                }
+                                                                deleteFile(obj).then((r) => {
+                                                                    let files = selectedFiles.filter((_, i) => i !== index);
+                                                                    setSelectedFiles(files)
+                                                                })
+                                                            }}><Icon className="icon deleteIcon">delete</Icon></span>
+                                                        </div>
+                                                    </Fragment>
+
+
+
+                                                })
+                                            }
                                         </Grid>
-                                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                                             {
                                                 selectedFiles.map((f) => {
                                                     return (
-                                                        <div>
-                                                            <p>{f.original_name}
-                                                                <Icon className="icon deleteIcon">delete</Icon>
-                                                            </p>
+                                                        <div id={f.id}>
+                                                            <span>{f.original_name}</span>
+                                                            <span onClick={deleteFile(f)}><Icon className="icon deleteIcon">delete</Icon></span>
                                                         </div>
                                                     )
 
                                                 })
                                             }
-                                        </Grid>
+                                        </Grid> */}
                                     </Grid>
 
                                 </FormContainer>

@@ -11,6 +11,7 @@ module.exports = (app) => {
     });
     var multipleUpload = multer({ storage: storage }).array('file');
     var upload = multer({ storage: storage }).single('file');
-    router.post("/uploadFile",auth, upload, file.uploadFile);
+    router.post("/uploadFile", auth, upload, file.uploadFile);
+    router.post("/deleteFile", auth, file.deleteFile);
     app.use("/api/file", router);
 };

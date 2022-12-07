@@ -47,7 +47,8 @@
         "create": "api/ticket/create"
     },
     "file": {
-        "upload": "api/file/uploadFile"
+        "upload": "api/file/uploadFile",
+        "delete": "api/file/deleteFile"
     },
     "master": {
         "getDropdownData": "api/admin/masterDropdownData"

@@ -16,3 +16,10 @@ export const fileUpload = (formData) => {
         data: formData,
     })
 }
+export const deleteFile = (formData) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.file.delete,
+        data: formData,
+    })
+}

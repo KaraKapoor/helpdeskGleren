@@ -4,8 +4,10 @@ const AWS = require('aws-sdk');
 const db = require("../models");
 const errorConstants = require("../constants/errorConstants");
 const userAPIService = require("../Services/userAPIService");
+const fileAPIService = require("../Services/fileAPIService");
 const uploads = db.uploads;
 const comment = db.comments;
+const Op = db.Sequelize.Op;
 const ticket = db.ticket
 
 exports.uploadFile = async (req, res) => {
@@ -74,4 +76,38 @@ exports.saveToUploads = async (folderName, key, mimeType, size, filePath, fileNa
     }
     const response = await uploads.create(reqObj);
     return response;
+}
+exports.deleteFromUploads = async (id, tenantId) => {
+    await uploads.destroy({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
+}
+exports.deleteFile = async (req, res) => {
+    const s3Config = this.get_S3_Config();
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    let keyName = input.keyName;
+    await deleteFile(keyName);
+
+    //Delete entry from uploads table
+    await this.deleteFromUploads(input.uploadId, tenantId);
+
+    //Delete entry from ticket files table
+    await fileAPIService.deleteTicketFiles(input.uploadId, tenantId);
+
+
+    async function deleteFile(keyName) {
+        const params = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: keyName,
+        };
+
+        await s3Config.deleteObject(params, function (error, data) {
+
+            if (error) {
+                res.status(200).send({ success: false, error: error })
+            } else {
+                res.send({ success: true, data: data });
+            }
+        })
+    }
 }
