@@ -1,8 +1,12 @@
 import {
     Box,
     Fab,
+    FormControl,
     Grid,
     Icon,
+    InputLabel,
+    MenuItem,
+    Select,
     styled,
     Table,
     TablePagination,
@@ -14,6 +18,8 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { Strings } from "config/strings";
 import { myTickets } from "app/services/ticketService";
+import { getMasterDropdownData } from "app/services/adminService";
+import Swal from "sweetalert2";
 
 const StyledTable = styled(Table)(() => ({
     whiteSpace: "pre",
@@ -56,6 +62,12 @@ const MyTickets = ({ setCurrentView }) => {
     const [page, setPage] = useState(0)
     const [totalRecords, setTotalRecords] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [selectedStatus, setSelectedStatus] = useState([]);
+    const [selectedProject, setSelectedProject] = useState([]);
+    const [selectedAssignee, setSelectedAssignee] = useState([]);
+    const [status, setStatus] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [assignees, setAssignee] = useState([]);
 
     const handleChangePage = (_, newPage) => {
         setPage(newPage);
@@ -63,12 +75,21 @@ const MyTickets = ({ setCurrentView }) => {
 
     useEffect(() => {
         fetchMyTickets()
-    }, [page])
+    }, [page, selectedStatus, selectedProject, selectedAssignee])
 
     const fetchMyTickets = (search) => {
         let queryParam = `?page=${page}&size=${rowsPerPage}`
         if (search !== undefined) {
             queryParam = queryParam + `&searchParam=${search}`
+        }
+        if (selectedStatus.length > 0) {
+            queryParam = queryParam + `&statusId=${selectedStatus.toString()}`
+        }
+        if (selectedProject.length > 0) {
+            queryParam = queryParam + `&projectId=${selectedProject.toString()}`
+        }
+        if (selectedAssignee.length > 0) {
+            queryParam = queryParam + `&assigneeId=${selectedAssignee.toString()}`
         }
         myTickets(queryParam).then((response) => {
             response?.pagingData.map((data, i) => {
@@ -86,6 +107,42 @@ const MyTickets = ({ setCurrentView }) => {
         }
 
     }
+    const handleStatusChange = (event) => {
+        setSelectedStatus(event.target.value);
+    }
+    const handleProjectChange = (event) => {
+        setSelectedProject(event.target.value);
+    }
+    const handleAssigneeChange = (event) => {
+        setSelectedAssignee(event.target.value);
+    }
+    useEffect(() => {
+        getMasterDropdownData().then((resp) => {
+            if (resp?.status === false) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: resp.error,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: 400,
+                })
+            } else {
+                // setCategory(resp?.data?.ticketCategory);
+                //setPriorityOption(resp?.data?.ticketPriorites);
+                // setDepartments(resp?.data?.departments);
+                // setProjects(resp?.data?.currentUserProjects);
+                // setAssignee(resp?.data?.agents);
+                setStatus(resp?.data?.activeStatus);
+                setProjects(resp?.data?.currentUserProjects);
+                let agents = resp?.data?.agents;
+                let users = resp?.data?.users;
+                let combinedArray = agents.concat(users);
+                setAssignee(combinedArray);
+                // setPriority(resp?.data?.ticketPriorites);
+            }
+        })
+    }, [])
 
     return (
         <Box width="100%" overflow="auto">
@@ -95,7 +152,64 @@ const MyTickets = ({ setCurrentView }) => {
                         <TextField id="searchTicket" onChange={handleSearchChange} label="Search Tickets" variant="standard" />
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
-
+                        <FormControl fullWidth>
+                            <InputLabel id="status">Status</InputLabel>
+                            <Select
+                                labelId="status"
+                                id="status"
+                                multiple
+                                value={selectedStatus}
+                                label="Status"
+                                onChange={handleStatusChange}
+                                defaultValue={selectedStatus}
+                            >
+                                {
+                                    status?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="project">Project</InputLabel>
+                            <Select
+                                labelId="project"
+                                id="project"
+                                multiple
+                                value={selectedProject}
+                                label="Project"
+                                onChange={handleProjectChange}
+                                defaultValue={selectedProject}
+                            >
+                                {
+                                    projects?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="assignee">Assignee</InputLabel>
+                            <Select
+                                labelId="assignee"
+                                id="assignee"
+                                multiple
+                                value={selectedAssignee}
+                                label="Assignee"
+                                onChange={handleAssigneeChange}
+                                defaultValue={selectedAssignee}
+                            >
+                                {
+                                    assignees?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
                     </Grid>
                 </Grid>
             </form>
