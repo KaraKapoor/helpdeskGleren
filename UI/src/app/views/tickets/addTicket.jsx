@@ -84,7 +84,7 @@ font-size: 13px;
                     showConfirmButton: false,
                     width: 400,
                 })
-                return navigate('/');
+                return navigate('/my-tickets');
             }
 
         })

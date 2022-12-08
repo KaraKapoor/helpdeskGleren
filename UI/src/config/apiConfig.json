@@ -44,7 +44,8 @@
         "getAllTeams": "api/admin/teams/getAllTeams"
     },
     "ticket": {
-        "create": "api/ticket/create"
+        "create": "api/ticket/create",
+        "myTickets": "api/ticket/myTickets"
     },
     "file": {
         "upload": "api/file/uploadFile",

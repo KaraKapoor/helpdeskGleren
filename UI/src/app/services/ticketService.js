@@ -23,3 +23,9 @@ export const deleteFile = (formData) => {
         data: formData,
     })
 }
+export const myTickets = (queryParams) => {
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.ticket.myTickets + queryParams,
+    })
+}
