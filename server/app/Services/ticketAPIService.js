@@ -8,6 +8,7 @@ const emailAPIService = require("./emailAPIService");
 const fileAPIService = require("./fileAPIService");
 const generalMethodAPIService = require("./generalMethodAPIService");
 const { user } = require("../models");
+const Op = db.Sequelize.Op;
 
 exports.saveTicketHistory = async (tenantId, ticketId, text) => {
     let response = null;
@@ -103,4 +104,19 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     }
 
     return response
+}
+exports.getMyTickets = async (conditionArray, userId, tenantId, limit, offset, page, searchParam) => {
+    var conditions = { [Op.and]: conditionArray };
+    if (searchParam !== null) {
+
+        conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { created_by: userId }, { tenant_id: tenantId }] }
+    }
+    const resp = await ticket.findAndCountAll({ limit, offset, where: conditions,include:[
+        {model:db.project},
+        {model:db.department},
+        {model:db.status},
+        {model:db.user}
+    ] });
+    const response = generalMethodAPIService.getPagingData(resp, page, limit);
+    return response;
 }

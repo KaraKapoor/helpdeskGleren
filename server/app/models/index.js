@@ -112,6 +112,15 @@ db.ticket.belongsTo(db.department, {
 db.ticket.belongsTo(db.project, {
     foreignKey: "project_id", //1:1
 });
+db.ticket.belongsTo(db.status, {
+    foreignKey: "status_id", //1:1
+});
+db.ticket.belongsTo(db.user, {
+    foreignKey: "created_by", //1:1
+});
+db.ticket.belongsTo(db.user, {
+    foreignKey: "assignee_id", //1:1
+});
 db.comments.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });

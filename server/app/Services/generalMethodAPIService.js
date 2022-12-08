@@ -23,3 +23,7 @@ exports.getPagingData = (data, page, limit) => {
 
     return { totalItems, pagingData, totalPages, currentPage };
 };
+exports.csvToArray=(csv)=>{
+    const array = csv.split(',');
+    return array
+}

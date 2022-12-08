@@ -5,5 +5,6 @@ module.exports = (app) => {
     const auth = require("../middleware/auth");
 
     router.post("/create", ticketController.createTicket);
+    router.get("/myTickets", ticketController.getMyTickets);
     app.use("/api/ticket", auth, router);
 };
