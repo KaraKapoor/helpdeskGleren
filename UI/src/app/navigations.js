@@ -5,7 +5,7 @@ export const navigations = [
 
   { label: 'TICKETS', type: 'label' },
   { name: 'My Tickets', icon: 'assignment', path: '/my-tickets' },
-  { name: 'Escalated Tickets', icon: 'trending_down', path: '/ticket' },
+  // { name: 'Escalated Tickets', icon: 'trending_down', path: '/ticket' },
   { name: 'All Tickets', icon: 'trending_up', path: '/ticket' },
   { name: 'My Team', icon: 'people', path: '/ticket' },
 

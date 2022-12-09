@@ -120,7 +120,7 @@ exports.getMyTickets = async (req, res) => {
         conditionArray.push({ due_dt: input.dueDate });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.overdue) !== null) {
-        conditionArray.push({ is_overdue: input.overdue });
+        conditionArray.push({ is_overdue: input.overdue==='true'?true:false });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reviewedBy) !== null) {
         conditionArray.push({ reviewed_by: { [Op.in]: generalMethodService.csvToArray(input.reviewedBy) } });
