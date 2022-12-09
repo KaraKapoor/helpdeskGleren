@@ -29,3 +29,9 @@ export const myTickets = (queryParams) => {
         url: BASE_URL + config.ticket.myTickets + queryParams,
     })
 }
+export const allTickets = (queryParams) => {
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.ticket.allTickets + queryParams,
+    })
+}

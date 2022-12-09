@@ -120,3 +120,24 @@ exports.getMyTickets = async (conditionArray, userId, tenantId, limit, offset, p
     const response = generalMethodAPIService.getPagingData(resp, page, limit);
     return response;
 }
+exports.getAllTickets = async (conditionArray, tenantId, limit, offset, page, searchParam) => {
+    var conditions = { [Op.and]: conditionArray };
+    if (searchParam !== null) {
+        let projectIdCondition=null;//It is mandatory so that users can get tickets based on the projects on which they are assigned
+        for(let i of conditionArray){
+            if(i.project_id){
+                projectIdCondition=i;
+                break;
+            }
+        }
+        conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] },{ tenant_id: tenantId },projectIdCondition] }
+    }
+    const resp = await ticket.findAndCountAll({ limit, offset, where: conditions,include:[
+        {model:db.project},
+        {model:db.department},
+        {model:db.status},
+        {model:db.user}
+    ] });
+    const response = generalMethodAPIService.getPagingData(resp, page, limit);
+    return response;
+}

@@ -17,7 +17,7 @@ import "./ticketsList.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { Strings } from "config/strings";
-import { myTickets } from "app/services/ticketService";
+import { allTickets } from "app/services/ticketService";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
 
@@ -57,7 +57,7 @@ const MyTicketsTable = styled(Table)(() => ({
     },
 }))
 
-const MyTickets = ({ setCurrentView }) => {
+const AllTickets = ({ setCurrentView }) => {
     const [data, setData] = useState([])
     const [page, setPage] = useState(0)
     const [totalRecords, setTotalRecords] = useState(0)
@@ -118,7 +118,7 @@ const MyTickets = ({ setCurrentView }) => {
         if (selectedTestedBy.length > 0) {
             queryParam = queryParam + `&testedBy=${selectedTestedBy.toString()}`
         }
-        myTickets(queryParam).then((response) => {
+        allTickets(queryParam).then((response) => {
             response?.pagingData.map((data, i) => {
                 Object.assign(data, { sno: rowsPerPage * page + i + 1 })
             })
@@ -138,6 +138,16 @@ const MyTickets = ({ setCurrentView }) => {
         setSelectedStatus(event.target.value);
     }
     const handleProjectChange = (event) => {
+        if (event.target.value.length <= 0) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "Atleast One Project is required",
+                showCloseButton: true,
+                showConfirmButton: false,
+                width: 400,
+            })
+        }
         setSelectedProject(event.target.value);
     }
     const handleAssigneeChange = (event) => {
@@ -180,6 +190,10 @@ const MyTickets = ({ setCurrentView }) => {
                 let combinedArray = agents.concat(users);
                 setAssignee(combinedArray);
                 setReviewedBy(resp?.data?.agents)
+                if (resp?.data?.currentUserProjects.length > 0) {
+                    setSelectedProject([resp?.data?.currentUserProjects[0].id]);
+                }
+
             }
         })
     }, [])
@@ -410,4 +424,4 @@ const MyTickets = ({ setCurrentView }) => {
     );
 };
 
-export default MyTickets;
+export default AllTickets;
