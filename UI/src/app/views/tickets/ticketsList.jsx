@@ -65,9 +65,16 @@ const MyTickets = ({ setCurrentView }) => {
     const [selectedStatus, setSelectedStatus] = useState([]);
     const [selectedProject, setSelectedProject] = useState([]);
     const [selectedAssignee, setSelectedAssignee] = useState([]);
+    const [selectedReviewedBy, setSelectedReviewedBy] = useState([]);
+    const [selectedTestedBy, setSelectedTestedBy] = useState([]);
+    const [selectedResolvedBy, setSelectedResolvedBy] = useState([]);
+    const [selectedFixVersion, setSelectedFixVersion] = useState();
+    const [selectedDueDate, setSelectedDueDate] = useState();
+    const [selectedOverdue, setSelectedOverdue] = useState();
     const [status, setStatus] = useState([]);
     const [projects, setProjects] = useState([]);
     const [assignees, setAssignee] = useState([]);
+    const [reviewedBy, setReviewedBy] = useState([]);
 
     const handleChangePage = (_, newPage) => {
         setPage(newPage);
@@ -75,7 +82,7 @@ const MyTickets = ({ setCurrentView }) => {
 
     useEffect(() => {
         fetchMyTickets()
-    }, [page, selectedStatus, selectedProject, selectedAssignee])
+    }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
 
     const fetchMyTickets = (search) => {
         let queryParam = `?page=${page}&size=${rowsPerPage}`
@@ -90,6 +97,26 @@ const MyTickets = ({ setCurrentView }) => {
         }
         if (selectedAssignee.length > 0) {
             queryParam = queryParam + `&assigneeId=${selectedAssignee.toString()}`
+        }
+        if (selectedFixVersion) {
+            queryParam = queryParam + `&fixVersion=${selectedFixVersion}`
+        }
+        if (selectedDueDate) {
+            let date = new Date(selectedDueDate + ' 00:00:00');
+            date = date.toISOString();
+            queryParam = queryParam + `&dueDate=${date}`
+        }
+        if (selectedOverdue != null && selectedOverdue !== undefined) {
+            queryParam = queryParam + `&overdue=${selectedOverdue}`
+        }
+        if (selectedReviewedBy.length > 0) {
+            queryParam = queryParam + `&reviewedBy=${selectedReviewedBy.toString()}`
+        }
+        if (selectedResolvedBy.length > 0) {
+            queryParam = queryParam + `&resolvedBy=${selectedResolvedBy.toString()}`
+        }
+        if (selectedTestedBy.length > 0) {
+            queryParam = queryParam + `&testedBy=${selectedTestedBy.toString()}`
         }
         myTickets(queryParam).then((response) => {
             response?.pagingData.map((data, i) => {
@@ -116,6 +143,24 @@ const MyTickets = ({ setCurrentView }) => {
     const handleAssigneeChange = (event) => {
         setSelectedAssignee(event.target.value);
     }
+    const handleFixVersionChange = (event) => {
+        setSelectedFixVersion(event.target.value);
+    }
+    const handleDueDateChange = (event) => {
+        setSelectedDueDate(event.target.value);
+    }
+    const onChangeOverdue = (event) => {
+        setSelectedOverdue(event.target.value);
+    }
+    const handleReviewedBy = (event) => {
+        setSelectedReviewedBy(event.target.value);
+    }
+    const handleTestedBy = (event) => {
+        setSelectedTestedBy(event.target.value);
+    }
+    const handleResolvedBy = (event) => {
+        setSelectedResolvedBy(event.target.value);
+    }
     useEffect(() => {
         getMasterDropdownData().then((resp) => {
             if (resp?.status === false) {
@@ -139,6 +184,7 @@ const MyTickets = ({ setCurrentView }) => {
                 let users = resp?.data?.users;
                 let combinedArray = agents.concat(users);
                 setAssignee(combinedArray);
+                setReviewedBy(resp?.data?.agents)
                 // setPriority(resp?.data?.ticketPriorites);
             }
         })
@@ -205,6 +251,89 @@ const MyTickets = ({ setCurrentView }) => {
                             >
                                 {
                                     assignees?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <TextField fullWidth size="large" name="fixVersion" type="text" label="Fix Version"
+                            variant="outlined" value={selectedFixVersion}
+                            onChange={handleFixVersionChange} sx={{ mb: 1.5 }} />
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <TextField fullWidth size="large" name="dueDate" type="date" label="Due Date"
+                            variant="outlined" value={selectedDueDate}
+                            onChange={handleDueDateChange} sx={{ mb: 1.5 }} />
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="overdue">Overdue</InputLabel>
+                            <Select
+                                labelId="overdue"
+                                id="overdue"
+                                value={selectedOverdue}
+                                label="Overdue"
+                                onChange={onChangeOverdue}
+                            >
+                                <MenuItem value={true}>YES</MenuItem>
+                                <MenuItem value={false}>NO</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="reviewedBy">Reviewed By</InputLabel>
+                            <Select
+                                labelId="reviewedBy"
+                                id="reviewedBy"
+                                multiple
+                                value={selectedReviewedBy}
+                                label="Reviewed By"
+                                onChange={handleReviewedBy}
+                                defaultValue={selectedReviewedBy}
+                            >
+                                {
+                                    reviewedBy?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="testedBy">Tested By</InputLabel>
+                            <Select
+                                labelId="testedBy"
+                                id="testedBy"
+                                multiple
+                                value={selectedTestedBy}
+                                label="Tested By"
+                                onChange={handleTestedBy}
+                            >
+                                {
+                                    reviewedBy?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="resolvedBy">Resolved By</InputLabel>
+                            <Select
+                                labelId="resolvedBy"
+                                id="resolvedBy"
+                                multiple
+                                value={selectedResolvedBy}
+                                label="Resolved By"
+                                onChange={handleResolvedBy}
+                            >
+                                {
+                                    reviewedBy?.map((d, i) => {
                                         return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                                     })
                                 }
