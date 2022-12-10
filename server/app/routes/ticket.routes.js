@@ -8,5 +8,6 @@ module.exports = (app) => {
     router.get("/myTickets", ticketController.getMyTickets);
     router.get("/allTickets", ticketController.getAllTickets);
     router.post("/getDashboardData", ticketController.getDashboardData);
+    router.post("/getById", ticketController.getTicketById);
     app.use("/api/ticket", auth, router);
 };

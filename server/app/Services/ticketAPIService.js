@@ -216,3 +216,32 @@ exports.getDashboardData = async (userId, tenantId) => {
 
     return response;
 }
+exports.getTicketById = async (userId, tenantId, ticketId) => {
+    let response=null;
+    const ticketResponse= await ticket.findOne({where:{[Op.and]:[{id:ticketId},{tenant_id:tenantId}]},include: [
+        { model: db.project },
+        { model: db.department },
+        { model: db.status },
+        { model: db.user }
+    ]});
+    response=ticketResponse.dataValues;
+    const createdBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.created_by}]}});
+    response.createdBy=createdBy;
+
+    const assigneeId= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.assignee_id}]}});
+    response.assigneeId=assigneeId;
+
+    const closedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.closed_by}]}});
+    response.closedBy=closedBy;
+
+    const reviewedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.reviewed_by}]}});
+    response.reviewedBy=reviewedBy;
+
+    const testedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.tested_by}]}});
+    response.testedBy=testedBy;
+    
+    const resolvedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.resolved_by}]}});
+    response.resolvedBy=resolvedBy;
+    
+    return response;
+}
