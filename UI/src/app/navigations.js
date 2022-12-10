@@ -7,7 +7,7 @@ export const navigations = [
   { name: 'Reported by me ', icon: 'assignment', path: '/my-reported-tickets' },
   // { name: 'Escalated Tickets', icon: 'trending_down', path: '/ticket' },
   { name: 'All Tickets', icon: 'trending_up', path: '/all-tickets' },
-  { name: 'My Team', icon: 'people', path: '/ticket' },
+  // { name: 'My Team', icon: 'people', path: '/ticket' },
 
   { label: 'ADMIN', type: 'label' },
   {

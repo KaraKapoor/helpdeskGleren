@@ -35,3 +35,10 @@ export const allTickets = (queryParams) => {
         url: BASE_URL + config.ticket.allTickets + queryParams,
     })
 }
+export const getDashboardData = (data) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.ticket.dashboardData,
+        data: data
+    })
+}

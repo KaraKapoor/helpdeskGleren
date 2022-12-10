@@ -1,5 +1,6 @@
 import { Card, Grid, styled, useTheme } from '@mui/material';
-import { Fragment } from 'react';
+import { getDashboardData } from 'app/services/ticketService';
+import { Fragment, useEffect, useState } from 'react';
 import Campaigns from './shared/Campaigns';
 import DoughnutChart from './shared/Doughnut';
 import RowCards from './shared/RowCards';
@@ -35,33 +36,43 @@ const H4 = styled('h4')(({ theme }) => ({
 
 const Analytics = () => {
   const { palette } = useTheme();
+  const [dashboardData, setDashboardData] = useState();
+  useEffect(() => {
+    fetchDashboardData()
+  }, [])
+  const fetchDashboardData = () => {
+
+    getDashboardData({}).then((response) => {
+      setDashboardData(response?.data);
+    })
+  }
 
   return (
     <Fragment>
       <ContentBox className="analytics">
         <Grid container spacing={3}>
           <Grid item lg={8} md={8} sm={12} xs={12}>
-            <StatCards />
-            <TopSellingTable />
+            <StatCards data={dashboardData} />
+            {/* <TopSellingTable />
             <StatCards2 />
 
             <H4>Ongoing Projects</H4>
-            <RowCards />
+            <RowCards /> */}
           </Grid>
 
           <Grid item lg={4} md={4} sm={12} xs={12}>
             <Card sx={{ px: 3, py: 2, mb: 3 }}>
-              <Title>Traffic Sources</Title>
-              <SubTitle>Last 30 days</SubTitle>
-
+              <Title>Your Tickets Statistics </Title>
               <DoughnutChart
                 height="300px"
-                color={[palette.primary.dark, palette.primary.main, palette.primary.light]}
+                color={[palette.primary.dark, '#FFAF38']}
+                toDoTicketCount={dashboardData?.toDoTicketCount}
+                inProgressTicketsCount={dashboardData?.inProgressTicketsCount}
               />
             </Card>
 
             <UpgradeCard />
-            <Campaigns />
+            {/* <Campaigns /> */}
           </Grid>
         </Grid>
       </ContentBox>

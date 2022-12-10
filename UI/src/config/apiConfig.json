@@ -46,7 +46,8 @@
     "ticket": {
         "create": "api/ticket/create",
         "myTickets": "api/ticket/myTickets",
-        "allTickets": "api/ticket/allTickets"
+        "allTickets": "api/ticket/allTickets",
+        "dashboardData": "api/ticket/getDashboardData"
     },
     "file": {
         "upload": "api/file/uploadFile",

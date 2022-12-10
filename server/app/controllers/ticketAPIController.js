@@ -84,7 +84,7 @@ exports.getMyTickets = async (req, res) => {
     const input = req.query;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-    const searchParam= await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.searchParam);
+    const searchParam = await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.searchParam);
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.page) == null) {
         return res.status(200).send({
             error: errorConstants.PAGE_NO_ERROR,
@@ -120,7 +120,7 @@ exports.getMyTickets = async (req, res) => {
         conditionArray.push({ due_dt: input.dueDate });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.overdue) !== null) {
-        conditionArray.push({ is_overdue: input.overdue==='true'?true:false });
+        conditionArray.push({ is_overdue: input.overdue === 'true' ? true : false });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reviewedBy) !== null) {
         conditionArray.push({ reviewed_by: { [Op.in]: generalMethodService.csvToArray(input.reviewedBy) } });
@@ -134,7 +134,7 @@ exports.getMyTickets = async (req, res) => {
     conditionArray.push({ tenant_id: tenantId });
     conditionArray.push({ created_by: userDetails.id });
     try {
-        const resp = await ticketAPIService.getMyTickets(conditionArray, userDetails.id, tenantId, limit, offset, input.page,searchParam);
+        const resp = await ticketAPIService.getMyTickets(conditionArray, userDetails.id, tenantId, limit, offset, input.page, searchParam);
         return res.status(200).send(resp);
     } catch (exception) {
         console.log(exception);
@@ -148,7 +148,7 @@ exports.getAllTickets = async (req, res) => {
     const input = req.query;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-    const searchParam= await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.searchParam);
+    const searchParam = await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.searchParam);
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.page) == null) {
         return res.status(200).send({
             error: errorConstants.PAGE_NO_ERROR,
@@ -184,7 +184,7 @@ exports.getAllTickets = async (req, res) => {
         conditionArray.push({ due_dt: input.dueDate });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.overdue) !== null) {
-        conditionArray.push({ is_overdue: input.overdue==='true'?true:false });
+        conditionArray.push({ is_overdue: input.overdue === 'true' ? true : false });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reviewedBy) !== null) {
         conditionArray.push({ reviewed_by: { [Op.in]: generalMethodService.csvToArray(input.reviewedBy) } });
@@ -200,8 +200,24 @@ exports.getAllTickets = async (req, res) => {
     }
     conditionArray.push({ tenant_id: tenantId });
     try {
-        const resp = await ticketAPIService.getAllTickets(conditionArray, tenantId, limit, offset, input.page,searchParam);
+        const resp = await ticketAPIService.getAllTickets(conditionArray, tenantId, limit, offset, input.page, searchParam);
         return res.status(200).send(resp);
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.getDashboardData = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+
+    try {
+        const resp = await ticketAPIService.getDashboardData(userDetails.id, tenantId);
+        return res.status(200).send({status:true,data:resp});
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({

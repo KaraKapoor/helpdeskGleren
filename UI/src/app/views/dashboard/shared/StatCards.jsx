@@ -1,5 +1,6 @@
 import { Box, Card, Grid, Icon, IconButton, styled, Tooltip } from '@mui/material';
 import { Small } from 'app/components/Typography';
+import { Link } from 'react-router-dom';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -27,12 +28,14 @@ const Heading = styled('h6')(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-const StatCards = () => {
+const StatCards = ({ data }) => {
   const cardList = [
-    { name: 'New Leads', amount: 3050, icon: 'group' },
-    { name: 'This week Sales', amount: '$80,500', icon: 'attach_money' },
-    { name: 'Inventory Status', amount: '8.5% Stock Surplus', icon: 'store' },
-    { name: 'Orders to deliver', amount: '305 Orders', icon: 'shopping_cart' },
+    { name: `Assigned Tickets`, value: data?.assignedTicketsCount, icon: 'assignment' },
+    { name: `Blocker/Critical Tickets Assigned`, value: data?.assignedBlockerTicketCount, icon: 'block' },
+    { name: `Tickets Resolved By Me`, value: data?.resolvedTicketCount, icon: 'work' },
+    { name: `Tickets Reviewed By Me`, value: data?.reviewedTicketCount, icon: 'rate_review' },
+    { name: `Tickets Tested By Me`, value: data?.testedTicketCount, icon: 'bug_report' },
+    { name: `Tickets Created By Me`, value: data?.totalTicketCreatedCount, icon: 'create' },
   ];
 
   return (
@@ -44,15 +47,18 @@ const StatCards = () => {
               <Icon className="icon">{item.icon}</Icon>
               <Box ml="12px">
                 <Small>{item.name}</Small>
-                <Heading>{item.amount}</Heading>
+                <Heading>{item.value}</Heading>
               </Box>
             </ContentBox>
 
-            <Tooltip title="View Details" placement="top">
-              <IconButton>
-                <Icon>arrow_right_alt</Icon>
-              </IconButton>
-            </Tooltip>
+            <Link to='/all-tickets'>
+              <Tooltip title="View Details" placement="top">
+                <IconButton>
+                  <Icon>arrow_right_alt</Icon>
+                </IconButton>
+              </Tooltip>
+            </Link>
+
           </StyledCard>
         </Grid>
       ))}
