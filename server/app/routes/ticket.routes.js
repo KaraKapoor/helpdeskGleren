@@ -10,5 +10,6 @@ module.exports = (app) => {
     router.post("/getDashboardData", ticketController.getDashboardData);
     router.post("/getById", ticketController.getTicketById);
     router.post("/update", ticketController.updateTicket);
+    router.post("/getTicketHistory", ticketController.getTicketHistory);
     app.use("/api/ticket", auth, router);
 };

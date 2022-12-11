@@ -56,3 +56,10 @@ export const updateTicket = (data) => {
         data: data
     })
 }
+export const getTicketHistory = (data) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.ticket.getTicketHistory,
+        data: data
+    })
+}

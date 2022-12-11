@@ -7,27 +7,16 @@ import './ticketsList.css'
 import { Card, Checkbox, Divider, Fab, FormControl, FormControlLabel, Grid, Icon, InputLabel, MenuItem, Select, TextareaAutosize, TextField }
     from '@mui/material'
 import styled from '@emotion/styled'
-import { LoadingButton } from '@mui/lab'
-import { Strings } from 'config/strings'
-import { authRoles } from 'app/auth/authRoles';
 import { getMasterDropdownData } from 'app/services/adminService';
-import { createTicket, deleteFile, fileUpload, getTicketById, updateTicket } from 'app/services/ticketService';
+import { deleteFile, fileUpload, getTicketById, updateTicket } from 'app/services/ticketService';
+import CustomTabs from './customTabs';
 
 const ViewTicket = ({ onClose }) => {
-    const [valid, setValid] = React.useState(false)
-    const handleClose = (event) => !!onClose && onClose(event) && setValid(false)
-    const [departments, setDepartments] = React.useState();
-    const [projects, setProjects] = React.useState([]);
     const [assignees, setAssignee] = React.useState([]);
     const [category, setCategory] = React.useState([]);
     const [status, setStatus] = React.useState([]);
     const [priority, setPriority] = React.useState([]);
-    const [selectedFiles, setSelectedFiles] = React.useState([]);
     const [editData, setEditData] = React.useState();
-    const [issueDetails, setIssueDetails] = React.useState();
-    const [issueSummary, setIssueSummary] = React.useState();
-    const [updateIssueDetailsBtn, setUpdateIssueDetailsBtn] = React.useState(false);
-    const [selectedFieldType, setSelectedFieldType] = React.useState();
     const [selectedReporter, setSelectedReporter] = React.useState();
     const [selectedDepartment, setSelectedDepartment] = React.useState();
     const [selectedProject, setSelectedProject] = React.useState();
@@ -54,10 +43,6 @@ display: grid;
 grid-template-columns: ${(props) => (props.divide ? '50% 48.4%' : '100%')};
 padding: 1rem 1rem 0 1rem;
 gap: 1rem;
-`
-    const MyErrorMessage = styled.div`
-color: red;
-font-size: 13px;
 `
     const ContentBox = styled('div')(({ theme }) => ({
         margin: '30px',
@@ -138,7 +123,6 @@ font-size: 13px;
                 })
             } else {
 
-                setSelectedFieldType(undefined);
                 getTicketDetails(editData.id);
                 return Swal.fire({
                     icon: 'success',
@@ -168,9 +152,6 @@ font-size: 13px;
                 })
             } else {
                 setCategory(resp?.data?.ticketCategory);
-                //setPriorityOption(resp?.data?.ticketPriorites);
-                setDepartments(resp?.data?.departments);
-                setProjects(resp?.data?.currentUserProjects);
                 setAssignee(resp?.data?.agents);
                 setStatus(resp?.data?.activeStatus);
                 setPriority(resp?.data?.ticketPriorites);
@@ -217,16 +198,11 @@ font-size: 13px;
                     dueDate: dueDate
                 })
                 setLoading(false);
-                // setIssueDetails(resp?.data?.issue_details);
-                // setIssueSummary(resp?.data?.issue_summary);
             }
 
         })
     }
 
-    const handleProjectChange = (event) => {
-        setSelectedProject(event.target.value);
-    }
     const handleAssigneeChange = (event) => {
         setSelectedAssignee(event.target.value);
         updateTicketDetails(event.target.value, 'assignee');
@@ -276,14 +252,6 @@ font-size: 13px;
             }
         })
     }
-    const onIssueDetailsChange = (event) => {
-        setIssueDetails(event.target.value);
-        setSelectedFieldType('issueDetails');
-    }
-    const onIssueSummaryChange = (event) => {
-        setIssueSummary(event.target.value);
-        setSelectedFieldType('issueSummary');
-    }
 
     return (
         <>
@@ -329,7 +297,7 @@ font-size: 13px;
                                                         variant="outlined" onBlur={handleBlur}
                                                         onChange={onChangeFile} sx={{ mb: 1.5 }} value="" />
                                                     <Card sx={{ px: 3, py: 2, mb: 3 }}>
-                                                        <InputLabel >Your Files</InputLabel>
+                                                        <InputLabel >Attachments</InputLabel>
                                                         {
                                                             editData.ticketFiles?.map((f, index) => {
                                                                 return <Fragment>
@@ -352,6 +320,10 @@ font-size: 13px;
                                                             })
                                                         }
                                                     </Card>
+                                                    <Card sx={{ px: 3, py: 2, mb: 3 }}>
+                                                        <CustomTabs ticketId={editData.id}></CustomTabs>
+                                                    </Card>
+
                                                 </Grid>
                                                 <Grid item lg={4} md={4} sm={12} xs={12}>
                                                     <Card sx={{ px: 3, py: 2, mb: 3 }}>

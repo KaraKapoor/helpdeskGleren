@@ -312,3 +312,12 @@ exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ti
     return response
 
 }
+exports.getTicketHistory = async (userDetails, tenantId, ticketId) => {
+    let response = null
+    const ticketHistoryData = await ticketHistory.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { ticket_id: ticketId }] } });
+    response = {
+        status: true,
+        data: ticketHistoryData
+    }
+    return response;
+}
