@@ -88,11 +88,11 @@ exports.deleteFile = async (req, res) => {
     let keyName = input.keyName;
     await deleteFile(keyName);
 
-    //Delete entry from uploads table
-    await this.deleteFromUploads(input.uploadId, tenantId);
-
     //Delete entry from ticket files table
     await fileAPIService.deleteTicketFiles(input.uploadId, tenantId);
+
+    //Delete entry from uploads table
+    await this.deleteFromUploads(input.uploadId, tenantId);
 
 
     async function deleteFile(keyName) {

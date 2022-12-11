@@ -20,6 +20,7 @@ import { Strings } from "config/strings";
 import { myTickets } from "app/services/ticketService";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const StyledTable = styled(Table)(() => ({
     whiteSpace: "pre",
@@ -75,6 +76,7 @@ const MyTickets = ({ setCurrentView }) => {
     const [projects, setProjects] = useState([]);
     const [assignees, setAssignee] = useState([]);
     const [reviewedBy, setReviewedBy] = useState([]);
+    const navigate = useNavigate();
 
     const handleChangePage = (_, newPage) => {
         setPage(newPage);
@@ -365,7 +367,7 @@ const MyTickets = ({ setCurrentView }) => {
                             icon: 'edit',
                             tooltip: 'View Ticket',
                             onClick: (event, rowData) => {
-
+                                navigate(`/view-ticket/${rowData.id}`);
                             },
                         }
                     ]}

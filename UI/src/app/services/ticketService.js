@@ -42,3 +42,17 @@ export const getDashboardData = (data) => {
         data: data
     })
 }
+export const getTicketById = (data) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.ticket.getTicketById,
+        data: data
+    })
+}
+export const updateTicket = (data) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.ticket.update,
+        data: data
+    })
+}

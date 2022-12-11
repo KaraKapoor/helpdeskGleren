@@ -7,7 +7,7 @@ const coreSettingsService = require("./coreSettingAPIService");
 const emailAPIService = require("./emailAPIService");
 const fileAPIService = require("./fileAPIService");
 const generalMethodAPIService = require("./generalMethodAPIService");
-const { user } = require("../models");
+const { user, ticketFiles } = require("../models");
 const Op = db.Sequelize.Op;
 const queries = require("../constants/queries");
 const constants = require("../constants/constants");
@@ -25,17 +25,50 @@ exports.saveTicketHistory = async (tenantId, ticketId, text) => {
     })
     return response;
 }
-exports.getTicketHistoryMessage = async (type, userName, status, assignee) => {
+exports.getTicketHistoryMessage = async (type, userName, status, assignee, changedValue) => {
     let response = null;
     switch (type) {
         case "newTicket":
             response = `${userName} created the Ticket`
             break;
-        case "statusChange":
-            response = `${userName} changed the Status to ${status}`
+        case "status":
+            response = `${userName} changed the Status to '${changedValue}'`
             break;
-        case "assigneeChange":
-            response = `${userName} changed the Assignee to ${assignee}`
+        case "assignee":
+            response = `${userName} changed the Assignee to '${changedValue}'`
+            break;
+        case "issueDetails":
+            response = `${userName} changed the Issue Details to  '${changedValue}'`
+            break;
+        case "issueSummary":
+            response = `${userName} changed the Issue Summary to  '${changedValue}'`
+            break;
+        case "files":
+            response = `${userName} attached new file  '${changedValue.original_name}'`
+            break;
+        case "category":
+            response = `${userName} changed ticket Category to '${changedValue}'`
+            break;
+        case "priority":
+            response = `${userName} changed ticket Priority to '${changedValue}'`
+            break;
+        case "fixVersion":
+            response = `${userName} changed ticket Fix Version to '${changedValue}'`
+            break;
+        case "dueDate":
+            response = `${userName} changed ticket Due Date to '${changedValue}'`
+            break;
+        case "storyPoints":
+            response = `${userName} changed ticket Story Points to '${changedValue}'`
+            break;
+        case "resolvedBy":
+            response = `${userName} changed Resolved By to '${changedValue}'`
+            break;
+        case "testedBy":
+            response = `${userName} changed Tested By to '${changedValue}'`
+            break;
+        case "reviewedBy":
+            response = `${userName} changed Reviewed By to '${changedValue}'`
             break;
         default:
         // code block
@@ -217,31 +250,65 @@ exports.getDashboardData = async (userId, tenantId) => {
     return response;
 }
 exports.getTicketById = async (userId, tenantId, ticketId) => {
-    let response=null;
-    const ticketResponse= await ticket.findOne({where:{[Op.and]:[{id:ticketId},{tenant_id:tenantId}]},include: [
-        { model: db.project },
-        { model: db.department },
-        { model: db.status },
-        { model: db.user }
-    ]});
-    response=ticketResponse.dataValues;
-    const createdBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.created_by}]}});
-    response.createdBy=createdBy;
+    let response = null;
+    const ticketResponse = await ticket.findOne({
+        where: { [Op.and]: [{ id: ticketId }, { tenant_id: tenantId }] }, include: [
+            { model: db.project },
+            { model: db.department },
+            { model: db.status },
+            { model: db.user }
+        ]
+    });
+    response = ticketResponse.dataValues;
+    const createdBy = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: response.created_by }] } });
+    response.createdBy = createdBy;
 
-    const assigneeId= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.assignee_id}]}});
-    response.assigneeId=assigneeId;
+    const assigneeId = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: response.assignee_id }] } });
+    response.assigneeId = assigneeId;
 
-    const closedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.closed_by}]}});
-    response.closedBy=closedBy;
+    const closedBy = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: response.closed_by }] } });
+    response.closedBy = closedBy;
 
-    const reviewedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.reviewed_by}]}});
-    response.reviewedBy=reviewedBy;
+    const reviewedBy = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: response.reviewed_by }] } });
+    response.reviewedBy = reviewedBy;
 
-    const testedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.tested_by}]}});
-    response.testedBy=testedBy;
-    
-    const resolvedBy= await user.findOne({where:{[Op.and]:[{tenant_id:tenantId},{id:response.resolved_by}]}});
-    response.resolvedBy=resolvedBy;
-    
+    const testedBy = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: response.tested_by }] } });
+    response.testedBy = testedBy;
+
+    const resolvedBy = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: response.resolved_by }] } });
+    response.resolvedBy = resolvedBy;
+
+    const ticketFilesList = await ticketFiles.findAll({
+        where: { [Op.and]: [{ tenant_id: tenantId }, { ticket_id: ticketId }] }, include: [
+            { model: db.uploads }
+        ]
+    })
+    response.ticketFiles = ticketFilesList;
+
     return response;
+}
+exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ticketId, changedValue) => {
+    let response = null;
+    let updatedTicket = null;
+    if (type !== 'files') {
+        updatedTicket = await ticket.update(updateObj, { where: { [Op.and]: [{ tenant_id: tenantId }, { id: ticketId }] } });
+    } else {
+        //<Start>Insert entry into ticketFiles table
+        if (generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(changedValue) !== null) {
+            await fileAPIService.saveTicketFiles(ticketId, changedValue.id, tenantId);
+        }
+        //<End>Insert entry into ticketFiles table
+    }
+
+
+    //<Start>Insert Entry in ticket history
+    await this.saveTicketHistory(tenantId, ticketId, await this.getTicketHistoryMessage(type, loggedInUserDetails.first_name + ' ' + loggedInUserDetails.last_name, null, null, changedValue));
+    //<End>Insert Entry in ticket history
+    response = {
+        status: true,
+        data: updatedTicket
+    }
+
+    return response
+
 }

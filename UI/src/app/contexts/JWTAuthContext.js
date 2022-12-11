@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
         const response = await axios.post(config.user.login, {
             email,
             password,
-        }).then(async(d)=>{
+        }).then(async (d) => {
             if (d.status === false) {
                 Swal.fire({
                     icon: 'error',
@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
                     showConfirmButton: false,
                     width: 400,
                 })
-            }else{
+            } else {
                 const { data } = d;
                 const tokens = {
                     accessToken: get(data, 'token'),
@@ -113,12 +113,12 @@ export const AuthProvider = ({ children }) => {
                     email: get(data, 'user.email'),
                     firstName: get(data, 'user.first_name'),
                     lastName: get(data, 'user.last_name'),
-                    avatar: '/assets/images/face-3.jpg', //dummy
+                    avatar: '/assets/images/avatars/001-man.svg', //dummy
                 }
-        
+
                 setSession(tokens)
                 window.localStorage.setItem('user', JSON.stringify(user))
-        
+
                 dispatch({
                     type: 'LOGIN',
                     payload: {

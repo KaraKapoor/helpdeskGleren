@@ -2,6 +2,7 @@ import { AppBar, Button, ThemeProvider, Toolbar } from '@mui/material';
 import { styled, useTheme } from '@mui/system';
 import useSettings from 'app/hooks/useSettings';
 import { topBarHeight } from 'app/utils/constant';
+import { Strings } from 'config/strings';
 import { Paragraph, Span } from './Typography';
 
 const AppFooter = styled(Toolbar)(() => ({
@@ -40,7 +41,7 @@ const Footer = () => {
       <AppBar color="primary" position="static" sx={{ zIndex: 96 }}>
         <AppFooter>
           <FooterContent>
-          <Paragraph sx={{ m: 0 }}>Version: 1.0.0</Paragraph>
+            <Paragraph sx={{ m: 0 }}>Version: {Strings.VERSION}</Paragraph>
             <Span sx={{ m: 'auto' }}></Span>
             <Paragraph>
               Gleren Technologies Pvt Ltd

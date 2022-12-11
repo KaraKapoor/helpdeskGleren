@@ -47,7 +47,9 @@
         "create": "api/ticket/create",
         "myTickets": "api/ticket/myTickets",
         "allTickets": "api/ticket/allTickets",
-        "dashboardData": "api/ticket/getDashboardData"
+        "dashboardData": "api/ticket/getDashboardData",
+        "getTicketById": "api/ticket/getById",
+        "update": "api/ticket/update"
     },
     "file": {
         "upload": "api/file/uploadFile",

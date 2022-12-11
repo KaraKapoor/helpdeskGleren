@@ -39,5 +39,13 @@ module.exports = {
     CATEGORY_ERROR: "Category is mandatory",
     PRIORITY_ERROR: "Priority is mandatory",
     ISSUE_DETAILS_ERROR: "Issue Details is mandatory",
-    ISSUE_SUMMARY_ERROR: "Issue Summary is mandatory"
+    ISSUE_SUMMARY_ERROR: "Issue Summary is mandatory",
+    FIELD_ERROR: "Field is mandatory",
+    FILES_ERROR: "Files is mandatory",
+    FIX_VERSION_ERROR: "Fix Version is mandatory",
+    DUE_DATE_ERROR:"Due Date is mandatory",
+    STORY_POINT_ERROR:"Story Point is mandatory",
+    RESOLVED_BY_ERROR:"Resolved By is mandatory",
+    REVIEWED_BY_ERROR:"Reviewed By is mandatory",
+    TESTED_BY_ERROR:"Tested By is mandatory"
 };
