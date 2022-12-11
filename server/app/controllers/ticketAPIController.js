@@ -466,3 +466,58 @@ exports.getTicketHistory = async (req, res) => {
         });
     }
 }
+exports.saveTicketComments = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.ticketId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.TICKET_ID_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.htmlComments) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.HTML_COMMENT_MANDATORY,
+            status: false
+        });
+    }
+
+    try {
+        const resp = await ticketAPIService.saveComments(userDetails, tenantId, input.ticketId, input.htmlComments);
+        return res.status(200).send({ status: true, data: resp });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.getTicketComments = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.ticketId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.TICKET_ID_ERROR,
+            status: false
+        });
+    }
+
+    try {
+        const resp = await ticketAPIService.getTicketComments(userDetails, tenantId, input.ticketId);
+        return res.status(200).send({ status: true, data: resp });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}

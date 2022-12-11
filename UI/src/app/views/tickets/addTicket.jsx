@@ -372,7 +372,7 @@ font-size: 13px;
 
                                 </FormContainer>
                                 <div className='d-flex justify-content-end'>
-                                    <LoadingButton type="submit" color="primary" variant="contained"
+                                    <LoadingButton type="submit" color="secondary" variant="contained"
                                         sx={{ my: 2, top: "60", marginRight: "10px", marginTop: "5vh" }}>
                                         Submit
                                     </LoadingButton>

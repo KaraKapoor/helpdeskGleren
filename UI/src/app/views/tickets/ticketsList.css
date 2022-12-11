@@ -1,4 +1,63 @@
-.deleteIcon{
+.deleteIcon {
     padding-top: 5px;
     cursor: pointer;
+}
+
+.triangle {
+    position: relative;
+    margin-top: 10px;
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+
+.triangleMain {
+    border-radius: 10px;
+    border: 1px solid #fafafa;
+    box-shadow: 0px 3px 3px 0 rgba(0, 0, 0, 0.4);
+    margin-bottom: 15px;
+    background-color: #fffff0;
+}
+
+.triangleInnerContent {
+    padding-left: 10px;
+}
+
+.triangle::after {
+    z-index: -10;
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin-left: 0;
+    bottom: 0;
+    top: calc(20% - 5px);
+    left: 0;
+    box-sizing: border-box;
+
+    border: 5px solid #fff;
+    border-color: transparent transparent #fff #fff;
+
+    transform-origin: 0 0;
+    transform: rotate(45deg);
+
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+.triangle::before {
+    z-index: 10;
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin-left: 0;
+    bottom: 0;
+    top: calc(20% - 5px);
+    left: 0;
+    box-sizing: border-box;
+
+    border: 5px solid black;
+    border-color: transparent transparent #fff #fff;
+
+    transform-origin: 0 0;
+    transform: rotate(45deg);
 }

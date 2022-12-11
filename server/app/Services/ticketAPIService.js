@@ -7,10 +7,11 @@ const coreSettingsService = require("./coreSettingAPIService");
 const emailAPIService = require("./emailAPIService");
 const fileAPIService = require("./fileAPIService");
 const generalMethodAPIService = require("./generalMethodAPIService");
-const { user, ticketFiles } = require("../models");
+const { user, ticketFiles, comments } = require("../models");
 const Op = db.Sequelize.Op;
 const queries = require("../constants/queries");
 const constants = require("../constants/constants");
+const { htmlToText } = require('html-to-text');
 
 exports.saveTicketHistory = async (tenantId, ticketId, text) => {
     let response = null;
@@ -76,12 +77,12 @@ exports.getTicketHistoryMessage = async (type, userName, status, assignee, chang
 
     return response;
 }
-exports.saveComments = async (tenantId, ticketId, plainText, htmlText, createdBy) => {
+exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment) => {
     let response = null;
     const reqObj = {
-        created_by: createdBy,
-        html_text: htmlText,
-        plain_text: plainText,
+        created_by: userDetails.id,
+        html_text: htmlComment,
+        plain_text: htmlToText(htmlComment),
         ticket_id: ticketId,
         tenant_id: tenantId
     }
@@ -318,6 +319,24 @@ exports.getTicketHistory = async (userDetails, tenantId, ticketId) => {
     response = {
         status: true,
         data: ticketHistoryData
+    }
+    return response;
+}
+exports.getTicketComments = async (userDetails, tenantId, ticketId) => {
+    let response = null
+    let commentsArray = [];
+    const ticketCommentsData = await comments.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { ticket_id: ticketId }] } });
+    if (ticketCommentsData !== null && ticketCommentsData.length > 0) {
+        for (let i of ticketCommentsData) {
+            let temp = i.dataValues;
+            const userDetails = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: i.created_by }] } });
+            temp.createdBy = userDetails.dataValues;
+            commentsArray.push(i.dataValues);
+        }
+    }
+    response = {
+        status: true,
+        data: commentsArray
     }
     return response;
 }

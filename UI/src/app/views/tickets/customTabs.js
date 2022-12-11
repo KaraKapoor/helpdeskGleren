@@ -4,10 +4,14 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { getTicketHistory } from 'app/services/ticketService';
+import { getTicketComments, getTicketHistory, saveTicketComment } from 'app/services/ticketService';
 import Swal from 'sweetalert2';
-import { Icon } from '@mui/material';
+import { Grid, Icon } from '@mui/material';
 import moment from 'moment';
+import { MaterialEditor } from 'react-mui-editor';
+import { useEffect } from 'react';
+import { LoadingButton } from '@mui/lab';
+import { Fragment } from 'react';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -45,15 +49,24 @@ function a11yProps(index) {
 export default function CustomTabs({ ticketId }) {
     const [value, setValue] = React.useState(0);
     const [editData, setEditData] = React.useState([]);
+    const [commentsData, setCommentsData] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [editorContent, setEditorContent] = React.useState(undefined);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        if (newValue === 2) {
+        if (newValue === 0) {
+            setIsLoading(false);
+        } else if (newValue === 1) {
+            getTicketCommentsData(ticketId);
+        }
+        else if (newValue === 2) {
             getTicketHistoryData(ticketId);
         }
     };
-
+    useEffect(() => {
+        setIsLoading(false);
+    }, [])
     const getTicketHistoryData = (id) => {
         getTicketHistory({ id: id }).then((resp) => {
             if (resp?.status === false) {
@@ -72,6 +85,49 @@ export default function CustomTabs({ ticketId }) {
 
         })
     }
+    const getTicketCommentsData = (id) => {
+        getTicketComments({ ticketId: id }).then((resp) => {
+            if (resp?.status === false) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: resp.error,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: 400,
+                })
+            } else {
+                setCommentsData(resp.data.data);
+                setIsLoading(false);
+            }
+
+        })
+    }
+    const saveComments = () => {
+        saveTicketComment({ ticketId: ticketId, htmlComments: editorContent }).then((resp) => {
+            if (resp?.status === false) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: resp.error,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: 400,
+                })
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "Saved Successfully",
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: 400,
+                })
+                setEditorContent(undefined);
+            }
+
+        })
+    };
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -85,10 +141,38 @@ export default function CustomTabs({ ticketId }) {
             {
                 !isLoading && <React.Fragment>
                     <TabPanel value={value} index={0}>
-                        Item One
+                        <MaterialEditor editorContent={editorContent} setEditorContent={setEditorContent} placeholder="Add Comment" />
+                        <div className='d-flex justify-content-start'>
+                            <LoadingButton color="secondary" variant="contained" onClick={saveComments}
+                                sx={{ my: 2, top: "60", marginRight: "10px", marginTop: "5vh" }}>
+                                Save
+                            </LoadingButton>
+                        </div>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        Item Two
+                        {
+                            commentsData?.map((f, index) => {
+                                return <Fragment>
+                                    <Grid container spacing={3}>
+                                        <Grid item lg={1} md={1} sm={1} xs={12}>
+                                            <Icon>comment</Icon>
+                                        </Grid>
+                                        <Grid item lg={11} md={11} sm={11} xs={12}>
+                                            <div className="triangleMain">
+                                                <div className="triangle">
+                                                    <p><span style={{ fontWeight: "bold" }}>{f.createdBy.first_name + ' ' + f.createdBy.last_name}</span> commented  on {moment(f.createdAt).format('DD/MM/YYYY hh:mm A')}
+                                                    </p>
+                                                </div>
+                                                <div className="triangleInnerContent">
+                                                    <p>{f.plain_text}</p>
+                                                </div>
+                                            </div>
+                                        </Grid>
+                                    </Grid>
+
+                                </Fragment>
+                            })
+                        }
                     </TabPanel>
                     <TabPanel value={value} index={2}>
                         {

@@ -47,5 +47,7 @@ module.exports = {
     STORY_POINT_ERROR:"Story Point is mandatory",
     RESOLVED_BY_ERROR:"Resolved By is mandatory",
     REVIEWED_BY_ERROR:"Reviewed By is mandatory",
-    TESTED_BY_ERROR:"Tested By is mandatory"
+    TESTED_BY_ERROR:"Tested By is mandatory",
+    TICKET_ID_ERROR: "Ticket Id is mandatory",
+    HTML_COMMENT_MANDATORY: "Html Comment is mandatory"
 };

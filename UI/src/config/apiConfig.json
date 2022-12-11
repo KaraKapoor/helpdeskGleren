@@ -50,7 +50,9 @@
         "dashboardData": "api/ticket/getDashboardData",
         "getTicketById": "api/ticket/getById",
         "update": "api/ticket/update",
-        "getTicketHistory": "api/ticket/getTicketHistory"
+        "getTicketHistory": "api/ticket/getTicketHistory",
+        "saveTicketComment": "api/ticket/saveComment",
+        "getTicketComments": "api/ticket/getTicketComments"
     },
     "file": {
         "upload": "api/file/uploadFile",

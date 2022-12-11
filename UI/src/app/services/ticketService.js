@@ -63,3 +63,17 @@ export const getTicketHistory = (data) => {
         data: data
     })
 }
+export const saveTicketComment = (data) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.ticket.saveTicketComment,
+        data: data
+    })
+}
+export const getTicketComments = (data) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.ticket.getTicketComments,
+        data: data
+    })
+}
