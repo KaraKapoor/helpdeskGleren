@@ -5,6 +5,7 @@ const db = require("../models");
 const errorConstants = require("../constants/errorConstants");
 const userAPIService = require("../Services/userAPIService");
 const fileAPIService = require("../Services/fileAPIService");
+const generalMethodAPIService = require("../Services/generalMethodAPIService");
 const uploads = db.uploads;
 const comment = db.comments;
 const Op = db.Sequelize.Op;
@@ -109,5 +110,28 @@ exports.deleteFile = async (req, res) => {
                 res.send({ success: true, data: data });
             }
         })
+    }
+}
+exports.downloadFile = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+
+    if (await generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(input.keyName) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.KEY_NAME_ERROR,
+            status: false
+        });
+    }
+    try {
+        const resp = await fileAPIService.downloadFile(userDetails, tenantId, input.keyName);
+        return res.status(200).send({ status: true, data: resp });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
     }
 }

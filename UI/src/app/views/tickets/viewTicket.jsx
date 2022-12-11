@@ -8,7 +8,7 @@ import { Card, Checkbox, Divider, Fab, FormControl, FormControlLabel, Grid, Icon
     from '@mui/material'
 import styled from '@emotion/styled'
 import { getMasterDropdownData } from 'app/services/adminService';
-import { deleteFile, fileUpload, getTicketById, updateTicket } from 'app/services/ticketService';
+import { deleteFile, downloadFile, fileUpload, getTicketById, updateTicket } from 'app/services/ticketService';
 import CustomTabs from './customTabs';
 
 const ViewTicket = ({ onClose }) => {
@@ -312,6 +312,15 @@ gap: 1rem;
                                                                                 getTicketDetails(f.ticket_id)
                                                                             })
                                                                         }}><Icon className="icon deleteIcon">delete</Icon></span>
+                                                                        <span onClick={(e) => {
+                                                                            const obj = {
+                                                                                "keyName": f.upload.key
+                                                                            }
+                                                                            downloadFile(obj).then((r) => {
+                                                                                window.open(r.data, '_blank');
+                                                                                getTicketDetails(f.ticket_id)
+                                                                            })
+                                                                        }}><Icon className="icon deleteIcon">file_download</Icon></span>
                                                                     </div>
                                                                 </Fragment>
 

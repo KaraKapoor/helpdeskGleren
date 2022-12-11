@@ -23,6 +23,13 @@ export const deleteFile = (formData) => {
         data: formData,
     })
 }
+export const downloadFile = (formData) => {
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.file.download,
+        data: formData,
+    })
+}
 export const myTickets = (queryParams) => {
     return appRequest({
         method: RequestMethod.GET,

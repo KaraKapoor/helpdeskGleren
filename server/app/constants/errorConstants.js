@@ -49,5 +49,6 @@ module.exports = {
     REVIEWED_BY_ERROR:"Reviewed By is mandatory",
     TESTED_BY_ERROR:"Tested By is mandatory",
     TICKET_ID_ERROR: "Ticket Id is mandatory",
-    HTML_COMMENT_MANDATORY: "Html Comment is mandatory"
+    HTML_COMMENT_MANDATORY: "Html Comment is mandatory",
+    KEY_NAME_ERROR: "KeyName is mandatory"
 };

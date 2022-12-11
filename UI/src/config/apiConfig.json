@@ -56,7 +56,8 @@
     },
     "file": {
         "upload": "api/file/uploadFile",
-        "delete": "api/file/deleteFile"
+        "delete": "api/file/deleteFile",
+        "download": "api/file/downloadFile"
     },
     "master": {
         "getDropdownData": "api/admin/masterDropdownData"
