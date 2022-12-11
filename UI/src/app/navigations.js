@@ -1,25 +1,27 @@
 import { Strings } from "config/strings";
+import { authRoles } from "./auth/authRoles";
 
 export const navigations = [
-  { name: 'Dashboard', path: '/dashboard/default', icon: 'dashboard' },
+  { name: 'Dashboard', path: '/dashboard/default', icon: 'dashboard', auth: [authRoles.admin, authRoles.teamLead, authRoles.agent, authRoles.user].toString(), },
 
-  { label: 'TICKETS', type: 'label' },
-  { name: 'Reported by me ', icon: 'assignment', path: '/my-reported-tickets' },
+  { label: 'TICKETS', type: 'label', auth: [authRoles.admin, authRoles.teamLead, authRoles.agent, authRoles.user].toString() },
+  { name: 'Reported by me ', icon: 'assignment', path: '/my-reported-tickets', auth: [authRoles.admin, authRoles.teamLead, authRoles.agent, authRoles.user].toString() },
   // { name: 'Escalated Tickets', icon: 'trending_down', path: '/ticket' },
-  { name: 'All Tickets', icon: 'trending_up', path: '/all-tickets' },
+  { name: 'All Tickets', icon: 'trending_up', path: '/all-tickets', auth: [authRoles.admin, authRoles.teamLead, authRoles.agent, authRoles.user].toString() },
   // { name: 'My Team', icon: 'people', path: '/ticket' },
 
-  { label: 'ADMIN', type: 'label' },
+  { label: 'ADMIN', type: 'label', auth: [authRoles.admin].toString() },
   {
+    auth: [authRoles.admin].toString(),
     name: 'Core Configurations',
     icon: 'security',
     children: [
-      { name: 'Teams', icon: 'people', path: '/teams' },
-      { name: 'Users', icon: 'group', path: '/users' },
-      { name: 'Escalation Configurations', icon: 'perm_data_setting', path: '/escalations' },
-      { name: 'Projects', icon: 'assignment', path: '/project' },
-      { name: 'Status', icon: 'do_not_disturb', path: '/status' },
-      { name: 'Departments', icon: 'assistant', path: '/departments' },
+      { name: 'Teams', icon: 'people', path: '/teams', auth: [authRoles.admin].toString() },
+      { name: 'Users', icon: 'group', path: '/users', auth: [authRoles.admin].toString() },
+      { name: 'Escalation Configurations', icon: 'perm_data_setting', path: '/escalations', auth: [authRoles.admin].toString() },
+      { name: 'Projects', icon: 'assignment', path: '/project', auth: [authRoles.admin].toString() },
+      { name: 'Status', icon: 'do_not_disturb', path: '/status', auth: [authRoles.admin].toString() },
+      { name: 'Departments', icon: 'assistant', path: '/departments', auth: [authRoles.admin].toString() },
       // { name: 'Change Logo',icon:'image',path:'/ticket'},
     ],
   },
@@ -73,11 +75,13 @@ export const navigations = [
     name: 'Contact Us',
     type: 'extLink',
     icon: 'contacts',
+    auth: [authRoles.admin, authRoles.teamLead, authRoles.agent, authRoles.user].toString(),
     path: Strings.GLEREN_WEBSITE + Strings.GLEREN_CONTACT_US_PATH,
   },
   {
     name: 'Report Bug',
     icon: 'bug_report',
+    auth: [authRoles.admin, authRoles.teamLead, authRoles.agent, authRoles.user].toString(),
     path: '/bugReport',
   },
 ];

@@ -76,9 +76,14 @@ const BadgeValue = styled('div')(() => ({
 const MatxVerticalNav = ({ items }) => {
   const { settings } = useSettings();
   const { mode } = settings.layout1Settings.leftSidebar;
+  const user = window.localStorage.getItem("user");
+  let parsedUser = JSON.parse(user);
 
   const renderLevels = (data) => {
     return data.map((item, index) => {
+      if (!item?.auth?.includes(parsedUser.role)) {
+        return null;
+      }
       if (item.type === 'label')
         return (
           <ListLabel key={index} mode={mode} className="sidenavHoverShow">
