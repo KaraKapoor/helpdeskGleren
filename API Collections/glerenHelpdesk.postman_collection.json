@@ -96,7 +96,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\",\r\n    \"password\":\"123456\"\r\n}",
+							"raw": "{\r\n    \"email\":\"karan.kapoor+admin@gleren.com\",\r\n    \"password\":\"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -265,6 +265,34 @@
 					"response": []
 				},
 				{
+					"name": "createEscalations",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":\"2\",\r\n    \"departmentId\":2,\r\n    \"l1Id\":\"1\",\r\n    \"l2Id\":\"1\",\r\n    \"l3Id\":\"1\",\r\n    \"l4Id\":\"1\",\r\n    \"l5Id\":\"1\",\r\n    \"l6Id\":\"1\",\r\n    \"is_active\":false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/escalations/createEscalation",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"escalations",
+								"createEscalation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "createDepartment",
 					"request": {
 						"method": "POST",
@@ -349,6 +377,62 @@
 					"response": []
 				},
 				{
+					"name": "EscalationGetById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/escalations/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"escalations",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TeamGetById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/teams/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"teams",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "getAllProjects",
 					"request": {
 						"method": "GET",
@@ -378,6 +462,35 @@
 					"response": []
 				},
 				{
+					"name": "getAllEscalations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/admin/escalations/getAllEscalations?page=0&size=10",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"escalations",
+								"getAllEscalations"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "getAllDepartments",
 					"request": {
 						"method": "GET",
@@ -391,6 +504,35 @@
 								"admin",
 								"department",
 								"getAllDepartments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllTeams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/admin/teams/getAllTeams?page=0&size=10",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"teams",
+								"getAllTeams"
 							],
 							"query": [
 								{
@@ -446,6 +588,34 @@
 							"path": [
 								"admin",
 								"masterDropdownData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTeam",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"teamName\":\"Urja Team\",\r\n    \"departmentId\":5,\r\n    \"projectId\":23,\r\n    \"users\":[7],\r\n    \"leads\":[4],\r\n    \"active\":false,\r\n    \"agents\":[5,6],\r\n    \"id\":5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/teams/create",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"teams",
+								"create"
 							]
 						}
 					},
@@ -632,6 +802,433 @@
 							"path": [
 								"user",
 								"createUpdateUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "createTicket",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"departmentId\":\"\",\r\n    \"projectId\":\"\",\r\n    \"assigneeId\":\"\",\r\n    \"category\":\"\",\r\n    \"statusId\":\"\",\r\n    \"priority\":\"\",\r\n    \"fixVersion\":\"\",\r\n    \"issueDetails\":\"\",\r\n    \"issueSummary\":\"\",\r\n    \"dueDate\":\"\",\r\n    \"closedBy\":\"\",\r\n    \"reviewedBy\":\"\",\r\n    \"testedBy\":\"\",\r\n    \"resolvedBy\":\"\",\r\n    \"storyPoints\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/ticket/create",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTicket",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"id\":1,\r\n   \"issueDetails\":\"NEW vALUE\",\r\n   \"field\":\"issueDetails\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/ticket/update",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "uploadFile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Karan Kapoor/Downloads/BoardingPass.pdf"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/file/uploadFile",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"file",
+								"uploadFile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMyTickets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/ticket/myTickets?page=0&size=10&dueDate=20221208T000000Z&searchParam=1",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"myTickets"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "projectId",
+									"value": "1,2,3",
+									"disabled": true
+								},
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z"
+								},
+								{
+									"key": "searchParam",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllTickets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/ticket/allTickets?page=0&size=10&projectId=24",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"allTickets"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "projectId",
+									"value": "24"
+								},
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z",
+									"disabled": true
+								},
+								{
+									"key": "searchParam",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDashboardData",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/ticket/getDashboardData",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"getDashboardData"
+							],
+							"query": [
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z",
+									"disabled": true
+								},
+								{
+									"key": "searchParam",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTicketById",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/ticket/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"getById"
+							],
+							"query": [
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z",
+									"disabled": true
+								},
+								{
+									"key": "searchParam",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTicketHistory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/ticket/getTicketHistory",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"getTicketHistory"
+							],
+							"query": [
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z",
+									"disabled": true
+								},
+								{
+									"key": "searchParam",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveTicketComment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ticketId\":1,\r\n    \"htmlComments\":\"<p>sasd</p>\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/ticket/saveComment",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"saveComment"
+							],
+							"query": [
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z",
+									"disabled": true
+								},
+								{
+									"key": "searchParam",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTicketComments",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ticketId\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/ticket/getTicketComments",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"ticket",
+								"getTicketComments"
+							],
+							"query": [
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z",
+									"disabled": true
+								},
+								{
+									"key": "searchParam",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTicketComments Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"keyName\":\"ticket/1670774162384ff7365d7-9447-4199-ac74-8edceb219c86/Urja_Db_Design_Draft_01.svg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/file/downloadFile",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"file",
+								"downloadFile"
+							],
+							"query": [
+								{
+									"key": "dueDate",
+									"value": "20221208T000000Z",
+									"disabled": true
+								},
+								{
+									"key": "searchParam",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteFile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uploadId\":\"\",\r\n    \"keyName\":\"ticket/16703531778578edb8cb9-762b-4194-b291-1407efd77a42/BoardingPass.pdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/file/deleteFile",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"file",
+								"deleteFile"
 							]
 						}
 					},
