@@ -187,8 +187,8 @@ gap: 1rem;
                 setSelectedReviewedBy(resp.data.reviewed_by);
                 setSelectedTestedBy(resp.data.tested_by);
                 let dueDate;
-                if (resp?.data?.due_date !== null) {
-                    dueDate = moment(resp.data.due_date).format('YYYY-MM-DD');
+                if (resp?.data?.due_dt !== null) {
+                    dueDate = moment(resp.data.due_dt).format('YYYY-MM-DD');
                 }
                 setInitialValues({
                     issueDetails: resp?.data?.issue_details ? resp.data.issue_details : '',
