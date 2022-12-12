@@ -485,13 +485,6 @@ exports.createTeam = async (req, res) => {
             status: false
         });
     }
-    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.users) == null) {
-
-        return res.status(200).send({
-            error: errorConstants.USERS_EMPTY_ARRAY_ERROR,
-            status: false
-        });
-    }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.leads) == null) {
 
         return res.status(200).send({

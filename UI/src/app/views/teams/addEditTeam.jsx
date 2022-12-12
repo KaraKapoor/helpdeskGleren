@@ -222,12 +222,11 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <FormControl fullWidth>
-                        <InputLabel required={true} id="user">Users</InputLabel>
+                        <InputLabel id="user">Users</InputLabel>
                         <Select
                           labelId="user"
                           id="user"
                           multiple
-                          required={true}
                           value={selectedUsers}
                           label="Users"
                           onChange={handleUserChange}
