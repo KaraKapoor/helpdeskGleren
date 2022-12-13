@@ -43,6 +43,7 @@ const UpgradeCard = () => {
         </Button>
       </StyledCard>
     </CardRoot>
+   
   );
 };
 

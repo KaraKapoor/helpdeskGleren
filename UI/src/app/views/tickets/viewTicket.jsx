@@ -322,10 +322,7 @@ gap: 1rem;
                                                                             })
                                                                         }}><Icon className="icon deleteIcon">file_download</Icon></span>
                                                                     </div>
-                                                                </Fragment>
-
-
-
+                                                                </Fragment>                                                                                                                                                                   
                                                             })
                                                         }
                                                     </Card>

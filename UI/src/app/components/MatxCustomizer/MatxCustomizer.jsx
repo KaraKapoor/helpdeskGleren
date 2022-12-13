@@ -129,7 +129,8 @@ const MatxCustomizer = () => {
               </IconButton>
             </Controller>
 
-            <Box px={3} mb={2} display="flex">
+
+            {/* <Box px={3} mb={2} display="flex">
               <Button
                 variant="outlined"
                 onClick={() => handleTabChange(0)}
@@ -145,7 +146,7 @@ const MatxCustomizer = () => {
               >
                 Settings
               </Button>
-            </Box>
+            </Box> */}
 
             <StyledScrollBar options={{ suppressScrollX: true }}>
               {tabIndex === 0 && (
