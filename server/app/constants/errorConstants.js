@@ -7,7 +7,7 @@ module.exports = {
     OTP_MANDATORY_ERROR: "OTP is mandatory",
     TENANT_ID_ERROR: "Tenant Id is mandatory",
     SOME_ERROR_OCCURRED: "Some error occurred while performing the operation",
-    INCORRECT_USERNAME_PASSWORD: "Incorrect email/password",
+    INCORRECT_USERNAME_PASSWORD: "Incorrect Email Address/Password",
     USER_ALREADY_EXISTS: "User with same email already exist",
     EMAIL_NOT_VERIFIED: "Email is not verified",
     TENANT_SAME_NAME_ERROR: "Tenant with name already exist",
