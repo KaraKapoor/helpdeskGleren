@@ -15,7 +15,7 @@ const FlexBox = styled(Box)(() => ({ display: 'flex', alignItems: 'center' }));
 const JustifyBox = styled(FlexBox)(() => ({ justifyContent: 'center' }));
 
 const ContentBox = styled(Box)(() => ({
-  height: '100%',
+  height: '100',
   padding: '32px',
   position: 'relative',
   background: 'rgba(0, 0, 0, 0.01)',
@@ -23,7 +23,7 @@ const ContentBox = styled(Box)(() => ({
 
 const JWTRoot = styled(JustifyBox)(({ imgUrl }) => ({
   background: '#1A2038',
-  minHeight: '100% !important',
+  height: '100vh',
   '& .card': {
       maxWidth: 800,
       borderRadius: 12,
@@ -85,29 +85,30 @@ const JwtLogin = () => {
                   <form onSubmit={handleSubmit}>
                     <TextField
                       fullWidth
+                      label="Email"
                       size="small"
                       type="email"
                       name="email"
-                      label="Email"
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.email}
+                      // value={values.email}
                       onChange={handleChange}
                       helperText={touched.email && errors.email}
                       error={Boolean(errors.email && touched.email)}
                       required={true}
                       sx={{ mb: 3 }}
+                      
                     />
 
                     <TextField
                       fullWidth
+                      label="Password"
                       size="small"
                       name="password"
                       type="password"
-                      label="Password"
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.password}
+                      // value={values.password}
                       onChange={handleChange}
                       required={true}
                       helperText={touched.password && errors.password}

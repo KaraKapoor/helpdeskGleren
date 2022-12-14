@@ -67,7 +67,7 @@ const ForgotPassword = () => {
             showConfirmButton: false,
             width: 400,
           }).then(() => {
-            return navigate("/session/signin");
+            return navigate("/session/forgot-password");
           });
         }
       });
