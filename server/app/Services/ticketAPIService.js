@@ -114,6 +114,7 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
 
     const createdTicket = await ticket.create(obj);
     const userDetails = await user.findOne({ where: { id: loggedInId } });
+    const assigneeDetails = await user.findOne({where: {id: assigneeId}});
 
     //<Start>Insert Entry in ticket history
     await this.saveTicketHistory(tenantId, createdTicket.id, await this.getTicketHistoryMessage('newTicket', userDetails.first_name + ' ' + userDetails.last_name, null, null));
@@ -134,6 +135,13 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     createEmailTemplate = createEmailTemplate.replace('{ticketNumber}', createdTicket.id);
     await emailAPIService.sendEmail(userDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createEmailTemplate);
     //<End>Send Email for Ticket Creation
+
+     //<Start>Send Email to assignee for Ticket Creation
+     let createassigneeEmailTemplate = emailTemplates.CREATE_TICKET_TEMPLATE;
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumber}', createdTicket.id);
+     await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createassigneeEmailTemplate);
+     //<End>Send Email to assignee for Ticket Creation
     response = {
         status: true,
         data: createdTicket
@@ -299,6 +307,23 @@ exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ti
             await fileAPIService.saveTicketFiles(ticketId, changedValue.id, tenantId);
         }
         //<End>Insert entry into ticketFiles table
+    }
+    if(type=== 'assignee'){
+        const assigneeDetails = await user.findOne({where: {id: updateObj.assignee_id}});
+        //<Start>Send Email to assignee for change in assignee
+        let changeassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
+        await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.UPDATE_TICKET_SUBJECT, null, null, null, changeassigneeEmailTemplate);
+        //<End>Send Email to assignee for change in assignee
+
+    }else{
+        const ticketDetails = await ticket.findOne({where:{id: ticketId}})
+        const assigneeId = ticketDetails.dataValues.assignee_id;
+        const assigneeDetails = await user.findOne({where: {id: assigneeId}});
+         //<Start>Send Email to assignee for any other change or update in ticket
+         let updateTicketEmailTemplate = emailTemplates.UPDATE_TICKET_TEMPLATE;
+         await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.UPDATE_TICKET_SUBJECT, null, null, null, updateTicketEmailTemplate);
+         //<End>Send Email to assignee for any other change or update in ticket
+
     }
 
 
