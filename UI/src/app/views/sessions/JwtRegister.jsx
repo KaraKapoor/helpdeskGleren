@@ -65,7 +65,6 @@ const JwtRegister = () => {
   }
 
   const handleFormSubmit = (values) => {
-    console.log(values);
     if (!values.firstName) {
       return Swal.fire({
           icon: 'warning',
@@ -175,7 +174,7 @@ const JwtRegister = () => {
           }
           registerTenant(formData).then((data) => {
               if (data.status === false) {
-                  return Swal.fire({
+                   Swal.fire({
                       icon: 'error',
                       title: 'Error',
                       text: data.error,
@@ -202,8 +201,9 @@ const JwtRegister = () => {
       console.log(e);
       setLoading(false);
   }
-  };
 
+  };
+console.log({loading});
   return (
     <JWTRegister>
       <Card className="card">
