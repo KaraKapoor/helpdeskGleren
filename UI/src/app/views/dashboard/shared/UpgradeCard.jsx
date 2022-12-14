@@ -1,5 +1,7 @@
 import { Button, Card, styled } from '@mui/material';
 import { convertHexToRGB } from 'app/utils/utils';
+import { useNavigate } from "react-router-dom";
+
 
 const CardRoot = styled(Card)(({ theme }) => ({
   marginBottom: '24px',
@@ -24,6 +26,7 @@ const Paragraph = styled('p')(({ theme }) => ({
 }));
 
 const UpgradeCard = () => {
+  const url = 'https://gleren.com/contact/'
   return (
     <CardRoot>
       <StyledCard elevation={0}>
@@ -38,6 +41,7 @@ const UpgradeCard = () => {
           color="primary"
           variant="contained"
           sx={{ textTransform: 'uppercase' }}
+          onClick={() => window.open(url, '_blank')} 
         >
           upgrade now
         </Button>
