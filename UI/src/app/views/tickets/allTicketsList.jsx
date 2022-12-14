@@ -4,6 +4,7 @@ import {
     FormControl,
     Grid,
     Icon,
+    IconButton,
     InputLabel,
     MenuItem,
     Select,
@@ -21,6 +22,11 @@ import { allTickets } from "app/services/ticketService";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import RefreshIcon from '@mui/icons-material/Refresh';
+
+function refreshPage() {
+    window.location.reload(false);
+}
 
 const StyledTable = styled(Table)(() => ({
     whiteSpace: "pre",
@@ -69,6 +75,7 @@ const AllTickets = ({ setCurrentView }) => {
     const [selectedReviewedBy, setSelectedReviewedBy] = useState([]);
     const [selectedTestedBy, setSelectedTestedBy] = useState([]);
     const [selectedResolvedBy, setSelectedResolvedBy] = useState([]);
+    const [selectedReportedBy, setSelectedReportedBy] = useState([]);
     const [selectedFixVersion, setSelectedFixVersion] = useState();
     const [selectedDueDate, setSelectedDueDate] = useState();
     const [selectedOverdue, setSelectedOverdue] = useState();
@@ -172,6 +179,9 @@ const AllTickets = ({ setCurrentView }) => {
     }
     const handleResolvedBy = (event) => {
         setSelectedResolvedBy(event.target.value);
+    }
+    const handleReportedBy = (event) => {
+        setSelectedReportedBy(event.target.value);
     }
     useEffect(() => {
         getMasterDropdownData().then((resp) => {
@@ -349,6 +359,31 @@ const AllTickets = ({ setCurrentView }) => {
                                 }
                             </Select>
                         </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="reportedBy">Reported By</InputLabel>
+                            <Select
+                                labelId="reportedBy"
+                                id="reportedBy"
+                                multiple
+                                value={selectedReportedBy}
+                                label="Reported By"
+                                onChange={handleReportedBy}
+                            >
+                                {
+                                    reviewedBy?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <IconButton onClick={refreshPage}>
+                            <RefreshIcon />
+                        </IconButton>
+
                     </Grid>
                 </Grid>
             </form>
