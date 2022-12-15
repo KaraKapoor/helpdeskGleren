@@ -1,22 +1,26 @@
 import { LoadingButton } from "@mui/lab";
-import React, { useEffect } from 'react'
-import { Box, Divider, FormControl, FormControlLabel, Grid, Icon, InputLabel, MenuItem, Select, TextareaAutosize, TextField } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Divider, FormControl, FormControlLabel, Grid, Icon, Input, InputLabel, MenuItem, Select, TextareaAutosize, TextField} from "@mui/material";
 import { getMasterDropdownData, reportBug } from "app/services/adminService";
 import { Formik } from "formik";
 import { useState } from "react";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import styled from '@emotion/styled'
-import { getLoggedInUserDetails, updateUserProfile } from "app/services/userService";
+import styled from "@emotion/styled";
+import {
+  getLoggedInUserDetails,
+  updateUserProfile,
+} from "app/services/userService";
 import { Strings } from "config/strings";
+import { fileUpload } from "app/services/ticketService";
 
-const MyProfile = ({onClose,editData}) => {
-const [valid, setValid] = React.useState(false)
-const [initialValues,setInitialValues]=React.useState(editData)
-const [masterDropdownData,setMasterDropdownData]= React.useState();
-const [departments,setDepartments]= React.useState();
-const [selectedDepartment, setSelectedDepartment]= React.useState();
+const MyProfile = ({ onClose, editData }) => {
+const [valid, setValid] = React.useState(false);
+const [initialValues, setInitialValues] = React.useState(editData);
+const [masterDropdownData, setMasterDropdownData] = React.useState();
+const [departments, setDepartments] = React.useState();
+const [selectedDepartment, setSelectedDepartment] = React.useState();
 const navigate = useNavigate();
 const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
 const HeaderTitle = styled.div`
@@ -28,7 +32,7 @@ font-size: 1.5rem;
 `
 const FormContainer = styled.div`
 display: grid;
-grid-template-columns: ${(props) => (props.divide ? '50% 48.4%' : '100%')};
+grid-template-columns: ${(props) => (props.divide ? "50% 48.4%" : "100%")};
 padding: 1rem 1rem 0 1rem;
 gap: 1rem;
 `
@@ -40,111 +44,183 @@ firstName: values.firstName,
 lastName: values.lastName,
 mobile: values.mobile,
 id: values.id,
-departmentId: selectedDepartment
+departmentId: selectedDepartment,
+
 };
-updateUserProfile(reqBody).then((resp)=>{
+updateUserProfile(reqBody).then((resp) => {
 if (resp?.status === false) {
 return Swal.fire({
-icon: 'error',
-title: 'Error',
+icon: "error",
+title: "Error",
 text: resp.error,
 showCloseButton: true,
 showConfirmButton: false,
 width: 400,
-})
+});
 } else {
 Swal.fire({
-icon: 'success',
-title: 'Success',
+icon: "success",
+title: "Success",
 text: Strings.UPDATED_SUCCESSFULLY,
 showCloseButton: true,
 showConfirmButton: false,
 width: 400,
-})
-return navigate('/dashboard/default');
+});
+return navigate("/dashboard/default");
 }
-})
-}
+});
+};
 useEffect(() => {
-	getMasterDropdownData().then((resp)=>{
-		if (resp?.status === false) {
-			return Swal.fire({
-			icon: 'error',
-			title: 'Error',
-			text: resp.error,
-			showCloseButton: true,
-			showConfirmButton: false,
-			width: 400,
-			})
-			} else {
-				setDepartments(resp?.data?.departments);
-				setMasterDropdownData(resp.data);
-				setSelectedDepartment(editData?.department);
-		}
-	})
-}, [])
+getMasterDropdownData().then((resp) => {
+if (resp?.status === false) {
+return Swal.fire({
+icon: "error",
+title: "Error",
+text: resp.error,
+showCloseButton: true,
+showConfirmButton: false,
+width: 400,
+});
+} else {
+setDepartments(resp?.data?.departments);
+setMasterDropdownData(resp.data);
+setSelectedDepartment(editData?.department);
+  }
+});
+  }, []);
 
-const handleDepartmentChange=(event)=>{
-	setSelectedDepartment(event.target.value);
+  const handleDepartmentChange = (event) => {
+setSelectedDepartment(event.target.value);
+  };
+  const onChangeFile = (event) => {
+    if (!event?.target?.files[0]) {
+        return null;
+    }
+    let data = new FormData();
+    data.append('file', event?.target?.files[0]);
+    fileUpload(data).then((resp) => {
+            console.log(resp)
+    })
 }
-
-return (
-<>
-	<div>
-		<Card elevation={3} sx={{ pt: 0, mb: 0 }}>
-			<HeaderTitle>
-				<div>
-					Edit Profile
-				</div>
-				<div onClick={handleClose}>
-					<Icon sx={{
-                                    color: '#59B691',
-                                    fontSize: '35px !important',
-                                    cursor: 'pointer',
-                                }}>
-						cancelsharp
-					</Icon>
-				</div>
-			</HeaderTitle>
-			<Divider />
-			<Formik onSubmit={onSubmit} initialValues={initialValues}>
-				{({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-				<form onSubmit={handleSubmit}>
-					<FormContainer>
-						<Grid container spacing={2}>
-							<Grid item lg={6} md={6} sm={12} xs={12}>
-								<TextField fullWidth size="large" name="firstName" type="text" label="First Name"
-									variant="outlined" onBlur={handleBlur} value={values.firstName}
-									onChange={handleChange} sx={{ mb: 1.5 }} />
-							</Grid>
-							<Grid item lg={6} md={6} sm={12} xs={12}>
-								<TextField fullWidth size="large" name="lastName" type="text" label="Last Name"
-									variant="outlined" onBlur={handleBlur} value={values.lastName}
-									onChange={handleChange} sx={{ mb: 1.5 }} />
-							</Grid>
-							<Grid item lg={6} md={6} sm={12} xs={12}>
-								<TextField fullWidth size="large" name="email" type="email" label="Email"
-									disabled={true} variant="outlined" onBlur={handleBlur} value={values.email}
-									onChange={handleChange} sx={{ mb: 1.5 }} />
-							</Grid>
-							<Grid item lg={6} md={6} sm={12} xs={12}>
-								<TextField fullWidth size="large" name="mobile" type="text" label="Mobile"
-									variant="outlined" onBlur={handleBlur} value={values.mobile} onChange={handleChange}
-									sx={{ mb: 1.5 }} />
-							</Grid>
-							<Grid item lg={6} md={6} sm={12} xs={12}>
-								<TextField fullWidth size="large" name="designation" type="text" label="Designation"
-									variant="outlined" onBlur={handleBlur} value={values.designation}
-									onChange={handleChange} sx={{ mb: 1.5 }} />
-
-							</Grid>
-							<Grid item lg={6} md={6} sm={12} xs={12}>
-								<TextField fullWidth size="large" name="role" type="text" label="Role" disabled={true}
-									variant="outlined" onBlur={handleBlur} value={values.role} onChange={handleChange}
-									sx={{ mb: 1.5 }} />
-							</Grid>
-							<Grid item lg={6} md={6} sm={12} xs={12}>
-							<FormControl fullWidth>
+  return (
+    <>
+      <div>
+        <Card elevation={3} sx={{ pt: 0, mb: 0 }}>
+          <HeaderTitle>
+            <div>Edit Profile</div>
+            <div onClick={handleClose}>
+              <Icon
+                sx={{
+                  color: "#59B691",
+                  fontSize: "35px !important",
+                  cursor: "pointer",
+                }}
+              >
+                cancelsharp
+              </Icon>
+            </div>
+          </HeaderTitle>
+          <Divider />
+          <Formik onSubmit={onSubmit} initialValues={initialValues}>
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <FormContainer>
+                  <Grid container spacing={2}>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <TextField
+                        fullWidth
+                        size="large"
+                        name="firstName"
+                        type="text"
+                        label="First Name"
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        value={values.firstName}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                      />
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <TextField
+                        fullWidth
+                        size="large"
+                        name="lastName"
+                        type="text"
+                        label="Last Name"
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        value={values.lastName}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                      />
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <TextField
+                        fullWidth
+                        size="large"
+                        name="email"
+                        type="email"
+                        label="Email"
+                        disabled={true}
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        value={values.email}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                      />
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <TextField
+                        fullWidth
+                        size="large"
+                        name="mobile"
+                        type="text"
+                        label="Mobile"
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        value={values.mobile}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                      />
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <TextField
+                        fullWidth
+                        size="large"
+                        name="designation"
+                        type="text"
+                        label="Designation"
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        value={values.designation}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                      />
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <TextField
+                        fullWidth
+                        size="large"
+                        name="role"
+                        type="text"
+                        label="Role"
+                        disabled={true}
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        value={values.role}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                      />
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                      <FormControl fullWidth>
                         <InputLabel id="role">Department</InputLabel>
                         <Select
                           labelId="department"
@@ -154,31 +230,69 @@ return (
                           onChange={handleDepartmentChange}
                           defaultValue={selectedDepartment}
                         >
-							{
+{
 								departments?.map((d,i)=>{
 									return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
 								})
 							}
                         </Select>
                       </FormControl>
-							</Grid>
+                    </Grid>
+                  </Grid>
+                  
 
-						</Grid>
+                  {/* <Grid>
+                    <Box
+                      sx={{
+                        border: "2px dashed gray",
+                        width: "100px",
+                        height: "100px",
+                        position: "relative",
+                      }}
+                    >
+                      <Icon
+                        sx={{
+                          color: "gray",
+                          fontSize: "55px !important",
+                          position: "absolute",
+                          top: "13px",
+                          left: "22px",
+                        }}
+                      >
+                        <i>
+                          <FaUser />
+                        </i>
+                      </Icon>
+                    </Box>
+                    <Button className="btn btn-secondary mt-3">Upload</Button>
+                  </Grid> */}
 
-					</FormContainer>
-					<div className='d-flex justify-content-end'>
-						<LoadingButton type="submit" color="primary" variant="contained"
-							sx={{ my: 2, top: "60", marginRight: "10px", marginTop: "25vh" }}>
-							Update
-						</LoadingButton>
-					</div>
-				</form>
-				)}
+<TextField fullWidth size="large" name="files" type="file"
+                                                        variant="outlined" onBlur={handleBlur}
+                                                        onChange={onChangeFile} sx={{ mb: 1.5 }} value="" />
 
-			</Formik>
-		</Card>
-	</div>
-</>
-)
-}
+                </FormContainer>
+                <div className="d-flex justify-content-end">
+                  <LoadingButton
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                    sx={{
+                      my: 2,
+                      top: "60",
+                      marginRight: "10px",
+                      marginTop: "25vh",
+                    }}
+                  >
+                    Update
+                  </LoadingButton>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </Card>
+      </div>
+    </>
+  );
+};
 export default MyProfile;

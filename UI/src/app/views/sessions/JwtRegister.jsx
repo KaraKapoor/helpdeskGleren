@@ -46,7 +46,10 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, 'Password must be 6 character length')
-    .required('Password is required!'),
+    .required('Password is required!').matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+    ),
   email: Yup.string().email('Invalid Email address').required('Email is required!'),
 });
 
@@ -255,6 +258,9 @@ console.log({loading});
                       error={Boolean(errors.firstName && touched.firstName)}
                       sx={{ mb: 3 }}
                     />
+
+
+
                     <TextField
                       fullWidth
                       size="small"
@@ -351,7 +357,7 @@ console.log({loading});
                       variant="contained"
                       sx={{ mb: 2, mt: 3 }}
                       >
-                      Verfiy OTP
+                      Verfiy OTP 
                     </LoadingButton>
                     }
 
