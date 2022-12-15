@@ -380,10 +380,11 @@ const AllTickets = ({ setCurrentView }) => {
                         </FormControl>
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <InputLabel> Refresh
                         <IconButton onClick={refreshPage}>
                             <RefreshIcon />
                         </IconButton>
-
+                        </InputLabel>
                     </Grid>
                 </Grid>
             </form>
