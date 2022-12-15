@@ -36,7 +36,12 @@ module.exports = (sequelize, Sequelize) => {
         reset_password_id: {
             type: Sequelize.STRING,
             defaultValue: null
+        },
+        photo_id: {
+            type: Sequelize.INTEGER,
+            defaultValue: null
         }
+
     });
 
     return User;

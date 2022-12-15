@@ -43,6 +43,11 @@ exports.updateUser = async (req, res) => {
         if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) !== null) {
             updateObj.department_id = input.departmentId;
         }
+        if(await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.photouploadId) !== null){
+            updateObj.photo_id = input.photoId;
+        }
+
+
 
         const response = await userAPIService.updateUser(input.id, updateObj, userDetails.tenant_id)
         return res.status(200).send({
@@ -188,4 +193,25 @@ exports.createUpdateUser = async (req, res) => {
             status: false
         });
     }
+}
+
+exports.getProfileURL = async (req, res) =>{
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+
+
+   
+    try {
+        const resp = await userAPIService.getProfileURL(userDetails, userDetails.tenant_id);
+        return res.status(200).send({ status: true, data: resp });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+
+    
+
 }
