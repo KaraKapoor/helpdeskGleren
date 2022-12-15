@@ -137,7 +137,7 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     //<End>Send Email for Ticket Creation
 
      //<Start>Send Email to assignee for Ticket Creation
-     let createassigneeEmailTemplate = emailTemplates.CREATE_TICKET_TEMPLATE;
+     let createassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
      createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
      createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumber}', createdTicket.id);
      await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createassigneeEmailTemplate);
@@ -310,19 +310,14 @@ exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ti
     }
     if(type=== 'assignee'){
         const assigneeDetails = await user.findOne({where: {id: updateObj.assignee_id}});
+        console.log(assigneeDetails.first_name);
+        const TicketId = ticketId;
         //<Start>Send Email to assignee for change in assignee
         let changeassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{ticketNumber}', TicketId);
         await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.UPDATE_TICKET_SUBJECT, null, null, null, changeassigneeEmailTemplate);
         //<End>Send Email to assignee for change in assignee
-
-    }else{
-        const ticketDetails = await ticket.findOne({where:{id: ticketId}})
-        const assigneeId = ticketDetails.dataValues.assignee_id;
-        const assigneeDetails = await user.findOne({where: {id: assigneeId}});
-         //<Start>Send Email to assignee for any other change or update in ticket
-         let updateTicketEmailTemplate = emailTemplates.UPDATE_TICKET_TEMPLATE;
-         await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.UPDATE_TICKET_SUBJECT, null, null, null, updateTicketEmailTemplate);
-         //<End>Send Email to assignee for any other change or update in ticket
 
     }
 

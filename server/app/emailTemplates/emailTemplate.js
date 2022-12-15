@@ -254,7 +254,10 @@ module.exports = {
     
     <body>
         <div>
-         
+        <p class="heading3">Hi {username}</p>
+        <p class="para">
+             Ticket ID {ticketNumber} is assigned.
+        </p><br></br>
 
             <p class="para">Regards,</p>
             <p class="para">Team Gleren</p>
@@ -262,54 +265,5 @@ module.exports = {
     </body>
     
     </html>`,
-    UPDATE_TICKET_SUBJECT: " Ticket Updated",
-
-    UPDATE_TICKET_TEMPLATE: `<!DOCTYPE html>
-    <html lang="en">
-    
-    <head>
-        <title>Ticket Has Been Updated</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
-            rel="stylesheet" />
-        <style>
-            * {
-                font-family: "Public Sans", sans-serif;
-                box-sizing: border-box;
-            }
-            body {
-                margin: 0;
-                background: #F7F9FF;
-            }
-            .heading3 {
-                font-style: normal;
-                font-weight: 700;
-                font-size: 14px;
-                margin-top: 16px;
-                margin-bottom: 16px;
-            }
-            .para {
-                font-style: normal;
-                font-weight: 400;
-                font-size: 14px;
-                line-height: 140%;
-                margin-top: 16px;
-                margin-bottom: 16px;
-            }
-        </style>
-    </head>
-    
-    <body>
-        <div>
-         
-
-            <p class="para">Regards,</p>
-            <p class="para">Team Gleren</p>
-        </div>
-    </body>
-    
-    </html>`,
-    UPDATE_TICKET_SUBJECT: " Ticket Updated",
+    UPDATE_TICKET_SUBJECT: " Ticket Assignee Updated",
 }

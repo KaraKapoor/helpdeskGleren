@@ -9,5 +9,6 @@ module.exports = (app) => {
     router.get("/getAllUsers", userController.getAllUsers);
     router.post("/getById", userController.getUserById);
     router.post("/createUpdateUser", userController.createUpdateUser);
+    router.get("/getProfileURL",userController.getProfileURL);
     app.use("/api/user", auth, router);
 };

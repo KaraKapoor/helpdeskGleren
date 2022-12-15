@@ -1,6 +1,7 @@
 import { Button, Card, styled } from '@mui/material';
 import { convertHexToRGB } from 'app/utils/utils';
 import { useNavigate } from "react-router-dom";
+import { Strings } from 'config/strings';
 
 
 const CardRoot = styled(Card)(({ theme }) => ({
@@ -26,7 +27,7 @@ const Paragraph = styled('p')(({ theme }) => ({
 }));
 
 const UpgradeCard = () => {
-  const url = 'https://gleren.com/contact/'
+  const url = Strings.GLEREN_WEBSITE.concat(Strings.GLEREN_CONTACT_US_PATH);
   return (
     <CardRoot>
       <StyledCard elevation={0}>

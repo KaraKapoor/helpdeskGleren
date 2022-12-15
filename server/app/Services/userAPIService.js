@@ -10,6 +10,8 @@ const Op = db.Sequelize.Op;
 const generalMethodService = require("../Services/generalMethodAPIService");
 const { v4: uuidv4 } = require('uuid');
 const errorConstants = require('../constants/errorConstants');
+const fileAPIService = require("./fileAPIService");
+const { uploads } = require('../models');
 exports.getByEmail = async (email) => {
     let response = null;
     response = await user.findOne({ where: { email: email } });
@@ -108,4 +110,15 @@ exports.getUserByIdWithTenant = async (id, tenantId) => {
 }
 exports.getCountOfUsersForTenant = async (tenantId) => {
     return user.count({ where: { tenant_id: tenantId } });
+}
+
+exports.getProfileURL = async(userDetails, tenantId)=>{
+    let url = null;
+    if(userDetails.photo_id === null){
+        return url;
+    }else{
+        const uploadDetails = await uploads.findOne({where:{id:userDetails.photo_id}});
+         url = await fileAPIService.getSignedUrl(uploadDetails.key);
+         return url;
+    }
 }
