@@ -105,7 +105,7 @@ const MyTickets = ({ setCurrentView }) => {
         }
         if (selectedDueDate) {
             let date = new Date(selectedDueDate + ' 00:00:00');
-            date = date.toISOString();
+            date = date.toISOString.split('T')[0]();
             queryParam = queryParam + `&dueDate=${date}`
         }
         if (selectedOverdue != null && selectedOverdue !== undefined) {
