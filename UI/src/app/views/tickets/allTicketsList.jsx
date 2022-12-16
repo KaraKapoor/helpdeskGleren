@@ -24,10 +24,6 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-function refreshPage() {
-    window.location.reload(false);
-}
-
 const StyledTable = styled(Table)(() => ({
     whiteSpace: "pre",
     "& thead": {
@@ -89,9 +85,13 @@ const AllTickets = ({ setCurrentView }) => {
         setPage(newPage);
     };
 
+    const refreshPage=()=> {
+        fetchMyTickets();
+    }
+
     useEffect(() => {
         fetchMyTickets()
-    }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
+    }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy, selectedReportedBy])
 
     const fetchMyTickets = (search) => {
         let queryParam = `?page=${page}&size=${rowsPerPage}`
@@ -123,6 +123,9 @@ const AllTickets = ({ setCurrentView }) => {
         }
         if (selectedResolvedBy.length > 0) {
             queryParam = queryParam + `&resolvedBy=${selectedResolvedBy.toString()}`
+        }
+        if (selectedReportedBy.length > 0) {
+            queryParam = queryParam + `&reportedBy=${selectedReportedBy.toString()}`
         }
         if (selectedTestedBy.length > 0) {
             queryParam = queryParam + `&testedBy=${selectedTestedBy.toString()}`
