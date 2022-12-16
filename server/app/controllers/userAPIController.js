@@ -198,12 +198,13 @@ exports.createUpdateUser = async (req, res) => {
 exports.getProfileURL = async (req, res) =>{
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const resp = await userAPIService.getProfileURL(userDetails, userDetails.tenant_id);
 
-
-   
     try {
-        const resp = await userAPIService.getProfileURL(userDetails, userDetails.tenant_id);
-        return res.status(200).send({ status: true, data: resp });
+     
+        return res.status(200).send({
+             status: true,
+              data: resp });
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
