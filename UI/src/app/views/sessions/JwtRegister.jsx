@@ -215,9 +215,7 @@ const JwtRegister = () => {
       setLoading(false);
     }
   };
-
-  };
-console.log({loading});
+  
   return (
     <JWTRegister>
       <Card className="card">
