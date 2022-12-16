@@ -29,10 +29,6 @@ import {
   deleteFile,
   fileUpload,
 } from "app/services/ticketService";
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 
 const CreateTicket = ({ onClose }) => {
   const [valid, setValid] = React.useState(false);
@@ -52,10 +48,6 @@ const CreateTicket = ({ onClose }) => {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const navigate = useNavigate();
 
-  const yesterday = moment().subtract(0, 'day');
-  const disablePastDt = current => {
-    return current.isAfter(yesterday);
-  };
   const HeaderTitle = styled.div`
     display: flex;
     align-items: center;
@@ -73,7 +65,7 @@ const CreateTicket = ({ onClose }) => {
     color: red;
     font-size: 13px;
   `;
-
+ 
   const onSubmit = (values) => {
     const reqBody = {
       departmentId: selectedDepartment,
@@ -89,6 +81,9 @@ const CreateTicket = ({ onClose }) => {
       storyPoints: values.storyPoints,
       files: selectedFiles,
     };
+
+
+    
     createTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
         return Swal.fire({
@@ -373,40 +368,40 @@ const CreateTicket = ({ onClose }) => {
                         fullWidth
                         size="large"
                         name="dueDate"
-                        type="datetime-local" 
+                        type="datetime-local"
                         label="Due Date"
                         variant="outlined"
                         onBlur={handleBlur}
-                        timeFormat={false}
-                        isValidDate={disablePastDt}
-                        value={values.dueDate }
+                        value={values.dueDate}
                         onChange={handleChange}
-                        defaultValue={new Date().toISOString().slice(0, 16)}
-                        inputProps={{
-                          // min: "2021-02-20T00:00",
-                          min: new Date().toISOString().slice(0, 16)
-                        }}
-                        InputLabelProps={{
-                          shrink: true
-                        }}
                         sx={{ mb: 1.5 }}
-                      />
-                     
+  
+                        InputLabelProps={{
+                          shrink: true,
+                      }}
+                        inputProps={{
+                          min: new Date().toISOString().slice(0, 16),
+                        }}
                        
+                      />
+                      
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField
                         fullWidth
                         size="large"
                         name="storyPoints"
-                        type="tel"
+                        type="number"
                         label="Story Points"
                         variant="outlined"
                         onBlur={handleBlur}
                         value={values.storyPoints}
+                        inputProps={{ min: 1 }}
                         onChange={handleChange}
-                        // InputProps=[ min: 0, max: 10  }}
                         sx={{ mb: 1.5 }}
+                        InputLabelProps={{
+                          shrink: true,
+                      }}
                       />
                     </Grid>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
