@@ -38,59 +38,96 @@ const ChangePassword = () => {
     let resetToken = currentUrl.substring(currentUrl.lastIndexOf("/") + 1);
     setResetToken(resetToken);
   }, []);
+  const checkPasswordValidity = (value) => {
+    const isNonWhiteSpace = /^\S*$/;
+    if (!isNonWhiteSpace.test(value)) {
+      return "Password must not contain Whitespaces.";
+    }
 
-const handleFormSubmit = async () => {
-if (!password) {
-return Swal.fire({
-icon: "warning",
-title: "Warning",
-text: "Please enter your New Password",
-showCloseButton: true,
-showConfirmButton: false,
-width: 400,
-});
-} else {
-await changePassword({
-password: password,
-resetTokenId: resetToken,
-}).then((resp) => {
-if (resp.status === false) {
-return Swal.fire({
-icon: "error",
-title: "Error",
-text: resp.error,
-showCloseButton: true,
-showConfirmButton: false,
-width: 400,
-});
-} else {
-Swal.fire({
-icon: "success",
-title: "Success",
-text: "Password Changed Successfully",
-showCloseButton: true,
-showConfirmButton: false,
-width: 400,
-}).then(() => {
-return navigate("/session/signin");
-});
-}
-});
-}
-};
+    const isContainsUppercase = /^(?=.*[A-Z]).*$/;
+    if (!isContainsUppercase.test(value)) {
+      return "Password must have at least one Uppercase Character.";
+    }
 
-return (
-<ForgotPasswordRoot>
-<Card className="card">
-<Grid container>
-<Grid item xs={12}>
-<JustifyBox p={4}>
-<img
-width="300"
-src="/assets/images/illustrations/dreamer.svg"
-alt=""
-/>
-          </JustifyBox>
+    const isContainsLowercase = /^(?=.*[a-z]).*$/;
+    if (!isContainsLowercase.test(value)) {
+      return "Password must have at least one Lowercase Character.";
+    }
+
+    const isContainsNumber = /^(?=.*[0-9]).*$/;
+    if (!isContainsNumber.test(value)) {
+      return "Password must contain at least one Digit.";
+    }
+
+    const isContainsSymbol =
+      /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
+    if (!isContainsSymbol.test(value)) {
+      return "Password must contain at least one Special Symbol.";
+    }
+
+    const isValidLength = /^.{10,16}$/;
+    if (!isValidLength.test(value)) {
+      return "Password must be 10-16 Characters Long.";
+    }
+    return null;
+  };
+
+  const handleFormSubmit = async () => {
+    const message = checkPasswordValidity(password);
+    if (!message) {
+     
+      changePassword({
+        password: password,
+        resetTokenId: resetToken,
+      }).then((resp) => {
+        
+        if (resp.status === false) {
+          return Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: resp.error,
+            showCloseButton: true,
+            showConfirmButton: false,
+            width: 400,
+          });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Password Changed Successfully",
+            showCloseButton: true,
+            showConfirmButton: false,
+            width: 400,
+          }).then(() => {
+            return navigate("/session/signin");
+          });
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: message,
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
+      });
+    }
+  
+  };
+
+  return (
+    <ForgotPasswordRoot>
+      <Card className="card">
+        <Grid container>
+          <Grid item xs={12}>
+            <JustifyBox p={4}>
+              <img
+                width="300"
+                src="/assets/images/illustrations/dreamer.svg"
+                alt=""
+              />
+            </JustifyBox>
 
             <ContentBox>
               <Formik onSubmit={handleFormSubmit} initialValues={{ email: "" }}>
