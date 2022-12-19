@@ -13,6 +13,7 @@ import {
   Select,
   TextareaAutosize,
   TextField,
+  Avatar,
 } from "@mui/material";
 import { getMasterDropdownData, reportBug } from "app/services/adminService";
 import { Formik } from "formik";
@@ -29,6 +30,8 @@ import {
 import { Strings } from "config/strings";
 import { fileUpload } from "app/services/ticketService";
 
+import useAuth from "app/hooks/useAuth";
+import { Link, useSearchParams } from "react-router-dom";
 const MyProfile = ({ onClose, editData }) => {
   const [valid, setValid] = React.useState(false);
   const [initialValues, setInitialValues] = React.useState(editData);
@@ -38,6 +41,20 @@ const MyProfile = ({ onClose, editData }) => {
   const [selectedDepartment, setSelectedDepartment] = React.useState();
   const navigate = useNavigate();
   const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
+  const [users, setUsers] = useState({ avatar: "", raw: "" });
+  const { logout, user } = useAuth();
+  let [searchParams] = useSearchParams();
+  const searchdata=searchParams.get('updated')
+  useEffect(() => {
+    getProfilePic()
+      .then((data) => {
+        setUsers({...users,avatar:data?.data});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchdata]);
+
   const HeaderTitle = styled.div`
     display: flex;
     align-items: center;
@@ -101,8 +118,8 @@ const MyProfile = ({ onClose, editData }) => {
         setDepartments(resp?.data?.departments);
         setMasterDropdownData(resp.data);
         setSelectedDepartment(editData?.department);
-      }
-    });
+  }
+});
   }, []);
 
   const handleDepartmentChange = (event) => {
@@ -116,8 +133,8 @@ setSelectedDepartment(event.target.value);
     data.append("file", event?.target?.files[0]);
     fileUpload(data).then((resp) => {
       setImageData(resp?.data);
-    });
-  };
+    })
+}
   return (
     <>
       <div>
@@ -246,11 +263,11 @@ setSelectedDepartment(event.target.value);
                           onChange={handleDepartmentChange}
                           defaultValue={selectedDepartment}
                         >
-                          {departments?.map((d, i) => {
-                            return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.name}
-                              </MenuItem>
+                      {departments?.map((d, i) => {
+                        return (
+                            <MenuItem key={i} value={d.id}>
+                              {d.name}
+                            </MenuItem>
                             );
                           })}
                         </Select>
@@ -269,8 +286,23 @@ setSelectedDepartment(event.target.value);
                     sx={{ mb: 1.5 }}
                     value=""
                   />
-
                   
+                  <label htmlFor="upload-button">
+                    {users.avatar ? (
+                      <img
+                        src={users.avatar}
+                        alt="dummy"
+                        width="70"
+                        height="70"
+                        style={{ borderRadius: "50%" }}
+                      />
+                    ) : (
+                      <>
+                        <Avatar src={user.avatar} sx={{ cursor: "pointer" }} />
+                      </>
+                    )}
+                  </label>
+
                 </FormContainer>
                 <div className="d-flex justify-content-end">
                   <LoadingButton
