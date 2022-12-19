@@ -187,7 +187,7 @@ const JwtRegister = () => {
         };
         registerTenant(formData).then((data) => {
           if (data.status === false) {
-            return Swal.fire({
+             Swal.fire({
               icon: "error",
               title: "Error",
               text: data.error,
