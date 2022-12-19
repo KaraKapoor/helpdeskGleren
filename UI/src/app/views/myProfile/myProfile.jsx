@@ -1,6 +1,20 @@
 import { LoadingButton } from "@mui/lab";
 import React, { useEffect } from "react";
-import { Box, Divider, FormControl, FormControlLabel, Grid, Icon, Input, InputLabel, MenuItem, Select, TextareaAutosize, TextField} from "@mui/material";
+import {
+  Box,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Icon,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextareaAutosize,
+  TextField,
+  Avatar,
+} from "@mui/material";
 import { getMasterDropdownData, reportBug } from "app/services/adminService";
 import { Formik } from "formik";
 import { useState } from "react";
@@ -10,81 +24,100 @@ import Swal from "sweetalert2";
 import styled from "@emotion/styled";
 import {
   getLoggedInUserDetails,
+  getProfilePic,
   updateUserProfile,
 } from "app/services/userService";
 import { Strings } from "config/strings";
 import { fileUpload } from "app/services/ticketService";
 
+import useAuth from "app/hooks/useAuth";
+import { Link, useSearchParams } from "react-router-dom";
 const MyProfile = ({ onClose, editData }) => {
-const [valid, setValid] = React.useState(false);
-const [initialValues, setInitialValues] = React.useState(editData);
-const [masterDropdownData, setMasterDropdownData] = React.useState();
-const [departments, setDepartments] = React.useState();
-const [selectedDepartment, setSelectedDepartment] = React.useState();
-const navigate = useNavigate();
-const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
-const HeaderTitle = styled.div`
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 1rem;
-font-size: 1.5rem;
-`
-const FormContainer = styled.div`
-display: grid;
-grid-template-columns: ${(props) => (props.divide ? "50% 48.4%" : "100%")};
-padding: 1rem 1rem 0 1rem;
-gap: 1rem;
-`
+  const [valid, setValid] = React.useState(false);
+  const [initialValues, setInitialValues] = React.useState(editData);
+  const [masterDropdownData, setMasterDropdownData] = React.useState();
+  const [image_data , setImageData]=useState(null)
+  const [departments, setDepartments] = React.useState();
+  const [selectedDepartment, setSelectedDepartment] = React.useState();
+  const navigate = useNavigate();
+  const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
+  const [users, setUsers] = useState({ avatar: "", raw: "" });
+  const { logout, user } = useAuth();
+  let [searchParams] = useSearchParams();
+  const searchdata=searchParams.get('updated')
+  useEffect(() => {
+    getProfilePic()
+      .then((data) => {
+        setUsers({...users,avatar:data?.data});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchdata]);
 
-const onSubmit = (values) => {
-const reqBody = {
-designation: values.designation,
-firstName: values.firstName,
-lastName: values.lastName,
-mobile: values.mobile,
-id: values.id,
-departmentId: selectedDepartment,
+  const HeaderTitle = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    font-size: 1.5rem;
+  `;
+  const FormContainer = styled.div`
+    display: grid;
+    grid-template-columns: ${(props) => (props.divide ? "50% 48.4%" : "100%")};
+    padding: 1rem 1rem 0 1rem;
+    gap: 1rem;
+  `;
 
-};
-updateUserProfile(reqBody).then((resp) => {
-if (resp?.status === false) {
-return Swal.fire({
-icon: "error",
-title: "Error",
-text: resp.error,
-showCloseButton: true,
-showConfirmButton: false,
-width: 400,
-});
-} else {
-Swal.fire({
-icon: "success",
-title: "Success",
-text: Strings.UPDATED_SUCCESSFULLY,
-showCloseButton: true,
-showConfirmButton: false,
-width: 400,
-});
-return navigate("/dashboard/default");
-}
-});
-};
-useEffect(() => {
-getMasterDropdownData().then((resp) => {
-if (resp?.status === false) {
-return Swal.fire({
-icon: "error",
-title: "Error",
-text: resp.error,
-showCloseButton: true,
-showConfirmButton: false,
-width: 400,
-});
-} else {
-setDepartments(resp?.data?.departments);
-setMasterDropdownData(resp.data);
-setSelectedDepartment(editData?.department);
+  const onSubmit = (values) => {
+    const reqBody = {
+      designation: values.designation,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      mobile: values.mobile,
+      id: values.id,
+      departmentId: selectedDepartment,
+      photouploadId:image_data?.id
+    };
+    updateUserProfile(reqBody).then((resp) => {
+      if (resp?.status === false) {
+        return Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: resp.error,
+          showCloseButton: true,
+          showConfirmButton: false,
+          width: 400,
+        });
+      } else {
+        getProfilePic()
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: Strings.UPDATED_SUCCESSFULLY,
+          showCloseButton: true,
+          showConfirmButton: false,
+          width: 400,
+        });
+        return navigate("/dashboard/default?updated=true");
+      }
+    });
+  };
+  useEffect(() => {
+    getMasterDropdownData().then((resp) => {
+      if (resp?.status === false) {
+        return Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: resp.error,
+          showCloseButton: true,
+          showConfirmButton: false,
+          width: 400,
+        });
+      } else {
+        setDepartments(resp?.data?.departments);
+        setMasterDropdownData(resp.data);
+        setSelectedDepartment(editData?.department);
   }
 });
   }, []);
@@ -97,9 +130,9 @@ setSelectedDepartment(event.target.value);
         return null;
     }
     let data = new FormData();
-    data.append('file', event?.target?.files[0]);
+    data.append("file", event?.target?.files[0]);
     fileUpload(data).then((resp) => {
-            console.log(resp)
+      setImageData(resp?.data);
     })
 }
   return (
@@ -230,46 +263,45 @@ setSelectedDepartment(event.target.value);
                           onChange={handleDepartmentChange}
                           defaultValue={selectedDepartment}
                         >
-{
-								departments?.map((d,i)=>{
-									return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
-								})
-							}
+                      {departments?.map((d, i) => {
+                        return (
+                            <MenuItem key={i} value={d.id}>
+                              {d.name}
+                            </MenuItem>
+                            );
+                          })}
                         </Select>
                       </FormControl>
                     </Grid>
                   </Grid>
+
+                  <TextField
+                    fullWidth
+                    size="large"
+                    name="files"
+                    type="file"
+                    variant="outlined"
+                    onBlur={handleBlur}
+                    onChange={onChangeFile}
+                    sx={{ mb: 1.5 }}
+                    value=""
+                  />
                   
-
-                  {/* <Grid>
-                    <Box
-                      sx={{
-                        border: "2px dashed gray",
-                        width: "100px",
-                        height: "100px",
-                        position: "relative",
-                      }}
-                    >
-                      <Icon
-                        sx={{
-                          color: "gray",
-                          fontSize: "55px !important",
-                          position: "absolute",
-                          top: "13px",
-                          left: "22px",
-                        }}
-                      >
-                        <i>
-                          <FaUser />
-                        </i>
-                      </Icon>
-                    </Box>
-                    <Button className="btn btn-secondary mt-3">Upload</Button>
-                  </Grid> */}
-
-<TextField fullWidth size="large" name="files" type="file"
-                                                        variant="outlined" onBlur={handleBlur}
-                                                        onChange={onChangeFile} sx={{ mb: 1.5 }} value="" />
+                  <label htmlFor="upload-button">
+                    {users.avatar ? (
+                      <img
+                        src={users.avatar}
+                        alt="dummy"
+                        width="70"
+                        height="70"
+                        style={{ borderRadius: "50%" }}
+                      />
+                    ) : (
+                      <>
+                        <Avatar src={user.avatar} sx={{ cursor: "pointer" }} />
+                      </>
+                    )}
+                  </label>
 
                 </FormContainer>
                 <div className="d-flex justify-content-end">
