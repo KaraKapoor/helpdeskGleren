@@ -131,9 +131,6 @@ exports.getMyTickets = async (req, res) => {
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.testedBy) !== null) {
         conditionArray.push({ tested_by: { [Op.in]: generalMethodService.csvToArray(input.testedBy) } });
     }
-    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reportedBy) !== null) {
-        conditionArray.push({ created_by: { [Op.in]: generalMethodService.csvToArray(input.reportedBy) } });
-    }
     conditionArray.push({ tenant_id: tenantId });
     conditionArray.push({ created_by: userDetails.id });
     try {
@@ -200,6 +197,9 @@ exports.getAllTickets = async (req, res) => {
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.createdBy) !== null) {
         conditionArray.push({ created_by: { [Op.in]: generalMethodService.csvToArray(input.createdBy) } });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reportedBy) !== null) {
+        conditionArray.push({ created_by: { [Op.in]: generalMethodService.csvToArray(input.reportedBy) } });
     }
     conditionArray.push({ tenant_id: tenantId });
     try {
