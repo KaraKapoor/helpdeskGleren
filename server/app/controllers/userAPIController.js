@@ -44,7 +44,7 @@ exports.updateUser = async (req, res) => {
             updateObj.department_id = input.departmentId;
         }
         if(await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.photouploadId) !== null){
-            updateObj.photo_id = input.photoId;
+            updateObj.photo_id = input.photouploadId;
         }
 
 

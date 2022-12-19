@@ -91,13 +91,13 @@ const JwtLogin = () => {
                       name="email"
                       variant="outlined"
                       onBlur={handleBlur}
-                      // value={values.email}
+                      value={values.email}
                       onChange={handleChange}
                       helperText={touched.email && errors.email}
                       error={Boolean(errors.email && touched.email)}
                       required={true}
                       sx={{ mb: 3 }}
-                      
+                      InputLabelProps={{ shrink: true }}
                     />
 
                     <TextField
@@ -108,12 +108,13 @@ const JwtLogin = () => {
                       type="password"
                       variant="outlined"
                       onBlur={handleBlur}
-                      // value={values.password}
+                      value={values.password}
                       onChange={handleChange}
                       required={true}
                       helperText={touched.password && errors.password}
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 1.5 }}
+                      InputLabelProps={{ shrink: true }}
                     />
 
                     <FlexBox justifyContent="space-between">

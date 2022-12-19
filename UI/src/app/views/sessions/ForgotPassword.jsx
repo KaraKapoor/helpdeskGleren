@@ -32,11 +32,6 @@ const ForgotPasswordRoot = styled(JustifyBox)(() => ({
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-  
- 
-
   const handleFormSubmit = async () => {
     if (!email) {
       return Swal.fire({
@@ -99,7 +94,7 @@ const ForgotPassword = () => {
                         label="Email"
                         // value={email}
                         variant="outlined"
-                         onChange={(e) => setEmail(e.target.value)}
+                         onChange={(e) => setEmail(e?.target?.value)}
                         sx={{ mb: 3, width: "100%" }}
                       />
                       <br />
@@ -112,7 +107,7 @@ const ForgotPassword = () => {
                       color="primary"
                       type="submit"
                     >
-                      Reset Password 
+                      Reset Password
                     </Button>
 
 					{/* <div>
@@ -134,7 +129,7 @@ const ForgotPassword = () => {
                       fullWidth
                       color="primary"
                       variant="outlined"
-                      onClick={() => navigate(-1)}
+                      onClick={() => navigate(-1) || navigate(-2) }
                       sx={{ mt: 2 }}
                     >
                       Go Back

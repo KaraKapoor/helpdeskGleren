@@ -13,7 +13,8 @@
         "changePassword": "api/public/changePassword",
         "getAllUsers": "api/user/getAllUsers",
         "getUserById": "api/user/getById",
-        "createUpdateUser": "api/user/createUpdateUser"
+        "createUpdateUser": "api/user/createUpdateUser",
+        "getProfileURL":"api/user/getProfileURL"
     },
     "project": {
         "create": "api/admin/project/create",

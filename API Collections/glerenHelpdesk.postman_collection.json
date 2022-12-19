@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b3e7d511-abce-452c-9d70-e66346dd56a8",
+		"_postman_id": "3b25b809-7412-4860-8eea-ea8b86a8be76",
 		"name": "glerenHelpdesk",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24877492"
 	},
 	"item": [
 		{
@@ -806,6 +807,24 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getProfileURL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/user/getProfileURL",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"user",
+								"getProfileURL"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -815,11 +834,21 @@
 				{
 					"name": "createTicket",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImthcmFuLmthcG9vcithZG1pbkBnbGVyZW4uY29tIiwiaWF0IjoxNjcxMDIzMDUyLCJleHAiOjE2NzEwMzAyNTJ9.P9TUCE8F2nN12rSNovuv35apoyKEm3wwPABlKuIxRg0",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"departmentId\":\"\",\r\n    \"projectId\":\"\",\r\n    \"assigneeId\":\"\",\r\n    \"category\":\"\",\r\n    \"statusId\":\"\",\r\n    \"priority\":\"\",\r\n    \"fixVersion\":\"\",\r\n    \"issueDetails\":\"\",\r\n    \"issueSummary\":\"\",\r\n    \"dueDate\":\"\",\r\n    \"closedBy\":\"\",\r\n    \"reviewedBy\":\"\",\r\n    \"testedBy\":\"\",\r\n    \"resolvedBy\":\"\",\r\n    \"storyPoints\":\"\"\r\n}",
+							"raw": "{\r\n    \"departmentId\":\"5\",\r\n    \"projectId\":\"23\",\r\n    \"assigneeId\":\"10\",\r\n    \"category\":\"Improvement\",\r\n    \"statusId\":\"2\",\r\n    \"priority\":\"Critical\",\r\n    \"fixVersion\":\"2.1\",\r\n    \"issueDetails\":\"1212\",\r\n    \"issueSummary\":\"It is my new value\",\r\n    \"dueDate\":\"2022-12-25 00:00:00\",\r\n    \"closedBy\":\"\",\r\n    \"reviewedBy\":\"6\",\r\n    \"testedBy\":\"5\",\r\n    \"resolvedBy\":\"4\",\r\n    \"storyPoints\":\"23\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -842,11 +871,21 @@
 				{
 					"name": "updateTicket",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImthcmFuLmthcG9vcithZG1pbkBnbGVyZW4uY29tIiwiaWF0IjoxNjcxMDIzMDUyLCJleHAiOjE2NzEwMzAyNTJ9.P9TUCE8F2nN12rSNovuv35apoyKEm3wwPABlKuIxRg0",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"id\":1,\r\n   \"issueDetails\":\"NEW vALUE\",\r\n   \"field\":\"issueDetails\"\r\n}",
+							"raw": "{\r\n   \"id\":1,\r\n   \"assignee\":\"10\",\r\n   \"field\":\"assignee\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -879,12 +918,7 @@
 									"type": "file",
 									"src": "/C:/Users/Karan Kapoor/Downloads/BoardingPass.pdf"
 								}
-							],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{url}}api/file/uploadFile",
