@@ -1,56 +1,69 @@
-import { useTheme } from '@emotion/react';
-import { LoadingButton } from '@mui/lab';
-import { Card, Checkbox, Grid, TextField } from '@mui/material';
-import { Box, styled } from '@mui/system';
-import { Paragraph } from 'app/components/Typography';
-import useAuth from 'app/hooks/useAuth';
-import { Formik } from 'formik';
-import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
-import Swal from 'sweetalert2'
-import { registerTenant, sendOTPEmail, verifyOTPEmail } from 'app/services/userService';
+import { useTheme } from "@emotion/react";
+import { LoadingButton } from "@mui/lab";
+import { Card, Checkbox, Grid, TextField } from "@mui/material";
+import { Box, styled } from "@mui/system";
+import { Paragraph } from "app/components/Typography";
+import useAuth from "app/hooks/useAuth";
+import { Formik } from "formik";
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import Swal from "sweetalert2";
+import {
+  registerTenant,
+  sendOTPEmail,
+  verifyOTPEmail,
+} from "app/services/userService";
 
-const FlexBox = styled(Box)(() => ({ display: 'flex', alignItems: 'center' }));
+const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 
-const JustifyBox = styled(FlexBox)(() => ({ justifyContent: 'center' }));
+const JustifyBox = styled(FlexBox)(() => ({ justifyContent: "center" }));
 
 const ContentBox = styled(JustifyBox)(() => ({
-  height: '100%',
-  padding: '32px',
-  background: 'rgba(0, 0, 0, 0.01)',
+  height: "100%",
+  padding: "32px",
+  background: "rgba(0, 0, 0, 0.01)",
 }));
 
 const JWTRegister = styled(JustifyBox)(() => ({
-  background: '#1A2038',
-  minHeight: '100vh !important',
-  '& .card': {
+  background: "#1A2038",
+  minHeight: "100vh !important",
+  "& .card": {
     maxWidth: 800,
     minHeight: 400,
-    margin: '1rem',
-    display: 'flex',
+    margin: "1rem",
+    display: "flex",
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
 }));
 
 // inital login credentials
 const initialValues = {
-  email: '',
-  password: '',
-  username: '',
+  email: "",
+  password: "",
+  username: "",
   remember: true,
 };
 
 // form field validation schema
 const validationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(6, 'Password must be 6 character length')
-    .required('Password is required!').matches(
+    .min(6, "Password must be 6 character length")
+    .required("Password is required!")
+    .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
       "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
     ),
-  email: Yup.string().email('Invalid Email address').required('Email is required!'),
+  firstName: Yup.string()
+    .matches(/^[A-Za-z ]*$/, "Please enter valid First name")
+    .max(40)
+    .required("FirstName is required!"),
+
+  lastName: Yup.string()
+    .matches(/^[A-Za-z ]*$/, "Please enter valid Last name")
+    .max(40)
+    .required("LastName is required!"),
 });
 
 const JwtRegister = () => {
@@ -62,151 +75,147 @@ const JwtRegister = () => {
   const [showVerifyOTPBtn, setShowVerifyOTPBtn] = useState(false);
   const [showRegisterBtn, setShowRegisterBtn] = useState(false);
 
-  
-  const onClickVerifyEmail=(values)=>{
-    console.log(values)
-  }
+  const onClickVerifyEmail = (values) => {
+    console.log(values);
+  };
 
   const handleFormSubmit = (values) => {
     if (!values.firstName) {
       return Swal.fire({
-          icon: 'warning',
-          title: 'Warning',
-          text: "Please enter your First Name",
-          showCloseButton: true,
-          showConfirmButton: false,
-          width: 400,
-      })
-  } else if (!values.lastName) {
+        icon: "warning",
+        title: "Warning",
+        text: "Please enter your First Name",
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
+      });
+    } else if (!values.lastName) {
       return Swal.fire({
-          icon: 'warning',
-          title: 'Warning',
-          text: "Please enter your Last Name",
-          showCloseButton: true,
-          showConfirmButton: false,
-          width: 400,
-      })
-  } else if (!values.email) {
+        icon: "warning",
+        title: "Warning",
+        text: "Please enter your Last Name",
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
+      });
+    } else if (!values.email) {
       return Swal.fire({
-          icon: 'warning',
-          title: 'Warning',
-          text: "Please enter your email",
-          showCloseButton: true,
-          showConfirmButton: false,
-          width: 400,
-      })
-  } else if (!values.workplace) {
+        icon: "warning",
+        title: "Warning",
+        text: "Please enter your email",
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
+      });
+    } else if (!values.workplace) {
       return Swal.fire({
-          icon: 'warning',
-          title: 'Warning',
-          text: "Please enter your Workplace Name",
-          showCloseButton: true,
-          showConfirmButton: false,
-          width: 400,
-      })
-  }
+        icon: "warning",
+        title: "Warning",
+        text: "Please enter your Workplace Name",
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
+      });
+    }
     setLoading(true);
 
     try {
       if (showSendEmailBtn) {
-          const formData = {
-              email: values.email
+        const formData = {
+          email: values.email,
+        };
+        sendOTPEmail(formData).then((data) => {
+          if (data.status === false) {
+            return Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: data.error,
+              showCloseButton: true,
+              showConfirmButton: false,
+              width: 400,
+            });
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "OTP Sent Successfully",
+              showCloseButton: true,
+              showConfirmButton: false,
+              width: 400,
+            });
+            setShowSendEmailBtn(false);
+            setShowVerifyOTPBtn(true);
+            return null;
           }
-          sendOTPEmail(formData).then((data) => {
-              if (data.status === false) {
-                  return Swal.fire({
-                      icon: 'error',
-                      title: 'Error',
-                      text: data.error,
-                      showCloseButton: true,
-                      showConfirmButton: false,
-                      width: 400,
-                  })
-              } else {
-                  Swal.fire({
-                      icon: 'success',
-                      title: 'Success',
-                      text: "OTP Sent Successfully",
-                      showCloseButton: true,
-                      showConfirmButton: false,
-                      width: 400,
-                  })
-                  setShowSendEmailBtn(false);
-                  setShowVerifyOTPBtn(true);
-                  return null;
-  
-              }
-          })
+        });
       } else if (showVerifyOTPBtn) {
-          const formData = {
-              otp: values.otp,
-              email: values.email
+        const formData = {
+          otp: values.otp,
+          email: values.email,
+        };
+        verifyOTPEmail(formData).then((data) => {
+          if (data.status === false) {
+            return Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: data.error,
+              showCloseButton: true,
+              showConfirmButton: false,
+              width: 400,
+            });
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "OTP Verified Successfully",
+              showCloseButton: true,
+              showConfirmButton: false,
+              width: 400,
+            });
+            setShowVerifyOTPBtn(false);
+            setShowRegisterBtn(true);
+            return null;
           }
-          verifyOTPEmail(formData).then((data) => {
-              if (data.status === false) {
-                  return Swal.fire({
-                      icon: 'error',
-                      title: 'Error',
-                      text: data.error,
-                      showCloseButton: true,
-                      showConfirmButton: false,
-                      width: 400,
-                  })
-              } else {
-                  Swal.fire({
-                      icon: 'success',
-                      title: 'Success',
-                      text: "OTP Verified Successfully",
-                      showCloseButton: true,
-                      showConfirmButton: false,
-                      width: 400,
-                  })
-                  setShowVerifyOTPBtn(false);
-                  setShowRegisterBtn(true);
-                  return null;
-  
-              }
-          })
+        });
       } else if (showRegisterBtn) {
-          const formData = {
-              email: values.email,
-              tenantName: values.workplace,
-              password: values.password,
-              firstName: values.firstName,
-              lastName: values.lastName
+        const formData = {
+          email: values.email,
+          tenantName: values.workplace,
+          password: values.password,
+          firstName: values.firstName,
+          lastName: values.lastName,
+        };
+        registerTenant(formData).then((data) => {
+          if (data.status === false) {
+             Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: data.error,
+              showCloseButton: true,
+              showConfirmButton: false,
+              width: 400,
+            });
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Account Created Successfully",
+              showCloseButton: true,
+              showConfirmButton: false,
+              width: 400,
+            });
           }
-          registerTenant(formData).then((data) => {
-              if (data.status === false) {
-                   Swal.fire({
-                      icon: 'error',
-                      title: 'Error',
-                      text: data.error,
-                      showCloseButton: true,
-                      showConfirmButton: false,
-                      width: 400,
-                  })
-              } else {
-                  Swal.fire({
-                      icon: 'success',
-                      title: 'Success',
-                      text: "Account Created Successfully",
-                      showCloseButton: true,
-                      showConfirmButton: false,
-                      width: 400,
-                  })
-              }
-              navigate('/session/signin')
-          })
-          return null;
+          navigate("/session/signin");
+        });
+        return null;
       }
       setLoading(false);
-  } catch (e) {
+    } catch (e) {
       console.log(e);
       setLoading(false);
-  }
-
+    }
   };
-console.log({loading});
+  
   return (
     <JWTRegister>
       <Card className="card">
@@ -228,7 +237,14 @@ console.log({loading});
                 validationSchema={validationSchema}
                 initialValues={initialValues}
               >
-                {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+                {({
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                }) => (
                   <form onSubmit={handleSubmit}>
                     <TextField
                       fullWidth
@@ -244,7 +260,7 @@ console.log({loading});
                       error={Boolean(errors.email && touched.email)}
                       sx={{ mb: 3 }}
                     />
-                   <TextField
+                    <TextField
                       fullWidth
                       size="small"
                       type="text"
@@ -258,9 +274,6 @@ console.log({loading});
                       error={Boolean(errors.firstName && touched.firstName)}
                       sx={{ mb: 3 }}
                     />
-
-
-
                     <TextField
                       fullWidth
                       size="small"
@@ -289,7 +302,7 @@ console.log({loading});
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 2 }}
                     />
-                      <TextField
+                    <TextField
                       fullWidth
                       size="small"
                       type="text"
@@ -303,69 +316,65 @@ console.log({loading});
                       error={Boolean(errors.workplace && touched.workplace)}
                       sx={{ mb: 3 }}
                     />
-                    {
-                      showVerifyOTPBtn && 
+                    {showVerifyOTPBtn && (
                       <TextField
-                      fullWidth
-                      size="small"
-                      type="number"
-                      name="otp"
-                      label="OTP"
-                      variant="outlined"
-                      onBlur={handleBlur}
-                      value={values.otp}
-                      onChange={handleChange}
-                      helperText={touched.otp && errors.otp}
-                      error={Boolean(errors.otp && touched.otp)}
-                      sx={{ mb: 3 }}
-                    />
+                        fullWidth
+                        size="small"
+                        type="number"
+                        name="otp"
+                        label="OTP"
+                        variant="outlined"
+                        onBlur={handleBlur}
+                        value={values.otp}
+                        onChange={handleChange}
+                        helperText={touched.otp && errors.otp}
+                        error={Boolean(errors.otp && touched.otp)}
+                        sx={{ mb: 3 }}
+                      />
+                    )}
 
-                    }
-
-                    {
-                      showRegisterBtn
-                       && 
-                       <LoadingButton
-                       type="submit"
-                       color="primary"
-                       loading={loading}
-                       variant="contained"
-                       sx={{ mb: 2, mt: 3 }}
-                     >
-                       Regiser
-                     </LoadingButton>
-                    }
-                    {showSendEmailBtn
-                     && 
+                    {showRegisterBtn && (
                       <LoadingButton
                         type="submit"
                         color="primary"
                         loading={loading}
                         variant="contained"
                         sx={{ mb: 2, mt: 3 }}
-                        >
+                      >
+                        Regiser
+                      </LoadingButton>
+                    )}
+                    {showSendEmailBtn && (
+                      <LoadingButton
+                        type="submit"
+                        color="primary"
+                        loading={loading}
+                        variant="contained"
+                        sx={{ mb: 2, mt: 3 }}
+                      >
                         Verfiy Email
                       </LoadingButton>
-                    
-                    }
-                    {
-                      showVerifyOTPBtn && 
+                    )}
+                    {showVerifyOTPBtn && (
                       <LoadingButton
-                      type="submit"
-                      color="primary"
-                      loading={loading}
-                      variant="contained"
-                      sx={{ mb: 2, mt: 3 }}
+                        type="submit"
+                        color="primary"
+                        loading={loading}
+                        variant="contained"
+                        sx={{ mb: 2, mt: 3 }}
                       >
-                      Verfiy OTP 
-                    </LoadingButton>
-                    }
+                        Verfiy OTP
+                      </LoadingButton>
+                    )}
 
                     <Paragraph>
                       Already have an account?
                       <NavLink
                         to="/session/signin"
-                        style={{ color: theme.palette.primary.main, marginLeft: 5 }}
+                        style={{
+                          color: theme.palette.primary.main,
+                          marginLeft: 5,
+                        }}
                       >
                         Login
                       </NavLink>

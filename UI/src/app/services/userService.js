@@ -77,3 +77,10 @@ export const createUpdateUser=(data)=>{
         data:data
     })
 }
+
+export const getProfilePic=()=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.user.getProfileURL,
+    })
+}

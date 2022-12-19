@@ -15,13 +15,15 @@ import { NotificationProvider } from "app/contexts/NotificationContext";
 import useAuth from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
 import { topBarHeight } from "app/utils/constant";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Paragraph, Span } from "../../../components/Typography";
 import NotificationBar from "../../NotificationBar/NotificationBar";
 import ShoppingCart from "../../ShoppingCart";
 import { fileUpload } from "app/services/ticketService";
-
+import Swal from "sweetalert2";
+import { getProfilePic, updateUserProfile } from "app/services/userService";
+import axios from "axios";
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
@@ -87,14 +89,17 @@ const Layout1Topbar = () => {
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [users, setUsers] = useState({ avatar: "", raw: "" });
 
-  const handleChange = (e) => {
-    if (e.target.files.length) {
-      setUsers({
-        avatar: URL.createObjectURL(e.target.files[0]),
-        raw: e.target.files[0],
+  let [searchParams] = useSearchParams();
+  const searchdata=searchParams.get('updated')
+  useEffect(() => {
+    getProfilePic()
+      .then((data) => {
+        setUsers({...users,avatar:data?.data});
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    }
-  };
+  }, []);
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({
       layout1Settings: { leftSidebar: { ...sidebarSettings } },
@@ -131,11 +136,15 @@ const Layout1Topbar = () => {
           <IconBox>
             <StyledIconButton>
               <Link to="/create-ticket">
-                <Fab size="small" color="secondary" aria-label="Add" className="button">
+                <Fab
+                  size="small"
+                  color="secondary"
+                  aria-label="Add"
+                  className="button"
+                >
                   <Icon>add</Icon>
                 </Fab>
               </Link>
-
             </StyledIconButton>
             {/* <StyledIconButton>
               <Icon>mail_outline</Icon>
@@ -154,8 +163,6 @@ const Layout1Topbar = () => {
           {/* <IMG src="/assets/modified/glerenLogo.png" alt="" className='mx-auto' /> */}
         </LogoContainer>
 
-
-
         <Box display="flex" alignItems="center">
           {/* <MatxSearchBox /> */}
 
@@ -163,13 +170,15 @@ const Layout1Topbar = () => {
             <NotificationBar />
           </NotificationProvider> */}
 
-          <MatxMenu 
-
+          <MatxMenu
             menuButton={
               <UserMenu>
                 <Hidden xsDown>
                   <Span>
-                    Hi<strong>{user.firstName} {user.lastName}</strong>
+                    Hi,
+                    <strong>
+                      {user.firstName} {user.lastName}
+                    </strong>
                   </Span>
                 </Hidden>
                 <div>
@@ -180,22 +189,22 @@ const Layout1Topbar = () => {
                         alt="dummy"
                         width="40"
                         height="40"
-                        style={{ borderRadius: "50%" }} 
+                        style={{ borderRadius: "50%" }}
                       />
                     ) : (
                       <>
-                      <Avatar src={user.avatar} sx={{ cursor: "pointer" }} />
+                        <Avatar src={user.avatar} sx={{ cursor: "pointer" }} />
                       </>
                     )}
                   </label>
-                  <input
+                  {/* <input
                     type="file"
                     id="upload-button"
                     style={{ display: "none" }}
                     onChange={handleChange}
-                  />
+                  /> */}
                 </div>
-                {/* <Avatar src={user.avatar} sx={{ cursor: "pointer" }} /> */}
+
               </UserMenu>
             }
           >

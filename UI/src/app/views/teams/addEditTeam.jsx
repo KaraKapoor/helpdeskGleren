@@ -9,6 +9,7 @@ import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
 import { createTeam, getMasterDropdownData } from 'app/services/adminService';
+import * as Yup from 'yup';
 
 const AddEditTeam = ({ onClose, editDetails }) => {
   const [valid, setValid] = React.useState(false)
@@ -149,6 +150,11 @@ const AddEditTeam = ({ onClose, editDetails }) => {
       );
   }
 
+  const validationSchema = Yup.object().shape({
+    teamName: Yup.string()
+      .max(12, 'Team Name can not be more than 12 characters long'),
+  });
+
   return (
     <>
       <div>
@@ -170,7 +176,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
             </div>
           </HeaderTitle>
           <Divider />
-          <Formik onSubmit={onSubmit} initialValues={initialValues}>
+          <Formik onSubmit={onSubmit} initialValues={initialValues} validationSchema={validationSchema}>
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <FormContainer>
@@ -178,7 +184,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                   <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" required={true} name="teamName" type="text" label="Team Name"
                         variant="outlined" onBlur={handleBlur} value={values.teamName}
-                        onChange={handleChange} sx={{ mb: 1.5 }} />
+                        onChange={handleChange} sx={{ mb: 1.5 }} error={Boolean(errors.teamName && touched.teamName)}  helperText={touched.teamName && errors.teamName} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <FormControl fullWidth>

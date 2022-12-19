@@ -1,6 +1,8 @@
 import { Card, Grid, styled, useTheme } from '@mui/material';
 import { getDashboardData } from 'app/services/ticketService';
+import { getProfilePic } from 'app/services/userService';
 import { Fragment, useEffect, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import Campaigns from './shared/Campaigns';
 import DoughnutChart from './shared/Doughnut';
 import RowCards from './shared/RowCards';
@@ -36,10 +38,17 @@ const H4 = styled('h4')(({ theme }) => ({
 
 const Analytics = () => {
   const { palette } = useTheme();
+  let [searchParams] = useSearchParams();
+  const searchdata = searchParams.get('updated')
   const [dashboardData, setDashboardData] = useState();
   useEffect(() => {
     fetchDashboardData()
   }, [])
+  useEffect(()=>{
+    if(searchdata){
+      getProfilePic()
+    }
+  },[searchdata])
   const fetchDashboardData = () => {
 
     getDashboardData({}).then((response) => {
