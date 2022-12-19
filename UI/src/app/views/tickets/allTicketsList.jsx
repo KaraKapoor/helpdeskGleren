@@ -94,7 +94,7 @@ const AllTickets = ({ setCurrentView }) => {
 
     useEffect(() => {
         fetchMyTickets()
-    }, [page, selectedStatus,departmentchanges, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
+    }, [page, selectedStatus,departmentchanges, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy,selectedReportedBy])
 
     const fetchMyTickets = (search) => {
         let queryParam = `?page=${page}&size=${rowsPerPage}`
