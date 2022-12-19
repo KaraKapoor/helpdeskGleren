@@ -99,7 +99,7 @@ const MyProfile = ({ onClose, editData }) => {
           showConfirmButton: false,
           width: 400,
         });
-        return navigate("/dashboard/default?updated=true");
+        return window.location.href="/dashboard/default?updated=true";
       }
     });
   };
