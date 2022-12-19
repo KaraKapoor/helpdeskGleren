@@ -16,7 +16,7 @@ import useAuth from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
 import { topBarHeight } from "app/utils/constant";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Paragraph, Span } from "../../../components/Typography";
 import NotificationBar from "../../NotificationBar/NotificationBar";
 import ShoppingCart from "../../ShoppingCart";
@@ -121,6 +121,9 @@ const Layout1Topbar = () => {
       });
     }
   };
+  let [searchParams] = useSearchParams();
+  const searchdata=searchParams.get('updated')
+  console.log(searchdata,"searchdatasearchdata")
   useEffect(() => {
     getProfilePic()
       .then((data) => {
@@ -227,14 +230,14 @@ const Layout1Topbar = () => {
                       </>
                     )}
                   </label>
-                  <input
+                  {/* <input
                     type="file"
                     id="upload-button"
                     style={{ display: "none" }}
                     onChange={handleChange}
-                  />
+                  /> */}
                 </div>
-                {/* <Avatar src={user.avatar} sx={{ cursor: "pointer" }} /> */}
+
               </UserMenu>
             }
           >
