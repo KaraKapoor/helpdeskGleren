@@ -71,6 +71,7 @@ const AllTickets = ({ setCurrentView }) => {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [selectedStatus, setSelectedStatus] = useState([]);
     const [selectedProject, setSelectedProject] = useState([]);
+    const [departmentchanges, setDepartmentChanges] = useState([]);
     const [selectedAssignee, setSelectedAssignee] = useState([]);
     const [selectedReviewedBy, setSelectedReviewedBy] = useState([]);
     const [selectedTestedBy, setSelectedTestedBy] = useState([]);
@@ -80,6 +81,7 @@ const AllTickets = ({ setCurrentView }) => {
     const [selectedDueDate, setSelectedDueDate] = useState();
     const [selectedOverdue, setSelectedOverdue] = useState();
     const [status, setStatus] = useState([]);
+    const [department, setDepartment] = useState([]);
     const [projects, setProjects] = useState([]);
     const [assignees, setAssignee] = useState([]);
     const [reviewedBy, setReviewedBy] = useState([]);
@@ -91,7 +93,7 @@ const AllTickets = ({ setCurrentView }) => {
 
     useEffect(() => {
         fetchMyTickets()
-    }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
+    }, [page, selectedStatus,departmentchanges, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
 
     const fetchMyTickets = (search) => {
         let queryParam = `?page=${page}&size=${rowsPerPage}`
@@ -100,6 +102,9 @@ const AllTickets = ({ setCurrentView }) => {
         }
         if (selectedStatus.length > 0) {
             queryParam = queryParam + `&statusId=${selectedStatus.toString()}`
+        }
+        if (departmentchanges.length > 0) {
+            queryParam = queryParam + `&statusId=${departmentchanges.toString()}`
         }
         if (selectedProject.length > 0) {
             queryParam = queryParam + `&projectId=${selectedProject.toString()}`
@@ -145,6 +150,9 @@ const AllTickets = ({ setCurrentView }) => {
     }
     const handleStatusChange = (event) => {
         setSelectedStatus(event.target.value);
+    }
+    const handleDepartmentChange = (event) => {
+        setDepartmentChanges(event.target.value);
     }
     const handleProjectChange = (event) => {
         if (event.target.value.length <= 0) {
@@ -195,6 +203,7 @@ const AllTickets = ({ setCurrentView }) => {
                     width: 400,
                 })
             } else {
+                setDepartment(resp?.data?.departments)
                 setStatus(resp?.data?.activeStatus);
                 setProjects(resp?.data?.currentUserProjects);
                 let agents = resp?.data?.agents;
@@ -216,6 +225,26 @@ const AllTickets = ({ setCurrentView }) => {
                 <Grid container spacing={2}>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                         <TextField id="searchTicket" onChange={handleSearchChange} label="Search Tickets" variant="standard" />
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="reviewedBy">Department</InputLabel>
+                            <Select
+                                labelId="department"
+                                id="department"
+                                multiple
+                                value={departmentchanges}
+                                label="Status"
+                                onChange={handleDepartmentChange}
+                                defaultValue={departmentchanges}
+                            >
+                                {
+                                    department?.filter((d,i) => (d.is_active === true)).map((d, i) => {
+                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                         <FormControl fullWidth>
