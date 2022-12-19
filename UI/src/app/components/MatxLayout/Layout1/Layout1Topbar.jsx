@@ -16,7 +16,7 @@ import useAuth from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
 import { topBarHeight } from "app/utils/constant";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Paragraph, Span } from "../../../components/Typography";
 import NotificationBar from "../../NotificationBar/NotificationBar";
 import ShoppingCart from "../../ShoppingCart";
@@ -88,39 +88,9 @@ const Layout1Topbar = () => {
   const { logout, user } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [users, setUsers] = useState({ avatar: "", raw: "" });
-  const handleChange = (event) => {
-    if (event.target.files.length) {
-      setUsers({
-        avatar: URL.createObjectURL(event.target.files[0]),
-        raw: event.target.files[0],
-      });
-      let data = new FormData();
-      data.append("file", event?.target?.files[0]);
-      fileUpload(data).then((resp) => {
-        if (resp?.data) {
-          updateUserProfile({ photouploadId: resp?.data?.id,id:resp?.data?.uploaded_by }).then((data) => {
-            if (data) {
-              getProfilePic()
-                .then((data) => {
-                  setUsers({...users,avatar:data?.data});
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-              Swal.fire({
-                icon: "success",
-                title: "Success",
-                text: "Upload image Successfully",
-                showCloseButton: true,
-                showConfirmButton: false,
-                width: 400,
-              });
-            }
-          });
-        }
-      });
-    }
-  };
+
+  let [searchParams] = useSearchParams();
+  const searchdata=searchParams.get('updated')
   useEffect(() => {
     getProfilePic()
       .then((data) => {
@@ -227,14 +197,14 @@ const Layout1Topbar = () => {
                       </>
                     )}
                   </label>
-                  <input
+                  {/* <input
                     type="file"
                     id="upload-button"
                     style={{ display: "none" }}
                     onChange={handleChange}
-                  />
+                  /> */}
                 </div>
-                {/* <Avatar src={user.avatar} sx={{ cursor: "pointer" }} /> */}
+
               </UserMenu>
             }
           >
