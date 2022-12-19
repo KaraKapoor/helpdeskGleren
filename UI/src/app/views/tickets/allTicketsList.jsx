@@ -1,5 +1,6 @@
 import {
     Box,
+    Button,
     Fab,
     FormControl,
     Grid,
@@ -87,7 +88,7 @@ const AllTickets = ({ setCurrentView }) => {
         setPage(newPage);
     };
 
-    const refreshPage=()=> {
+    const refreshPage = () => {
         fetchMyTickets();
     }
 
@@ -412,11 +413,9 @@ const AllTickets = ({ setCurrentView }) => {
                         </FormControl>
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
-                        <InputLabel> Refresh
-                        <IconButton onClick={refreshPage}>
-                            <RefreshIcon />
-                        </IconButton>
-                        </InputLabel>
+
+                        <Button variant="contained" style={{ height: "100%", width: "100%" }} onClick={refreshPage}>Refresh <Icon sx={{ ml: 1.5 }}>refresh</Icon></Button>
+
                     </Grid>
                 </Grid>
             </form>
