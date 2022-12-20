@@ -35,7 +35,7 @@ exports.generateEmailTransporter = async () => {
     return transporter;
 }
 
-exports.sendEmail = async (toEmailAddress, subject, cc, bcc, body,html) => {
+exports.sendEmail = async (toEmailAddress, subject, cc, bcc, body, html) => {
     const transporter = await this.generateEmailTransporter();
     const fromEmailSettings = await coreSettingsService.getSettingByName(coreSettingConstants.SMTP_FROM_EMAIL_ADDRESS);
     var mailOptions = {
@@ -43,7 +43,7 @@ exports.sendEmail = async (toEmailAddress, subject, cc, bcc, body,html) => {
         to: toEmailAddress,
         cc: cc,
         bcc: bcc,
-        subject: subject,
+        subject: await generalMethodService.getEmailSubjectPrefix() + subject,
         text: body,
         html: html
     };

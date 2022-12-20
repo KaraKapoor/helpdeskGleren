@@ -38,13 +38,23 @@ exports.executeRawSelectQuery = async (query) => {
 }
 exports.getFormattedCurrentStartDate = async (format) => {
     var newDate = moment(new Date());
-    newDate=newDate.set({hour:0,minute:0,second:0,millisecond:0})
-    newDate=newDate.format(format)
+    newDate = newDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+    newDate = newDate.format(format)
     return newDate;
 }
 exports.getFormattedCurrentEndDate = async (format) => {
     var newDate = moment(new Date());
-    newDate=newDate.set({hour:23,minute:59,second:59,millisecond:0})
-    newDate=newDate.format(format)
+    newDate = newDate.set({ hour: 23, minute: 59, second: 59, millisecond: 0 })
+    newDate = newDate.format(format)
     return newDate;
+}
+exports.getEmailSubjectPrefix = async () => {
+    let prefix = '';
+
+    if (process.env.SERVER.includes('local')) {
+        prefix = 'LOCAL: '
+    } else if (process.env.SERVER.includes('dev')) {
+        prefix = 'DEV: '
+    }
+    return prefix;
 }
