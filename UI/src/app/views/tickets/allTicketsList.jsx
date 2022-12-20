@@ -92,6 +92,11 @@ const AllTickets = ({ setCurrentView }) => {
         fetchMyTickets();
     }
 
+    const newWindow = (id) => {
+        console.log('hello')
+        window.open(`/view-ticket/${id}`)     
+    }
+
     useEffect(() => {
         fetchMyTickets()
     }, [page, selectedStatus,departmentchanges, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy,selectedReportedBy])
@@ -424,7 +429,7 @@ const AllTickets = ({ setCurrentView }) => {
                 <MaterialTable
                     title="MyTickets"
                     columns={[
-                        { title: 'Ticket No', field: 'id' },
+                        { title: 'Ticket No', field: 'id', },
                         { title: 'Status', field: 'status' },
                         { title: 'Project', field: 'project' },
                         { title: 'Priority', field: 'priority' },
@@ -433,23 +438,24 @@ const AllTickets = ({ setCurrentView }) => {
                         { title: 'Created At ', field: 'createdAt' },
                     ]}
                     data={data.map((e) => {
+                        console.log(e,"ee")
                         return {
-                            id: e.id,
+                            id: <p onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</p> ,
                             status: e.status.name,
                             priority: e.priority,
                             project: e.project.name,
                             category: e.category,
                             overdue: e.is_overdue == 0 ? 'NO' : 'YES',
                             createdAt: moment(e.createdAt).format(Strings.DATE_TIME_FORMAT),
-                        }
+                        } 
                     })}
                     actions={[
                         {
                             icon: 'edit',
                             tooltip: 'View Ticket',
                             onClick: (event, rowData) => {
-                                navigate(`/view-ticket/${rowData.id}`);
-
+                                console.log(rowData?.id?.props?.children)
+                                navigate(`/view-ticket/${rowData?.id?.props?.children}`);
                             },
                         }
                     ]}
