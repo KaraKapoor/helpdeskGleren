@@ -43,6 +43,9 @@ db.project.belongsTo(db.tenant, {
 db.status.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
+db.status.belongsTo(db.department, {
+    foreignKey: "department_id", //1:1
+});
 db.department.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });

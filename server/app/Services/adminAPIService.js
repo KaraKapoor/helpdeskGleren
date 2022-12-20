@@ -62,10 +62,11 @@ exports.getStatusByName = async (statusName, tenantId) => {
 exports.getStatusById = async (id, tenantId) => {
     return await status.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
-exports.createStatus = async (name, id, active, tenantId, statusType) => {
+exports.createStatus = async (name, id, active, tenantId, statusType, departmentId) => {
     let response = null;
     const obj = {
         name: name,
+        department_id: departmentId,
         tenant_id: tenantId,
         status_type: statusType,
         is_active: true
@@ -143,7 +144,7 @@ exports.getAllDepartmentsWithPagination = async (page, size, tenantid) => {
         })
     return response;
 }
-exports.masterDropdownData = async (tenantId,currentUserId) => {
+exports.masterDropdownData = async (tenantId, currentUserId) => {
     let response = {};
     const departmentData = await department.findAll({ where: { tenant_id: tenantId } });
     response["departments"] = departmentData;
@@ -152,9 +153,9 @@ exports.masterDropdownData = async (tenantId,currentUserId) => {
     const projectsData = await project.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { is_active: true }] } });
     response["projects"] = projectsData;
 
-    let currenUserProjectsQuery= queries.GET_LOGGED_IN_USER_PROJECTS;
-    currenUserProjectsQuery=currenUserProjectsQuery.replace(/:id/g,currentUserId);
-    currenUserProjectsQuery=currenUserProjectsQuery.replace(/:tenantId/g,tenantId)
+    let currenUserProjectsQuery = queries.GET_LOGGED_IN_USER_PROJECTS;
+    currenUserProjectsQuery = currenUserProjectsQuery.replace(/:id/g, currentUserId);
+    currenUserProjectsQuery = currenUserProjectsQuery.replace(/:tenantId/g, tenantId)
     const currenUserProjects = await this.executeRawSelectQuery(currenUserProjectsQuery);
     response["currentUserProjects"] = currenUserProjects;
     const onlyUsersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.notIn]: ['admin', 'agent', 'teamLead'] } }] } });
