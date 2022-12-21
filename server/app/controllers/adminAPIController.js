@@ -113,6 +113,13 @@ exports.createStatus = async (req, res) => {
             status: false
         });
     }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.DEPARTMENT_NAME_ERROR,
+            status: false
+        });
+    }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
         isNew = true;
     }
@@ -129,7 +136,7 @@ exports.createStatus = async (req, res) => {
                 status: false
             });
         } else {
-            const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId,input.statusType);
+            const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId,input.statusType, input.departmentId);
             return res.status(200).send(resp);
         }
 

@@ -119,6 +119,63 @@ const AllTickets = ({ setCurrentView }) => {
     }
     if (selectedStatus.length > 0) {
       queryParam = queryParam + `&statusId=${selectedStatus.toString()}`;
+
+    const newWindow = (id) => {
+        console.log('hello')
+        window.open(`/view-ticket/${id}`)     
+    }
+
+    useEffect(() => {
+        fetchMyTickets()
+    }, [page, selectedStatus,departmentchanges, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy,selectedReportedBy])
+
+    const fetchMyTickets = (search) => {
+        let queryParam = `?page=${page}&size=${rowsPerPage}`
+        if (search !== undefined) {
+            queryParam = queryParam + `&searchParam=${search}`
+        }
+        if (selectedStatus.length > 0) {
+            queryParam = queryParam + `&statusId=${selectedStatus.toString()}`
+        }
+        if (departmentchanges.length > 0) {
+            queryParam = queryParam + `&statusId=${departmentchanges.toString()}`
+        }
+        if (selectedProject.length > 0) {
+            queryParam = queryParam + `&projectId=${selectedProject.toString()}`
+        }
+        if (selectedAssignee.length > 0) {
+            queryParam = queryParam + `&assigneeId=${selectedAssignee.toString()}`
+        }
+        if (selectedFixVersion) {
+            queryParam = queryParam + `&fixVersion=${selectedFixVersion}`
+        }
+        if (selectedDueDate) {
+            let date = new Date(selectedDueDate + ' 00:00:00');
+            date = date.toISOString();
+            queryParam = queryParam + `&dueDate=${date}`
+        }
+        if (selectedOverdue != null && selectedOverdue !== undefined) {
+            queryParam = queryParam + `&overdue=${selectedOverdue}`
+        }
+        if (selectedReviewedBy.length > 0) {
+            queryParam = queryParam + `&reviewedBy=${selectedReviewedBy.toString()}`
+        }
+        if (selectedResolvedBy.length > 0) {
+            queryParam = queryParam + `&resolvedBy=${selectedResolvedBy.toString()}`
+        }
+        if (selectedReportedBy.length > 0) {
+            queryParam = queryParam + `&reportedBy=${selectedReportedBy.toString()}`
+        }
+        if (selectedTestedBy.length > 0) {
+            queryParam = queryParam + `&testedBy=${selectedTestedBy.toString()}`
+        }
+        allTickets(queryParam).then((response) => {
+            response?.pagingData.map((data, i) => {
+                Object.assign(data, { sno: rowsPerPage * page + i + 1 })
+            })
+            setData(response?.pagingData)
+            setTotalRecords(response.totalItems)
+        })
     }
     if (selectedProject.length > 0) {
       queryParam = queryParam + `&projectId=${selectedProject.toString()}`;
