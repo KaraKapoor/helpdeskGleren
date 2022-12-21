@@ -14,7 +14,9 @@ const AddEditStatus = ({ onClose, editDetails }) => {
     const [valid, setValid] = React.useState(false)
     const [isActive, setIsActive] = React.useState(editDetails?.is_active ? editDetails.is_active : true);
     const [statusTypes, setStatusType] = React.useState([]);
+    const [departmentvalue, setDepartmentValue] = React.useState([]);
     const [selectedStatusType, setSelectedStatusType] = React.useState();
+    const [department, setDepartment] = React.useState();
     const handleClose = (event) => !!onClose && onClose(event) && setValid(false)
     const navigate = useNavigate();
 
@@ -41,6 +43,7 @@ const AddEditStatus = ({ onClose, editDetails }) => {
             {
                 setIsActive(editDetails?.is_active);
                 setSelectedStatusType(editDetails?.status_type);
+            
             }
         }
         getMasterDropdownData().then((resp) => {
@@ -54,7 +57,8 @@ const AddEditStatus = ({ onClose, editDetails }) => {
                     width: 400,
                 })
             } else {
-                setStatusType(resp?.data?.statusTypes);
+                setStatusType(resp?.data?.statusTypes)
+                setDepartmentValue(resp?.data?.departments)
             }
         })
     }, [])
@@ -63,6 +67,7 @@ const AddEditStatus = ({ onClose, editDetails }) => {
         const reqBody = {
             statusName: values.statusName,
             statusType: selectedStatusType,
+            // department: department,
             is_active: isActive
         };
         if (editDetails?.id) {
@@ -113,6 +118,9 @@ const AddEditStatus = ({ onClose, editDetails }) => {
     }
     const handleStatusType = (event) => {
         setSelectedStatusType(event.target.value);
+    }
+    const handleDepartment = (event) => {
+        setDepartment(event.target.value);
     }
     return (
         <>
@@ -173,6 +181,26 @@ const AddEditStatus = ({ onClose, editDetails }) => {
                                                 {
                                                     statusTypes?.map((d, i) => {
                                                         return <MenuItem key={i} value={d}>{d}</MenuItem>
+                                                    })
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                    <div>
+                                        <FormControl fullWidth>
+                                            <InputLabel required={true} id="department">Department</InputLabel>
+                                            <Select
+                                                labelId="department"
+                                                id="department"
+                                                required={true}
+                                                value={department}
+                                                label="department"
+                                                onChange={handleDepartment}
+                                                defaultValue={department}
+                                            >
+                                                {
+                                                    departmentvalue?.filter((d,i) => (d.is_active === true)).map((d, i) => {
+                                                        return <MenuItem key={i} value={d}>{d.name}</MenuItem>
                                                     })
                                                 }
                                             </Select>

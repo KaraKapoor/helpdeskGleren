@@ -62,27 +62,27 @@ const MyTicketsTable = styled(Table)(() => ({
 }));
 
 const AllTickets = ({ setCurrentView }) => {
-  const [data, setData] = useState([]);
-  const [page, setPage] = useState(0);
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [selectedStatus, setSelectedStatus] = useState([]);
-  const [selectedProject, setSelectedProject] = useState([]);
-  const [departmentchanges, setDepartmentChanges] = useState([]);
-  const [selectedAssignee, setSelectedAssignee] = useState([]);
-  const [selectedReviewedBy, setSelectedReviewedBy] = useState([]);
-  const [selectedTestedBy, setSelectedTestedBy] = useState([]);
-  const [selectedResolvedBy, setSelectedResolvedBy] = useState([]);
-  const [selectedReportedBy, setSelectedReportedBy] = useState([]);
-  const [selectedFixVersion, setSelectedFixVersion] = useState();
-  const [selectedDueDate, setSelectedDueDate] = useState();
-  const [selectedOverdue, setSelectedOverdue] = useState();
-  const [status, setStatus] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [assignees, setAssignee] = useState([]);
-  const [reviewedBy, setReviewedBy] = useState([]);
-  const navigate = useNavigate();
+    const [data, setData] = useState([])
+    const [page, setPage] = useState(0)
+    const [totalRecords, setTotalRecords] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [selectedStatus, setSelectedStatus] = useState([]);
+    const [selectedProject, setSelectedProject] = useState([]);
+    // const [departmentchanges, setDepartmentChanges] = useState([]);
+    const [selectedAssignee, setSelectedAssignee] = useState([]);
+    const [selectedReviewedBy, setSelectedReviewedBy] = useState([]);
+    const [selectedTestedBy, setSelectedTestedBy] = useState([]);
+    const [selectedResolvedBy, setSelectedResolvedBy] = useState([]);
+    const [selectedReportedBy, setSelectedReportedBy] = useState([]);
+    const [selectedFixVersion, setSelectedFixVersion] = useState();
+    const [selectedDueDate, setSelectedDueDate] = useState();
+    const [selectedOverdue, setSelectedOverdue] = useState();
+    const [status, setStatus] = useState([]);
+    const [department, setDepartment] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [assignees, setAssignee] = useState([]);
+    const [reviewedBy, setReviewedBy] = useState([]);
+    const navigate = useNavigate()
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
@@ -97,7 +97,6 @@ const AllTickets = ({ setCurrentView }) => {
   }, [
     page,
     selectedStatus,
-    departmentchanges,
     selectedProject,
     selectedAssignee,
     selectedFixVersion,
@@ -116,9 +115,6 @@ const AllTickets = ({ setCurrentView }) => {
     }
     if (selectedStatus.length > 0) {
       queryParam = queryParam + `&statusId=${selectedStatus.toString()}`;
-    }
-    if (departmentchanges.length > 0) {
-      queryParam = queryParam + `&statusId=${departmentchanges.toString()}`;
     }
     if (selectedProject.length > 0) {
       queryParam = queryParam + `&projectId=${selectedProject.toString()}`;
@@ -167,9 +163,9 @@ const AllTickets = ({ setCurrentView }) => {
   const handleStatusChange = (event) => {
     setSelectedStatus(event.target.value);
   };
-  const handleDepartmentChange = (event) => {
-    setDepartmentChanges(event.target.value);
-  };
+  // const handleDepartmentChange = (event) => {
+  //   setDepartmentChanges(event.target.value);
+  // };
   const handleProjectChange = (event) => {
     if (event.target.value.length <= 0) {
       return Swal.fire({
@@ -246,7 +242,7 @@ const AllTickets = ({ setCurrentView }) => {
               variant="standard"
             />
           </Grid>
-          <Grid item lg={2} md={2} sm={12} xs={12}>
+          {/* <Grid item lg={2} md={2} sm={12} xs={12}>
             <FormControl fullWidth>
               <InputLabel id="reviewedBy">Department</InputLabel>
               <Select
@@ -269,7 +265,7 @@ const AllTickets = ({ setCurrentView }) => {
                   })}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item lg={2} md={2} sm={12} xs={12}>
             <FormControl fullWidth>
               <InputLabel id="status">Status</InputLabel>
