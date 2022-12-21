@@ -92,6 +92,10 @@ const AllTickets = ({ setCurrentView }) => {
     fetchMyTickets();
   };
 
+  const newWindow = (id) => {
+    window.open(`/view-ticket/${id}`)     
+}
+
   useEffect(() => {
     fetchMyTickets();
   }, [
@@ -484,7 +488,7 @@ const AllTickets = ({ setCurrentView }) => {
           ]}
           data={data.map((e) => {
             return {
-              id: e.id,
+              id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a> ,
               status: e.status.name,
               priority: e.priority,
               project: e.project.name,
@@ -498,7 +502,7 @@ const AllTickets = ({ setCurrentView }) => {
               icon: "edit",
               tooltip: "View Ticket",
               onClick: (event, rowData) => {
-                navigate(`/view-ticket/${rowData.id}`);
+                navigate(`/view-ticket/${rowData?.id?.props?.children}`);
               },
             },
           ]}
