@@ -45,7 +45,7 @@ const MyTicketsTable = styled(Table)(() => ({
   },
   "& td": {
     borderBottom: "none",
-    minWidth: "200px",
+    // minWidth: "200px",
   },
   "& td:first-of-type": {
     paddingLeft: "16px !important",
