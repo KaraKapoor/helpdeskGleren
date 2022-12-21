@@ -82,6 +82,10 @@ const MyTickets = ({ setCurrentView }) => {
         setPage(newPage);
     };
 
+    const newWindow = (id) => {
+        window.open(`/view-ticket/${id}`)     
+    }
+
     useEffect(() => {
         fetchMyTickets()
     }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
@@ -353,7 +357,7 @@ const MyTickets = ({ setCurrentView }) => {
                     ]}
                     data={data.map((e) => {
                         return {
-                            id: e.id,
+                            id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a>,
                             status: e.status.name,
                             priority: e.priority,
                             project: e.project.name,
