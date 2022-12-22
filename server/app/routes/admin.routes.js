@@ -21,5 +21,6 @@ module.exports = (app) => {
     router.get("/teams/getAllTeams", adminController.getAllTeams);
     router.post("/teams/create", adminController.createTeam);
     router.post("/teams/getById", adminController.getTeamById);
+    router.post("/department/getStatus", adminController.getStatusByDepartmentId);
     app.use("/api/admin", auth, router);
 };
