@@ -1,6 +1,6 @@
 {
     "general": {
-        "baseUrl": "/"
+        "baseUrl": "http://localhost:8080/"
     },
     "user": {
         "login": "api/public/login",
@@ -32,7 +32,8 @@
     "status": {
         "create": "api/admin/status/create",
         "getById": "api/admin/status/getById",
-        "getAllStatus": "api/admin/status/getAllStatus"
+        "getAllStatus": "api/admin/status/getAllStatus",
+        "getStatusByDepartmentId":"api/admin/department/getStatus"
     },
     "escalation": {
         "create": "api/admin/escalations/createEscalation",
