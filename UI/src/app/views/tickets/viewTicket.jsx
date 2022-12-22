@@ -567,14 +567,17 @@ const ViewTicket = ({ onClose }) => {
                               className="mt-2"
                               name="dueDate"
                               type="date"
-                              label="Due Date"
+                               label="Due Date"
                               variant="outlined"
                               onBlur={(e) => {
                                 updateTicketDetails(e.target.value, "dueDate");
                               }}
-                              value={values.dueDate}
+                              defaultValue={values.dueDate}
+                              value={values.dueDate  || '' }
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
+                               InputLabelProps={{ shrink: true }}  
+
                             />
                             <TextField
                               fullWidth
