@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import styled from "@emotion/styled";
 import { LoadingButton } from "@mui/lab";
+import * as Yup from 'yup';
 import { Strings } from "config/strings";
 import { authRoles } from "app/auth/authRoles";
 import { getMasterDropdownData } from "app/services/adminService";
@@ -65,6 +66,11 @@ const CreateTicket = ({ onClose }) => {
     color: red;
     font-size: 13px;
   `;
+
+  const validationSchema = Yup.object().shape({
+    storyPoints: Yup.number()
+      .max(20, 'Story Points can not be more than 20 numbers long'),
+  });
  
   const onSubmit = (values) => {
     const reqBody = {
@@ -193,7 +199,7 @@ const CreateTicket = ({ onClose }) => {
             </div>
           </HeaderTitle>
           <Divider />
-          <Formik onSubmit={onSubmit} initialValues={initialValues}>
+          <Formik onSubmit={onSubmit} initialValues={initialValues} validationSchema={validationSchema}>
             {({
               values,
               errors,
@@ -398,6 +404,8 @@ const CreateTicket = ({ onClose }) => {
                         value={values.storyPoints}
                         inputProps={{ min: 1 }}
                         onChange={handleChange}
+                        error={Boolean(errors.storyPoints && touched.storyPoints)} 
+                        helperText={touched.storyPoints && errors.storyPoints}
                         sx={{ mb: 1.5 }}
                         InputLabelProps={{
                           shrink: true,
