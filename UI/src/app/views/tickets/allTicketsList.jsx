@@ -349,6 +349,7 @@ const AllTickets = ({ setCurrentView }) => {
               value={selectedDueDate}
               onChange={handleDueDateChange}
               sx={{ mb: 1.5 }}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
           <Grid item lg={2} md={2} sm={12} xs={12}>
