@@ -44,6 +44,9 @@ const MyTicketsTable = styled(Table)(() => ({
     '& td': {
         borderBottom: 'none',
     },
+    "& td:nth-child(2)": {
+        minWidth: "200px",
+    },
     '& td:first-of-type': {
         paddingLeft: '16px !important',
     },
