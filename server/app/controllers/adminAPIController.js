@@ -136,7 +136,7 @@ exports.createStatus = async (req, res) => {
                 status: false
             });
         } else {
-            const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId,input.statusType, input.departmentId);
+            const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId, input.statusType, input.departmentId);
             return res.status(200).send(resp);
         }
 
@@ -166,6 +166,33 @@ exports.getStatusById = async (req, res) => {
         const response = await adminAPIService.getStatusById(input.id, tenantId);
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.getStatusByDepartmentId = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    console.log(userDetails,"userDetailsuserDetails")
+    const departmentId = input.departmentId;
+
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.ID_ERROR,
+            status: false
+        });
+    }
+
+    try {
+        const response = await adminAPIService.getStatusByDepartmentId(departmentId, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    }
+    catch (exception) {
         console.log(exception);
         return res.status(200).send({
             error: errorConstants.SOME_ERROR_OCCURRED,
@@ -329,7 +356,7 @@ exports.masterDropDownData = async (req, res) => {
     const tenantId = userDetails.tenant_id;
 
     try {
-        const response = await adminAPIService.masterDropdownData(tenantId,req.user.user_id);
+        const response = await adminAPIService.masterDropdownData(tenantId, req.user.user_id);
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
         console.log(exception);
