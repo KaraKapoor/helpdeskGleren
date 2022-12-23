@@ -8,6 +8,7 @@ import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
 import { createDepartment } from 'app/services/adminService';
+import * as Yup from 'yup';
 
 const AddEditDepartment = ({ onClose, editDetails }) => {
     const [valid, setValid] = React.useState(false)
@@ -38,6 +39,11 @@ const AddEditDepartment = ({ onClose, editDetails }) => {
             setIsActive(editDetails?.is_active);
         }}
     }, [])
+
+    const validationSchema = Yup.object().shape({
+        departmentName: Yup.string()
+          .max(20, 'Department Name can not be more than 20 characters long'),
+      });
 
     const onSubmit = (values) => {
         const reqBody = {
@@ -114,6 +120,7 @@ const AddEditDepartment = ({ onClose, editDetails }) => {
                     <Formik
                         onSubmit={onSubmit}
                         initialValues={initialValues}
+                        validationSchema={validationSchema}
                     >
                         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                             <form onSubmit={handleSubmit}>
@@ -129,6 +136,8 @@ const AddEditDepartment = ({ onClose, editDetails }) => {
                                             onBlur={handleBlur}
                                             value={values.departmentName}
                                             onChange={handleChange}
+                                            error={Boolean(errors.departmentName && touched.departmentName)}
+                                            helperText={touched.departmentName && errors.departmentName}
                                             sx={{ mb: 1.5 }}
                                         />
                                         <br />
