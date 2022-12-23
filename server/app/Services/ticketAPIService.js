@@ -133,7 +133,7 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     //<Start>Send Email for Ticket Creation
     let createEmailTemplate = emailTemplates.CREATE_TICKET_TEMPLATE;
     createEmailTemplate = createEmailTemplate.replace('{username}', userDetails.first_name);
-    createEmailTemplate = createEmailTemplate.replace('{ticketNumber}', createdTicket.id);
+    createEmailTemplate = createEmailTemplate.replace(/{ticketNumber}/g, createdTicket.id);
     createEmailTemplate = createEmailTemplate.replace('{url}', process.env.BASE_URL);
     createEmailTemplate = createEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
     await emailAPIService.sendEmail(userDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createEmailTemplate);
@@ -141,13 +141,11 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
 
      //<Start>Send Email to assignee for Ticket Creation
      let createassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
-     let ticket_id = createdTicket.id;
-     let ticket_idURL = createdTicket.id;
+     let ticketId = createdTicket.id;
      createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumber}', ticket_id);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace(/{ticketNumber}/g, ticketId);
      createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{url}', process.env.BASE_URL);
      createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumberURL}', ticket_idURL);
      await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createassigneeEmailTemplate);
      //<End>Send Email to assignee for Ticket Creation
     response = {
@@ -323,7 +321,9 @@ exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ti
         //<Start>Send Email to assignee for change in assignee
         let changeassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
         changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
-        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{ticketNumber}', TicketId);
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace(/{ticketNumber}/g, TicketId);
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{url}', process.env.BASE_URL);
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
         await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.UPDATE_TICKET_SUBJECT, null, null, null, changeassigneeEmailTemplate);
         //<End>Send Email to assignee for change in assignee
 

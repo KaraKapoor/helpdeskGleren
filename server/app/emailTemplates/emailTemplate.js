@@ -207,6 +207,7 @@ module.exports = {
             <p class="para">
                  Ticket ID {ticketNumber} is created.
             </p><br></br>
+            <a href="{url}{view_ticket}/{ticketNumber}">View Ticket</a><br></br>
 
             <p class="para">Regards,</p>
             <p class="para">Team Gleren</p>
@@ -258,7 +259,7 @@ module.exports = {
         <p class="para">
              A new Ticket is Assigned {ticketNumber}
         </p><br></br>
-        <a href="{url}{view_ticket}/{ticketNumberURL}">Click Here </a><br></br>
+        <a href="{url}{view_ticket}/{ticketNumber}">View Ticket</a><br></br>
             <p class="para">Regards,</p>
             <p class="para">Team Gleren</p>
         </div>
