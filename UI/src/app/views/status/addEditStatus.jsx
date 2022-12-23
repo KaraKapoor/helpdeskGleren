@@ -67,7 +67,7 @@ const AddEditStatus = ({ onClose, editDetails }) => {
         const reqBody = {
             statusName: values.statusName,
             statusType: selectedStatusType,
-            // department: department,
+            departmentId: department.id,
             is_active: isActive
         };
         if (editDetails?.id) {
