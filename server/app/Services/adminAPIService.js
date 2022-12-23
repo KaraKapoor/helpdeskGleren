@@ -82,7 +82,7 @@ exports.createStatus = async (name, id, active, tenantId, statusType, department
         await status.create(obj);
     }
 
-    const createdStatus = await this.getStatusByName(name, tenantId);
+    const createdStatus = await this.getStatusByName(name, tenantId, departmentId);
     response = {
         status: true,
         data: createdStatus

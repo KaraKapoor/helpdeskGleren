@@ -44,6 +44,7 @@ const AddEditStatus = ({ onClose, editDetails }) => {
             {
                 setIsActive(editDetails?.is_active);
                 setSelectedStatusType(editDetails?.status_type);
+                setDepartment(editDetails?.department_id);
             
             }
         }
@@ -72,7 +73,7 @@ const AddEditStatus = ({ onClose, editDetails }) => {
         const reqBody = {
             statusName: values.statusName,
             statusType: selectedStatusType,
-            departmentId: department.id,
+            departmentId: department,
             is_active: isActive
         };
         if (editDetails?.id) {
@@ -208,7 +209,7 @@ const AddEditStatus = ({ onClose, editDetails }) => {
                                             >
                                                 {
                                                     departmentvalue?.filter((d,i) => (d.is_active === true)).map((d, i) => {
-                                                        return <MenuItem key={i} value={d}>{d.name}</MenuItem>
+                                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
                                                     })
                                                 }
                                             </Select>
