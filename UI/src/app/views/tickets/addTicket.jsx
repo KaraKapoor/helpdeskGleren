@@ -143,11 +143,14 @@ const CreateTicket = ({ onClose }) => {
 
   const handleDepartmentChange = async (event) => {
     setSelectedDepartment(event.target.value);
-    const data = await getStatusByDepId(event.target.value);
-    setStatus(data);
+    await getStatusByDepId(event.target.value);
 
   };
-
+  const getStatusByDepId = async (departmentId) => {
+    await getStatusByDepartment({ departmentId }).then(async(response) => {
+      setStatus(response.data);
+    })
+  }
   
   
   const handleProjectChange = (event) => {

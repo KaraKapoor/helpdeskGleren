@@ -20,7 +20,7 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { getMasterDropdownData } from "app/services/adminService";
+import { getMasterDropdownData, getStatusByDepartment } from "app/services/adminService";
 import {
   deleteFile,
   downloadFile,
@@ -29,7 +29,6 @@ import {
   updateTicket,
 } from "app/services/ticketService";
 import CustomTabs from "./customTabs";
-import {getStatusByDepId} from "../../utils/utils";
 
 const ViewTicket = ({ onClose }) => {
   const [assignees, setAssignee] = React.useState([]);
@@ -179,6 +178,12 @@ const ViewTicket = ({ onClose }) => {
     getTicketDetails(id);
   }, []);
 
+  const getStatusByDepId = async (departmentId) => {
+    await getStatusByDepartment({ departmentId }).then(async(response) => {
+      setStatus(response.data);
+    })
+  }
+
   const getTicketDetails = (id) => {
     getTicketById({ id: id }).then(async(resp) => {
       if (resp?.status === false) {
@@ -197,8 +202,7 @@ const ViewTicket = ({ onClose }) => {
         );
         setSelectedDepartment(resp.data.department.name);
         console.log(resp.data);
-        const data = await getStatusByDepId(resp.data.department_id);
-        setStatus(data);
+        await getStatusByDepId(resp.data.department_id);
         setSelectedProject(resp.data.project.name);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);
