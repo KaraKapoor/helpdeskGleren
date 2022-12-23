@@ -41,6 +41,9 @@ import { getAllTeams } from "app/services/adminService";
     '& th:first-of-type': {
         paddingLeft: '16px !important',
     },
+    '& th:nth-of-type(5)': {
+        width: '90px !important',
+    },
     '& tfoot tr td div:nth-child(1)': {
         justifyContent: 'center',
         alignItems:'center',

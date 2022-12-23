@@ -47,6 +47,9 @@ const MyTicketsTable = styled(Table)(() => ({
     '& td:first-of-type': {
         paddingLeft: '16px !important',
     },
+    '& th:nth-of-type(8)': {
+        width: '90px !important',
+    },
     '& th:first-of-type': {
         paddingLeft: '16px !important',
     },
