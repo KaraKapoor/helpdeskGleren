@@ -12,6 +12,7 @@ const Op = db.Sequelize.Op;
 const queries = require("../constants/queries");
 const constants = require("../constants/constants");
 const { htmlToText } = require('html-to-text');
+const { VIEW_TICKET } = require("../constants/constants");
 
 exports.saveTicketHistory = async (tenantId, ticketId, text) => {
     let response = null;
@@ -133,13 +134,20 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     let createEmailTemplate = emailTemplates.CREATE_TICKET_TEMPLATE;
     createEmailTemplate = createEmailTemplate.replace('{username}', userDetails.first_name);
     createEmailTemplate = createEmailTemplate.replace('{ticketNumber}', createdTicket.id);
+    createEmailTemplate = createEmailTemplate.replace('{url}', process.env.BASE_URL);
+    createEmailTemplate = createEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
     await emailAPIService.sendEmail(userDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createEmailTemplate);
     //<End>Send Email for Ticket Creation
 
      //<Start>Send Email to assignee for Ticket Creation
      let createassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
+     let ticket_id = createdTicket.id;
+     let ticket_idURL = createdTicket.id;
      createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumber}', createdTicket.id);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumber}', ticket_id);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{url}', process.env.BASE_URL);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumberURL}', ticket_idURL);
      await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createassigneeEmailTemplate);
      //<End>Send Email to assignee for Ticket Creation
     response = {

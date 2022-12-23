@@ -254,11 +254,11 @@ module.exports = {
     
     <body>
         <div>
-        <p class="heading3">Hi {username}</p>
+        <p class="heading3">Hi {username} </p>
         <p class="para">
-             Ticket ID {ticketNumber} is assigned.
+             A new Ticket is Assigned {ticketNumber}
         </p><br></br>
-
+        <a href="{url}{view_ticket}/{ticketNumberURL}">Click Here </a><br></br>
             <p class="para">Regards,</p>
             <p class="para">Team Gleren</p>
         </div>
