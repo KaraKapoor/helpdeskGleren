@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/app/views/status/statusList.css"],"names":[],"mappings":"AAAA,QACI,WAAY,CACZ,kBACJ","file":"16.20849be6.chunk.css","sourcesContent":[".addBtn{\r\n    float: right;\r\n    margin-bottom:10px ;\r\n}"]}

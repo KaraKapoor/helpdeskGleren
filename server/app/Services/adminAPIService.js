@@ -62,6 +62,9 @@ exports.getStatusByName = async (statusName, tenantId) => {
 exports.getStatusById = async (id, tenantId) => {
     return await status.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
+exports.getStatusByDepartmentId = async (departmentId, tenantId) => {
+    return await status.findAll({ where: { [Op.and]: [{ department_id: departmentId }, { tenant_id: tenantId }] } });
+}
 exports.createStatus = async (name, id, active, tenantId, statusType, departmentId) => {
     let response = null;
     const obj = {
@@ -69,7 +72,7 @@ exports.createStatus = async (name, id, active, tenantId, statusType, department
         department_id: departmentId,
         tenant_id: tenantId,
         status_type: statusType,
-        is_active: true
+        is_active: true,
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
         obj.id = id;

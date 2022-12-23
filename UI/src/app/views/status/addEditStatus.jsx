@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
 import { createStatus, getMasterDropdownData } from 'app/services/adminService';
 import "./statusList.css";
+import * as Yup from 'yup';
 
 const AddEditStatus = ({ onClose, editDetails }) => {
     const [valid, setValid] = React.useState(false)
@@ -62,12 +63,16 @@ const AddEditStatus = ({ onClose, editDetails }) => {
             }
         })
     }, [])
+    const validationSchema = Yup.object().shape({
+        statusName: Yup.string()
+          .max(20, 'Status Name can not be more than 20 characters long'),
+      });
 
     const onSubmit = (values) => {
         const reqBody = {
             statusName: values.statusName,
             statusType: selectedStatusType,
-            // department: department,
+            departmentId: department.id,
             is_active: isActive
         };
         if (editDetails?.id) {
@@ -146,6 +151,7 @@ const AddEditStatus = ({ onClose, editDetails }) => {
                     <Formik
                         onSubmit={onSubmit}
                         initialValues={initialValues}
+                        validationSchema={validationSchema}
                     >
                         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                             <form onSubmit={handleSubmit}>
@@ -161,6 +167,8 @@ const AddEditStatus = ({ onClose, editDetails }) => {
                                             onBlur={handleBlur}
                                             value={values.statusName}
                                             onChange={handleChange}
+                                            error={Boolean(errors.statusName && touched.statusName)}
+                                            helperText={touched.statusName && errors.statusName}
                                             sx={{ mb: 1.5 }}
                                         />
                                         <br />

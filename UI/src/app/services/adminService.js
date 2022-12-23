@@ -95,3 +95,12 @@ export const createTeam=(formData)=>{
         data: formData,
     })
 }
+
+export const getStatusByDepartment=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.status.getStatusByDepartmentId,
+        data: formData,
+    })
+    
+}

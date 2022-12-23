@@ -42,7 +42,7 @@ const BugReport = (props) => {
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: "OTP Sent Successfully",
+                        text: "Bug Reported Successfully",
                         showCloseButton: true,
                         showConfirmButton: false,
                         width: 400,

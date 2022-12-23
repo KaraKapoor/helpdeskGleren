@@ -152,7 +152,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
 
   const validationSchema = Yup.object().shape({
     teamName: Yup.string()
-      .max(12, 'Team Name can not be more than 12 characters long'),
+      .max(20, 'Team Name can not be more than 20 characters long'),
   });
 
   return (

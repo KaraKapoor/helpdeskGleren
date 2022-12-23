@@ -24,7 +24,7 @@ import { LoadingButton } from "@mui/lab";
 import * as Yup from 'yup';
 import { Strings } from "config/strings";
 import { authRoles } from "app/auth/authRoles";
-import { getMasterDropdownData } from "app/services/adminService";
+import { getMasterDropdownData,getStatusByDepartment } from "app/services/adminService";
 import {
   createTicket,
   deleteFile,
@@ -134,15 +134,24 @@ const CreateTicket = ({ onClose }) => {
         setDepartments(resp?.data?.departments);
         setProjects(resp?.data?.currentUserProjects);
         setAssignee(resp?.data?.agents);
-        setStatus(resp?.data?.activeStatus);
+        // setStatus(resp?.data?.activeStatus);
         setPriority(resp?.data?.ticketPriorites);
       }
     });
   }, []);
 
-  const handleDepartmentChange = (event) => {
+  const handleDepartmentChange = async (event) => {
     setSelectedDepartment(event.target.value);
+    getStatusByDepId(event.target.value);
+
   };
+
+  const getStatusByDepId=async(departmentId)=>{
+   await getStatusByDepartment({departmentId}).then((response)=>{
+    console.log("new",response.data);
+    setStatus(response.data);
+    })
+  }
   const handleProjectChange = (event) => {
     setSelectedProject(event.target.value);
   };

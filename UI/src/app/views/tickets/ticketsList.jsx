@@ -268,7 +268,7 @@ const MyTickets = ({ setCurrentView }) => {
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                         <TextField fullWidth size="large" name="dueDate" type="date" label="Due Date"
                             variant="outlined" value={selectedDueDate}
-                            onChange={handleDueDateChange} sx={{ mb: 1.5 }} />
+                            onChange={handleDueDateChange} sx={{ mb: 1.5 }} InputLabelProps={{ shrink: true }}  />
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                         <FormControl fullWidth>
