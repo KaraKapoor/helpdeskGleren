@@ -27,6 +27,9 @@ import { getAllStatus } from "app/services/adminService";
     '& td:first-of-type': {
         paddingLeft: '16px !important',
     },
+    '& th:nth-of-type(3)': {
+        width: '90px !important',
+    },
     '& th:first-of-type': {
         paddingLeft: '16px !important',
     },
