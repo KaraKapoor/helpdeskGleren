@@ -20,7 +20,7 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { getMasterDropdownData } from "app/services/adminService";
+import { getMasterDropdownData, getStatusByDepartment } from "app/services/adminService";
 import {
   deleteFile,
   downloadFile,
@@ -169,7 +169,7 @@ const ViewTicket = ({ onClose }) => {
       } else {
         setCategory(resp?.data?.ticketCategory);
         setAssignee(resp?.data?.agents);
-        setStatus(resp?.data?.activeStatus);
+        
         setPriority(resp?.data?.ticketPriorites);
       }
     });
@@ -178,8 +178,14 @@ const ViewTicket = ({ onClose }) => {
     getTicketDetails(id);
   }, []);
 
+  const getStatusByDepId = async (departmentId) => {
+    await getStatusByDepartment({ departmentId }).then(async(response) => {
+      setStatus(response.data);
+    })
+  }
+
   const getTicketDetails = (id) => {
-    getTicketById({ id: id }).then((resp) => {
+    getTicketById({ id: id }).then(async(resp) => {
       if (resp?.status === false) {
         return Swal.fire({
           icon: "error",
@@ -195,6 +201,8 @@ const ViewTicket = ({ onClose }) => {
           resp.data.createdBy.first_name + " " + resp.data.createdBy.last_name
         );
         setSelectedDepartment(resp.data.department.name);
+        console.log(resp.data);
+        await getStatusByDepId(resp.data.department_id);
         setSelectedProject(resp.data.project.name);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);
