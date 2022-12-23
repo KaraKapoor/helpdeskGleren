@@ -29,6 +29,7 @@ import {
   updateTicket,
 } from "app/services/ticketService";
 import CustomTabs from "./customTabs";
+import {getStatusByDepId} from "../../utils/utils";
 
 const ViewTicket = ({ onClose }) => {
   const [assignees, setAssignee] = React.useState([]);
@@ -169,7 +170,7 @@ const ViewTicket = ({ onClose }) => {
       } else {
         setCategory(resp?.data?.ticketCategory);
         setAssignee(resp?.data?.agents);
-        setStatus(resp?.data?.activeStatus);
+        
         setPriority(resp?.data?.ticketPriorites);
       }
     });
@@ -179,7 +180,7 @@ const ViewTicket = ({ onClose }) => {
   }, []);
 
   const getTicketDetails = (id) => {
-    getTicketById({ id: id }).then((resp) => {
+    getTicketById({ id: id }).then(async(resp) => {
       if (resp?.status === false) {
         return Swal.fire({
           icon: "error",
@@ -195,6 +196,9 @@ const ViewTicket = ({ onClose }) => {
           resp.data.createdBy.first_name + " " + resp.data.createdBy.last_name
         );
         setSelectedDepartment(resp.data.department.name);
+        console.log(resp.data);
+        const data = await getStatusByDepId(resp.data.department_id);
+        setStatus(data);
         setSelectedProject(resp.data.project.name);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);

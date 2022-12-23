@@ -1,4 +1,5 @@
 import { differenceInSeconds } from 'date-fns';
+import {getStatusByDepartment } from "../services/adminService"
 
 export const convertHexToRGB = (hex) => {
   // check if it's a rgba
@@ -171,3 +172,8 @@ export const flat = (array) => {
   });
   return result;
 };
+
+export const  getStatusByDepId = async(departmentId)=>{
+  const response=  await getStatusByDepartment({departmentId})
+ return response.data;
+}

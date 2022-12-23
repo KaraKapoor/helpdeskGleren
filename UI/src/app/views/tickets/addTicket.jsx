@@ -30,6 +30,7 @@ import {
   deleteFile,
   fileUpload,
 } from "app/services/ticketService";
+import {getStatusByDepId} from "../../utils/utils";
 
 const CreateTicket = ({ onClose }) => {
   const [valid, setValid] = React.useState(false);
@@ -142,16 +143,13 @@ const CreateTicket = ({ onClose }) => {
 
   const handleDepartmentChange = async (event) => {
     setSelectedDepartment(event.target.value);
-    getStatusByDepId(event.target.value);
+    const data = await getStatusByDepId(event.target.value);
+    setStatus(data);
 
   };
 
-  const getStatusByDepId=async(departmentId)=>{
-   await getStatusByDepartment({departmentId}).then((response)=>{
-    console.log("new",response.data);
-    setStatus(response.data);
-    })
-  }
+  
+  
   const handleProjectChange = (event) => {
     setSelectedProject(event.target.value);
   };
