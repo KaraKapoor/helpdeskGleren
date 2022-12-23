@@ -12,6 +12,7 @@ const Op = db.Sequelize.Op;
 const queries = require("../constants/queries");
 const constants = require("../constants/constants");
 const { htmlToText } = require('html-to-text');
+const { VIEW_TICKET } = require("../constants/constants");
 
 exports.saveTicketHistory = async (tenantId, ticketId, text) => {
     let response = null;
@@ -132,14 +133,19 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     //<Start>Send Email for Ticket Creation
     let createEmailTemplate = emailTemplates.CREATE_TICKET_TEMPLATE;
     createEmailTemplate = createEmailTemplate.replace('{username}', userDetails.first_name);
-    createEmailTemplate = createEmailTemplate.replace('{ticketNumber}', createdTicket.id);
+    createEmailTemplate = createEmailTemplate.replace(/{ticketNumber}/g, createdTicket.id);
+    createEmailTemplate = createEmailTemplate.replace('{url}', process.env.BASE_URL);
+    createEmailTemplate = createEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
     await emailAPIService.sendEmail(userDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createEmailTemplate);
     //<End>Send Email for Ticket Creation
 
      //<Start>Send Email to assignee for Ticket Creation
      let createassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
+     let ticketId = createdTicket.id;
      createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{ticketNumber}', createdTicket.id);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace(/{ticketNumber}/g, ticketId);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{url}', process.env.BASE_URL);
+     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
      await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createassigneeEmailTemplate);
      //<End>Send Email to assignee for Ticket Creation
     response = {
@@ -315,7 +321,9 @@ exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ti
         //<Start>Send Email to assignee for change in assignee
         let changeassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
         changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
-        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{ticketNumber}', TicketId);
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace(/{ticketNumber}/g, TicketId);
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{url}', process.env.BASE_URL);
+        changeassigneeEmailTemplate = changeassigneeEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
         await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.UPDATE_TICKET_SUBJECT, null, null, null, changeassigneeEmailTemplate);
         //<End>Send Email to assignee for change in assignee
 
