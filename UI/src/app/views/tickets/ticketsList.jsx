@@ -374,7 +374,7 @@ const MyTickets = ({ setCurrentView }) => {
                             icon: 'edit',
                             tooltip: 'View Ticket',
                             onClick: (event, rowData) => {
-                                navigate(`/view-ticket/${rowData.id}`);
+                                navigate(`/view-ticket/${rowData?.id?.props?.children}`);
                             },
                         }
                     ]}
