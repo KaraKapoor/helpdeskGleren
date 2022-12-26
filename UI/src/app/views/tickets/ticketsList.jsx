@@ -45,6 +45,9 @@ const MyTicketsTable = styled(Table)(() => ({
     '& td:first-of-type': {
         paddingLeft: '16px !important',
     },
+    '& th:nth-of-type(8)': {
+        width: '90px !important',
+    },
     '& th:first-of-type': {
         paddingLeft: '16px !important',
     },
@@ -263,7 +266,7 @@ const MyTickets = ({ setCurrentView }) => {
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                         <TextField fullWidth size="large" name="dueDate" type="date" label="Due Date"
                             variant="outlined" value={selectedDueDate}
-                            onChange={handleDueDateChange} sx={{ mb: 1.5 }} />
+                            onChange={handleDueDateChange} sx={{ mb: 1.5 }} InputLabelProps={{ shrink: true }}  />
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                         <FormControl fullWidth>
@@ -347,6 +350,7 @@ const MyTickets = ({ setCurrentView }) => {
                     columns={[
                         { title: 'Ticket No', field: 'id' },
                         { title: 'Status', field: 'status' },
+                        { title: 'Summary', field: 'summary' },
                         { title: 'Project', field: 'project' },
                         { title: 'Priority', field: 'priority' },
                         { title: 'Category', field: 'category' },
@@ -357,6 +361,7 @@ const MyTickets = ({ setCurrentView }) => {
                         return {
                             id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a>,
                             status:  <Tooltip title={e.status.name}><p className="status">{e.status.name}</p></Tooltip> ,
+                            summary: e.issue_details,
                             priority: e.priority,
                             project: e.project.name,
                             category: e.category,
@@ -369,7 +374,7 @@ const MyTickets = ({ setCurrentView }) => {
                             icon: 'edit',
                             tooltip: 'View Ticket',
                             onClick: (event, rowData) => {
-                                navigate(`/view-ticket/${rowData.id}`);
+                                navigate(`/view-ticket/${rowData?.id?.props?.children}`);
                             },
                         }
                     ]}

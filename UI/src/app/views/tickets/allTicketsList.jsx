@@ -350,6 +350,7 @@ const AllTickets = ({ setCurrentView }) => {
               value={selectedDueDate}
               onChange={handleDueDateChange}
               sx={{ mb: 1.5 }}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
           <Grid item lg={2} md={2} sm={12} xs={12}>
@@ -468,11 +469,12 @@ const AllTickets = ({ setCurrentView }) => {
         <MaterialTable
           title="MyTickets"
           columns={[
-            { title: "Ticket No", field: "id" },
-            { title: "Status", field: "status" },
+            { title: "Ticket No", field: "id"},
+            { title: "Status", field: "status"},
+            { title: "Summary", field: "summary"},
             { title: "Project", field: "project" },
             { title: "Priority", field: "priority" },
-            { title: "Category", field: "category" },
+            { title: "Category", field: "category"},
             { title: "Overdue", field: "overdue" },
             { title: "Created At ", field: "createdAt" },
           ]}
@@ -480,6 +482,7 @@ const AllTickets = ({ setCurrentView }) => {
             return {
               id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a> ,
               status: <Tooltip title={e.status.name}><p className="status">{e.status.name}</p></Tooltip> ,
+              summary: e.issue_details,
               priority: e.priority,
               project: e.project.name,
               category: e.category,

@@ -9,6 +9,7 @@ import { Card, Checkbox, Divider, FormControlLabel, Icon, TextField } from '@mui
 import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
+import * as Yup from 'yup';
 
 const AddEditProject = ({ onClose, editDetails }) => {
     const [valid, setValid] = React.useState(false)
@@ -39,6 +40,11 @@ const AddEditProject = ({ onClose, editDetails }) => {
             setIsActive(editDetails?.is_active);
         }}
     }, [])
+
+    const validationSchema = Yup.object().shape({
+        projectName: Yup.string()
+          .max(20, 'Project Name can not be more than 20 characters long'),
+      });
 
     const onSubmit = (values) => {
         const reqBody = {
@@ -115,6 +121,7 @@ const AddEditProject = ({ onClose, editDetails }) => {
                     <Formik
                         onSubmit={onSubmit}
                         initialValues={initialValues}
+                        validationSchema={validationSchema}
                     >
                         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                             <form onSubmit={handleSubmit}>
@@ -131,6 +138,7 @@ const AddEditProject = ({ onClose, editDetails }) => {
                                             value={values.projectName}
                                             onChange={handleChange}
                                             sx={{ mb: 1.5 }}
+                                            error={Boolean(errors.projectName && touched.projectName)}  helperText={touched.projectName && errors.projectName}
                                         />
                                         <br />
 
