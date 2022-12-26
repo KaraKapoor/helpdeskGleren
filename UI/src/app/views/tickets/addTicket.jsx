@@ -283,7 +283,7 @@ const CreateTicket = ({ onClose }) => {
                           onChange={handleAssigneeChange}
                           defaultValue={selectedAssignee}
                         >
-                          {assignees?.map((d, i) => {
+                          {assignees?.filter(assignee=>assignee.is_active)?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.first_name} {d.last_name}
