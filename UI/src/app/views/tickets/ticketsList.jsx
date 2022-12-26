@@ -8,6 +8,7 @@ import {
     MenuItem,
     Select,
     styled,
+    Tooltip,
     Table,
     TablePagination,
     TextField,
@@ -40,9 +41,6 @@ const MyTicketsTable = styled(Table)(() => ({
         borderRadius: 500,
         boxShadow:
             '0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)',
-    },
-    '& td': {
-        borderBottom: 'none',
     },
     '& td:first-of-type': {
         paddingLeft: '16px !important',
@@ -112,7 +110,7 @@ const MyTickets = ({ setCurrentView }) => {
         }
         if (selectedDueDate) {
             let date = new Date(selectedDueDate + ' 00:00:00');
-            date = date.toISOString.split('T')[0]();
+            date = date.toISOString();
             queryParam = queryParam + `&dueDate=${date}`
         }
         if (selectedOverdue != null && selectedOverdue !== undefined) {
@@ -362,7 +360,7 @@ const MyTickets = ({ setCurrentView }) => {
                     data={data.map((e) => {
                         return {
                             id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a>,
-                            status: e.status.name,
+                            status:  <Tooltip title={e.status.name}><p className="status">{e.status.name}</p></Tooltip> ,
                             summary: e.issue_details,
                             priority: e.priority,
                             project: e.project.name,
