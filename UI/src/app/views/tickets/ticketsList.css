@@ -61,3 +61,10 @@
     transform-origin: 0 0;
     transform: rotate(45deg);
 }
+.status{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100px;
+    margin-top: 0px;
+};

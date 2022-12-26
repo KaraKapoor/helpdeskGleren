@@ -13,6 +13,7 @@ import {
   Table,
   TablePagination,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import MaterialTable from "material-table";
 import "./ticketsList.css";
@@ -20,6 +21,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { Strings } from "config/strings";
 import { allTickets } from "app/services/ticketService";
+import "./allTicketList.css";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -46,9 +48,6 @@ const MyTicketsTable = styled(Table)(() => ({
   "& td": {
     borderBottom: "none",
   },
-  "& td:nth-child(2)": {
-        minWidth: "200px",
-    },
   "& td:first-of-type": {
     paddingLeft: "16px !important",
   },
@@ -480,7 +479,7 @@ const AllTickets = ({ setCurrentView }) => {
           data={data.map((e) => {
             return {
               id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a> ,
-              status: e.status.name,
+              status: <Tooltip title={e.status.name}><p className="status">{e.status.name}</p></Tooltip> ,
               priority: e.priority,
               project: e.project.name,
               category: e.category,
