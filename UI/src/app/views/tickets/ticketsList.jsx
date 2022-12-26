@@ -8,6 +8,7 @@ import {
     MenuItem,
     Select,
     styled,
+    Tooltip,
     Table,
     TablePagination,
     TextField,
@@ -40,9 +41,6 @@ const MyTicketsTable = styled(Table)(() => ({
         borderRadius: 500,
         boxShadow:
             '0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)',
-    },
-    '& td': {
-        borderBottom: 'none',
     },
     '& td:first-of-type': {
         paddingLeft: '16px !important',
@@ -352,6 +350,7 @@ const MyTickets = ({ setCurrentView }) => {
                     columns={[
                         { title: 'Ticket No', field: 'id' },
                         { title: 'Status', field: 'status' },
+                        { title: 'Summary', field: 'summary' },
                         { title: 'Project', field: 'project' },
                         { title: 'Priority', field: 'priority' },
                         { title: 'Category', field: 'category' },
@@ -361,7 +360,8 @@ const MyTickets = ({ setCurrentView }) => {
                     data={data.map((e) => {
                         return {
                             id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a>,
-                            status: e.status.name,
+                            status:  <Tooltip title={e.status.name}><p className="status">{e.status.name}</p></Tooltip> ,
+                            summary: e.issue_details,
                             priority: e.priority,
                             project: e.project.name,
                             category: e.category,
@@ -374,7 +374,7 @@ const MyTickets = ({ setCurrentView }) => {
                             icon: 'edit',
                             tooltip: 'View Ticket',
                             onClick: (event, rowData) => {
-                                navigate(`/view-ticket/${rowData.id}`);
+                                navigate(`/view-ticket/${rowData?.id?.props?.children}`);
                             },
                         }
                     ]}
