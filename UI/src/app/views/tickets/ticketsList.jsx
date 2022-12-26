@@ -352,6 +352,7 @@ const MyTickets = ({ setCurrentView }) => {
                     columns={[
                         { title: 'Ticket No', field: 'id' },
                         { title: 'Status', field: 'status' },
+                        { title: 'Summary', field: 'summary' },
                         { title: 'Project', field: 'project' },
                         { title: 'Priority', field: 'priority' },
                         { title: 'Category', field: 'category' },
@@ -362,6 +363,7 @@ const MyTickets = ({ setCurrentView }) => {
                         return {
                             id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a>,
                             status: e.status.name,
+                            summary: e.issue_details,
                             priority: e.priority,
                             project: e.project.name,
                             category: e.category,
