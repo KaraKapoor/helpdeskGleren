@@ -1,6 +1,7 @@
 import {
     Box,
     Fab,
+    Button,
     FormControl,
     Grid,
     Icon,
@@ -84,6 +85,10 @@ const MyTickets = ({ setCurrentView }) => {
     const handleChangePage = (_, newPage) => {
         setPage(newPage);
     };
+
+    const refreshPage = () => {
+        fetchMyTickets();
+      };
 
     const newWindow = (id) => {
         window.open(`/view-ticket/${id}`)     
@@ -342,6 +347,15 @@ const MyTickets = ({ setCurrentView }) => {
                                 }
                             </Select>
                         </FormControl>
+                    </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <Button
+                            variant="contained"
+                            style={{ height: "100%", width: "100%" }}
+                            onClick={refreshPage}
+                        >
+                            Refresh <Icon sx={{ ml: 1.5 }}>refresh</Icon>
+                        </Button>
                     </Grid>
                 </Grid>
             </form>
