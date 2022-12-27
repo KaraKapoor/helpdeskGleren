@@ -429,7 +429,7 @@ const CreateTicket = ({ onClose }) => {
                         required={true}
                         name="issueDetails"
                         type="text"
-                        label="Issue Details"
+                        label="Issue Summary"
                         variant="outlined"
                         onBlur={handleBlur}
                         value={values.issueDetails}
