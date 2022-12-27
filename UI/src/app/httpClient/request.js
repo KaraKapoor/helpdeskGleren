@@ -53,10 +53,10 @@ export  const RequestMethod ={
       let errorMessage = {
         title: "Error",
         message:
-          error?.error ||
+        error?.response?.data?.error ||
           "Something went wrong, please try again later.",
         status: false,
-        httpStatusCode: error.response?.data?.httpStatusCode || 500,
+        httpStatusCode: error.response?.status || 500,
       };
   
     
