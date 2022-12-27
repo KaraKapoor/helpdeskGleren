@@ -47,7 +47,7 @@ function a11yProps(index) {
 }
 
 export default function CustomTabs({ ticketId }) {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(1);
     const [editData, setEditData] = React.useState([]);
     const [commentsData, setCommentsData] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -66,6 +66,7 @@ export default function CustomTabs({ ticketId }) {
     };
     useEffect(() => {
         setIsLoading(false);
+        getTicketCommentsData(ticketId);
     }, [])
     const getTicketHistoryData = (id) => {
         getTicketHistory({ id: id }).then((resp) => {
