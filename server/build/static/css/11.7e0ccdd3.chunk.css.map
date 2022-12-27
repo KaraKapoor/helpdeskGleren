@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/app/views/bugReport/bugReport.css"],"names":[],"mappings":"AAAA,kBACI,eACJ,CACA,kBACI,kBACJ,CACA,aACI,iBACJ","file":"11.7e0ccdd3.chunk.css","sourcesContent":[".issueDescription{\r\n    font-weight: 700;\r\n}\r\n.inputStyling > div{\r\n    padding-bottom: 5px;\r\n}\r\n.Datastyling{\r\n    padding-right:5px ;\r\n}"]}
