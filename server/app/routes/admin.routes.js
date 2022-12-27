@@ -23,4 +23,8 @@ module.exports = (app) => {
     router.post("/teams/getById", adminController.getTeamById);
     router.post("/department/getStatus", adminController.getStatusByDepartmentId);
     app.use("/api/admin", auth, router);
+    router.post("/holiday/create", adminController.createHolidays);
+    router.post("/holiday/getByName", adminController.getHolidaysByName);
+    router.post("/holiday/getById", adminController.getHolidaysById);
+    router.get("/holiday/getAllHolidays", adminController.getAllHolidays);
 };

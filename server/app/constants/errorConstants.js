@@ -50,5 +50,7 @@ module.exports = {
     TESTED_BY_ERROR:"Tested By is mandatory",
     TICKET_ID_ERROR: "Ticket Id is mandatory",
     HTML_COMMENT_MANDATORY: "Html Comment is mandatory",
-    KEY_NAME_ERROR: "KeyName is mandatory"
-};
+    KEY_NAME_ERROR: "KeyName is mandatory",
+    HOLIDAY_NAME_ERROR: " Holiday Name is mandatory",
+    HOLIDAY_SAME_NAME_ERROR: "Holiday with same name already exist",
+  };
