@@ -60,6 +60,9 @@ const MyTicketsTable = styled(Table)(() => ({
     flex: "initial",
     margin: "0.5rem 0",
   },
+  "th:last-child": {
+    width: "55px !important",
+  }
 }));
 
 const AllTickets = ({ setCurrentView }) => {

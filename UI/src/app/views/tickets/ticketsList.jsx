@@ -46,9 +46,9 @@ const MyTicketsTable = styled(Table)(() => ({
     '& td:first-of-type': {
         paddingLeft: '16px !important',
     },
-    '& th:nth-of-type(8)': {
-        width: '90px !important',
-    },
+    // '& th:nth-of-type(8)': {
+    //     width: '90px !important',
+    // },
     '& th:first-of-type': {
         paddingLeft: '16px !important',
     },
@@ -58,6 +58,9 @@ const MyTicketsTable = styled(Table)(() => ({
         flex: 'initial',
         margin: '0.5rem 0',
     },
+    "th:last-child": {
+        width: "55px !important",
+      }
 }))
 
 const MyTickets = ({ setCurrentView }) => {
