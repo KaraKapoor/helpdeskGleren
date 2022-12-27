@@ -12,6 +12,7 @@ import { Strings } from 'config/strings'
 import { authRoles } from 'app/auth/authRoles';
 import { createUpdateUser } from 'app/services/userService';
 import { getMasterDropdownData } from 'app/services/adminService';
+import * as Yup from 'yup';
 
 const AddEditUser = ({ onClose, editDetails }) => {
   const [valid, setValid] = React.useState(false)
@@ -40,6 +41,11 @@ gap: 1rem;
 color: red;
 font-size: 13px;
 `
+
+const validationSchema = Yup.object().shape({
+  designation: Yup.string()
+    .max(20, 'Designation can not be more than 20 characters long'),
+});
 
   React.useEffect(() => {
     if (editDetails) {
@@ -156,7 +162,7 @@ font-size: 13px;
             </div>
           </HeaderTitle>
           <Divider />
-          <Formik onSubmit={onSubmit} initialValues={initialValues}>
+          <Formik onSubmit={onSubmit} initialValues={initialValues} validationSchema={validationSchema}> 
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <FormContainer>
@@ -184,7 +190,10 @@ font-size: 13px;
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" name="designation" required={true} type="text" label="Designation"
                         variant="outlined" onBlur={handleBlur} value={values.designation}
-                        onChange={handleChange} sx={{ mb: 1.5 }} />
+                        onChange={handleChange}
+                        error={Boolean(errors.designation && touched.designation)} 
+                        helperText={touched.designation && errors.designation}
+                        sx={{ mb: 1.5 }} />
 
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
