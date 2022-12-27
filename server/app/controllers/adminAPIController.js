@@ -243,7 +243,7 @@ exports.bugReportEmail = async (req, res) => {
     }
 
     try {
-        const response = await adminAPIService.bugReportEmail(input.issueDescription, tenantId);
+        const response = await adminAPIService.bugReportEmail(input.issueDescription,input.attachment, tenantId);
         return res.status(200).send({
             status: true
         })

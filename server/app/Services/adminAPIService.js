@@ -100,10 +100,11 @@ exports.getAllStatussWithPagination = async (page, size, tenantid) => {
         })
     return response;
 }
-exports.bugReportEmail = async (bugDescription, tenantId) => {
+exports.bugReportEmail = async (bugDescription,attachment, tenantId) => {
     let bugReportTemplate = emailTemplates.BUG_REPORT_EMAIL_TEMPLATE;
     bugReportTemplate = bugReportTemplate.replace('{tenantId}', tenantId);
     bugReportTemplate = bugReportTemplate.replace('{bugDescription}', bugDescription);
+    bugReportTemplate = bugReportTemplate.replace('{attachment}', attachment);
 
     await emailAPIService.sendEmail(coreSettingsConstants.SUPPORT_EMAIL, emailTemplates.BUG_REPORT_SUBJECT, null, null, null, bugReportTemplate);
 }
