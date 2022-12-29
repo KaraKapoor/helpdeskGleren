@@ -176,6 +176,7 @@ const Layout1Topbar = () => {
                 <Hidden xsDown>
                   <Span>
                     Hi,
+                    &nbsp;
                     <strong>
                       {user.firstName} {user.lastName}
                     </strong>
