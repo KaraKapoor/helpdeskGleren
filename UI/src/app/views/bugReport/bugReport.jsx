@@ -10,7 +10,7 @@ import './bugReport.css';
 const BugReport = (props) => {
     const [issueDescription, setIssueDescription] = useState();
     const [image_data, setImageData] = useState([]);
-    const [AttachmentsId,SetAttachmentId] = useState();
+    const [AttachmentsId,SetAttachmentId] = useState([]);
     const navigate = useNavigate();
     const handleChange = (event) => {
         setIssueDescription(event.target.value);
@@ -60,6 +60,7 @@ const BugReport = (props) => {
             console.log(e);
         }
     }
+    console.log(AttachmentsId,"AttachmentsId");
   const onChangeFile = (event) => {
     let file = event.target.files[0];
     if (!event?.target?.files[0]) {
@@ -68,7 +69,7 @@ const BugReport = (props) => {
     let data = new FormData();
     data.append("file", event?.target?.files[0]);
     fileUpload(data).then((resp) => {
-      SetAttachmentId(resp?.data?.id)
+      SetAttachmentId(AttachmentsId => [...AttachmentsId,resp.data.id])
       if (resp?.status === false) {
         return Swal.fire({
           icon: "error",
