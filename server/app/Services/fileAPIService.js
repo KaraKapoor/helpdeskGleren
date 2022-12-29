@@ -1,6 +1,7 @@
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const ticketFile = db.ticketFiles;
+const AWS = require('aws-sdk');
 
 exports.saveTicketFiles = async (ticketId, uploadId, tenantId) => {
 
