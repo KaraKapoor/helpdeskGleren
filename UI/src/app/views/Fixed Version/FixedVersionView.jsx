@@ -33,7 +33,7 @@ const H4 = styled('h4')(({ theme }) => ({
 }));
 
 const FixedVersionView = () => {
-    const [currentView, setCurrentView] = useState('Status');
+    const [currentView, setCurrentView] = useState('fixedversion');
     const navigate = useNavigate()
     const [query] = useSearchParams()
     const [editDetails, setEditDetails] = useState()
@@ -44,7 +44,7 @@ const FixedVersionView = () => {
         } else if (query?.get('type')?.split('/')[0] === 'edit-fix') {
             onEditClick(query.get('type').split('/')[1])
         } else {
-            setCurrentView('Status')
+            setCurrentView('fixedversion')
             setEditDetails();
         }
     }, [query])
@@ -55,20 +55,20 @@ const FixedVersionView = () => {
         })
         setCurrentView('Edit')
         navigate({
-            search: `?type=edit-status/${statusId}`,
+            search: `?type=edit-fixedversion/${statusId}`,
         })
     }
     const onCreateClick = () => {
         setCurrentView('Create')
         navigate({
-            search: `?type=create-status`,
+            search: `?type=create-fixedversion`,
         })
     }
 
     return (
         <Fragment>
             <ContentBox>
-            {currentView === 'Status' && (
+            {currentView === 'fixedversion' && (
                     <FixedVersionList
                         onEditClick={onEditClick}
                         onCreateClick={onCreateClick}

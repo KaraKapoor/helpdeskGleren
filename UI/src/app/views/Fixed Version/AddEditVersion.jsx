@@ -107,7 +107,7 @@ const AddEditVersion = ({ onClose, editDetails }) => {
                     showConfirmButton: false,
                     width: 400,
                 })
-                return navigate('/status');
+                return navigate('/fixedversion');
             }
 
         })
@@ -218,7 +218,6 @@ const AddEditVersion = ({ onClose, editDetails }) => {
                                 </div>
                             </form>
                         )}
-
                     </Formik>
                 </Card>
             </div>
