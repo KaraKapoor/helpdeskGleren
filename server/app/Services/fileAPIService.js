@@ -36,3 +36,15 @@ exports.downloadFile = async(userDetails, tenantId, keyName) => {
     const fileDetails = await this.getSignedUrl(keyName);
     return fileDetails;
 }
+exports.downloadMultipleFile = async (
+  userDetails,
+  tenantId,
+  attachmentData
+) => {
+  let data=[]
+  await attachmentData.map(async (item) => {
+    const fileDetails =await this.getSignedUrl(item.key);
+    data.push({path:fileDetails})
+  });
+  return data
+};
