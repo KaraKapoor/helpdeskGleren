@@ -41,11 +41,26 @@ gap: 1rem;
 color: red;
 font-size: 13px;
 `
-
+let phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
 const validationSchema = Yup.object().shape({
   designation: Yup.string()
     .max(20, 'Designation can not be more than 20 characters long'),
-});
+
+    firstName: Yup.string()
+    .required("required")
+    .max(20,"First-name can not be more than 20 characters long" ),
+
+    lastName: Yup.string()
+    .required("required")
+    .max(20,"Last-name can not be more than 20 characters long" ),
+
+    mobile : Yup.string()
+    .required("required")
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .min(10, "too short")
+    .max(13, "too long"),
+
+  });
 
   React.useEffect(() => {
     if (editDetails) {
@@ -170,11 +185,15 @@ const validationSchema = Yup.object().shape({
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" required={true} name="firstName" type="text" label="First Name"
                         variant="outlined" onBlur={handleBlur} value={values.firstName}
+                        error={Boolean(errors.firstName && touched.firstName)} 
+                        helperText={touched.firstName && errors.firstName}
                         onChange={handleChange} sx={{ mb: 1.5 }} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" name="lastName" required={true} type="text" label="Last Name"
                         variant="outlined" onBlur={handleBlur} value={values.lastName}
+                        error={Boolean(errors.lastName && touched.lastName)} 
+                        helperText={touched.lastName && errors.lastName}
                         onChange={handleChange} sx={{ mb: 1.5 }} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -185,6 +204,8 @@ const validationSchema = Yup.object().shape({
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" name="mobile" required={true} type="text" label="Mobile"
                         variant="outlined" onBlur={handleBlur} value={values.mobile} onChange={handleChange}
+                        error={Boolean(errors.mobile && touched.mobile)} 
+                        helperText={touched.mobile && errors.mobile}
                         sx={{ mb: 1.5 }} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
