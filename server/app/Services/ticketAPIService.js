@@ -78,7 +78,7 @@ exports.getTicketHistoryMessage = async (type, userName, status, assignee, chang
 
     return response;
 }
-exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment,emailIds) => {
+exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment) => {
     let response = null;
     const reqObj = {
         created_by: userDetails.id,
@@ -86,7 +86,6 @@ exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment,email
         plain_text: htmlToText(htmlComment),
         ticket_id: ticketId,
         tenant_id: tenantId,
-        email_id: emailIds
     }
 
     await comment.create(reqObj).then(async (resp) => {
