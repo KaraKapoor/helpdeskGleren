@@ -88,10 +88,11 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    const login = async (email, password) => {
+    const login = async (email, password, workplace) => {
         const response = await axios.post(config.user.login, {
             email,
             password,
+            workplace,
         }).then(async (d) => {
             if (d.status === false) {
                 Swal.fire({

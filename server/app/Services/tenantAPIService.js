@@ -19,3 +19,24 @@ exports.createTenant = async (name) => {
 exports.findTenantByName = async (name) => {
    return await tenant.findOne({ where: { name: name } });
 }
+
+exports.getTenantInfoByTenantName = async(tenantName)=>{
+   try {
+      if (await tenant.findAll({ where: { name: tenantName } })) {
+         const resp= await tenant.findOne({ where: { name: tenantName } });
+         console.log("hello",resp);
+         return resp.id;
+         
+      }
+      else{
+         return "Error Message";
+      }
+      
+   } catch (error) {
+
+      return "Error Message";
+      
+   }
+  
+   
+}

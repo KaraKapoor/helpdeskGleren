@@ -24,3 +24,21 @@ exports.getTenantInfo = async (req, res) => {
     }
 
 };
+
+exports.getTenantInfoByTenantName = async(req, res)=>{
+    const input = req.body;
+    try {
+        const response = await tenantAPIService.getTenantInfoByTenantName(input.tenantName);
+        return res.status(200).send({
+            status: true,
+            data: response
+        })
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+
+}

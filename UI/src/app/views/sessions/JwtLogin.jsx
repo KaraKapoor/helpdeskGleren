@@ -35,6 +35,7 @@ const JWTRoot = styled(JustifyBox)(({ imgUrl }) => ({
 const initialValues = {
   email: '',
   password: '',
+  workplace: '',
 };
 
 // form field validation schema
@@ -43,6 +44,7 @@ const validationSchema = Yup.object().shape({
     .min(6, 'Password must be 6 character length')
     .required('Password is required!'),
   email: Yup.string().email('Invalid Email address').required('Email is required!'),
+  workplace: Yup.string().required('Work Place is required!'),
 });
 
 const JwtLogin = () => {
@@ -55,7 +57,7 @@ const JwtLogin = () => {
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
-      await login(values.email, values.password);
+      await login(values.email, values.password, values.workplace);
       setLoading(false);
       navigate('/')
 
@@ -116,6 +118,24 @@ const JwtLogin = () => {
                       sx={{ mb: 1.5 }}
                       InputLabelProps={{ shrink: true }}
                     />
+                    <br></br>
+
+                     <TextField
+                        fullWidth
+                        label="Work Place"
+                        size="small"
+                        name="workplace"
+                        type="text"
+                        variant="outlined"
+                         onBlur={handleBlur}
+                         value={values.workplace}
+                         onChange={handleChange}
+                         required={true}
+                         helperText={touched.workplace && errors.workplace}
+                         error={Boolean(errors.workplace && touched.workplace)}
+                         sx={{ mb: 1.5 }}
+                        InputLabelProps={{ shrink: true }}
+                      />
 
                     <FlexBox justifyContent="space-between">
                       {/* <FlexBox gap={1}>

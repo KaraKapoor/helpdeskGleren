@@ -73,9 +73,16 @@ exports.login = async (req, res) => {
             status: false
         });
     }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.workplace) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.WORKPLACE_MANDATORY_ERROR,
+            status: false
+        });
+    }
 
     try {
-        const response = await publicAPIService.login(input.email, input.password);
+        const response = await publicAPIService.login(input.email, input.password,input.workplace);
         return res.status(200).send(response);
     } catch (exception) {
         console.log(exception);
