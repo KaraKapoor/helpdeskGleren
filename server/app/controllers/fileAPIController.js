@@ -20,7 +20,7 @@ exports.uploadFile = async (req, res) => {
         const s3Config = this.get_S3_Config();
         let s3FileResponse = await uploadFile(folderPath, req.file);
         console.log(s3FileResponse);
-        const uploadResponse = await this.saveToUploads(constants.UPLOAD_PATH, s3FileResponse.key, req.file.mimetype, req.file.size, s3FileResponse.Location, req.file.originalname, req.user.user_id, tenantId);
+        const uploadResponse = await this.saveToUploads(constants.UPLOAD_PATH, s3FileResponse.Key, req.file.mimetype, req.file.size, s3FileResponse.Location, req.file.originalname, req.user.user_id, tenantId);
         return res.status(200).send({
             status: true,
             data: uploadResponse
@@ -114,6 +114,7 @@ exports.deleteFile = async (req, res) => {
 }
 exports.downloadFile = async (req, res) => {
     const input = req.body;
+    console.log(input);
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
 
