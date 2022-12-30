@@ -85,7 +85,7 @@ exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment) => {
         html_text: htmlComment,
         plain_text: htmlToText(htmlComment),
         ticket_id: ticketId,
-        tenant_id: tenantId
+        tenant_id: tenantId,
     }
 
     await comment.create(reqObj).then(async (resp) => {

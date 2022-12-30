@@ -100,12 +100,11 @@ exports.getAllStatussWithPagination = async (page, size, tenantid) => {
         })
     return response;
 }
-exports.bugReportEmail = async (bugDescription, tenantId) => {
+exports.bugReportEmail = async (bugDescription,attachmentId, tenantId,userDetails) => {
     let bugReportTemplate = emailTemplates.BUG_REPORT_EMAIL_TEMPLATE;
     bugReportTemplate = bugReportTemplate.replace('{tenantId}', tenantId);
     bugReportTemplate = bugReportTemplate.replace('{bugDescription}', bugDescription);
-
-    await emailAPIService.sendEmail(coreSettingsConstants.SUPPORT_EMAIL, emailTemplates.BUG_REPORT_SUBJECT, null, null, null, bugReportTemplate);
+    await emailAPIService.sendEmail(coreSettingsConstants.SUPPORT_EMAIL, emailTemplates.BUG_REPORT_SUBJECT, null, null, null, bugReportTemplate,attachmentId,userDetails,tenantId);
 }
 exports.getDepartmentByName = async (departmentName, tenantId) => {
 

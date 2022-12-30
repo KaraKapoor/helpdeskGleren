@@ -3,5 +3,5 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 100px;
-    margin-top: 0px;
+    margin-top: 15px !important;
 };
