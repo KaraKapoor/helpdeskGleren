@@ -52,7 +52,7 @@ const validationSchema = Yup.object().shape({
 
     lastName: Yup.string()
     .required("required")
-    .max(20,"First-name can not be more than 20 characters long" ),
+    .max(20,"Last-name can not be more than 20 characters long" ),
 
     mobile : Yup.string()
     .required("required")
