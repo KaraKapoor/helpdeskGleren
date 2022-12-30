@@ -235,7 +235,7 @@ const CreateTicket = ({ onClose }) => {
                           onChange={handleDepartmentChange}
                           defaultValue={selectedDepartment}
                         >
-                          {departments?.map((d, i) => {
+                          {departments?.filter(department=>department.is_active)?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.name}
@@ -283,7 +283,7 @@ const CreateTicket = ({ onClose }) => {
                           onChange={handleAssigneeChange}
                           defaultValue={selectedAssignee}
                         >
-                          {assignees?.map((d, i) => {
+                          {assignees?.filter(assignee=>assignee.is_active)?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.first_name} {d.last_name}
@@ -429,7 +429,7 @@ const CreateTicket = ({ onClose }) => {
                         required={true}
                         name="issueDetails"
                         type="text"
-                        label="Issue Details"
+                        label="Issue Summary"
                         variant="outlined"
                         onBlur={handleBlur}
                         value={values.issueDetails}

@@ -12,6 +12,7 @@ import { Strings } from 'config/strings'
 import { authRoles } from 'app/auth/authRoles';
 import { createUpdateUser } from 'app/services/userService';
 import { getMasterDropdownData } from 'app/services/adminService';
+import * as Yup from 'yup';
 
 const AddEditUser = ({ onClose, editDetails }) => {
   const [valid, setValid] = React.useState(false)
@@ -40,6 +41,26 @@ gap: 1rem;
 color: red;
 font-size: 13px;
 `
+let phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
+const validationSchema = Yup.object().shape({
+  designation: Yup.string()
+    .max(20, 'Designation can not be more than 20 characters long'),
+
+    firstName: Yup.string()
+    .required("required")
+    .max(20,"First-name can not be more than 20 characters long" ),
+
+    lastName: Yup.string()
+    .required("required")
+    .max(20,"Last-name can not be more than 20 characters long" ),
+
+    mobile : Yup.string()
+    .required("required")
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .min(10, "too short")
+    .max(13, "too long"),
+
+  });
 
   React.useEffect(() => {
     if (editDetails) {
@@ -156,7 +177,7 @@ font-size: 13px;
             </div>
           </HeaderTitle>
           <Divider />
-          <Formik onSubmit={onSubmit} initialValues={initialValues}>
+          <Formik onSubmit={onSubmit} initialValues={initialValues} validationSchema={validationSchema}> 
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <FormContainer>
@@ -164,11 +185,15 @@ font-size: 13px;
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" required={true} name="firstName" type="text" label="First Name"
                         variant="outlined" onBlur={handleBlur} value={values.firstName}
+                        error={Boolean(errors.firstName && touched.firstName)} 
+                        helperText={touched.firstName && errors.firstName}
                         onChange={handleChange} sx={{ mb: 1.5 }} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" name="lastName" required={true} type="text" label="Last Name"
                         variant="outlined" onBlur={handleBlur} value={values.lastName}
+                        error={Boolean(errors.lastName && touched.lastName)} 
+                        helperText={touched.lastName && errors.lastName}
                         onChange={handleChange} sx={{ mb: 1.5 }} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -179,12 +204,17 @@ font-size: 13px;
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" name="mobile" required={true} type="text" label="Mobile"
                         variant="outlined" onBlur={handleBlur} value={values.mobile} onChange={handleChange}
+                        error={Boolean(errors.mobile && touched.mobile)} 
+                        helperText={touched.mobile && errors.mobile}
                         sx={{ mb: 1.5 }} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField fullWidth size="large" name="designation" required={true} type="text" label="Designation"
                         variant="outlined" onBlur={handleBlur} value={values.designation}
-                        onChange={handleChange} sx={{ mb: 1.5 }} />
+                        onChange={handleChange}
+                        error={Boolean(errors.designation && touched.designation)} 
+                        helperText={touched.designation && errors.designation}
+                        sx={{ mb: 1.5 }} />
 
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -219,7 +249,7 @@ font-size: 13px;
                           defaultValue={selectedDepartment}
                         >
 							{
-								departments?.map((d,i)=>{
+								 departments?.filter(department=>department.is_active)?.map((d, i) =>{
 									return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
 								})
 							}

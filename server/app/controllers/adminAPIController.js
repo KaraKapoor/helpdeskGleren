@@ -5,6 +5,7 @@ const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const { project } = require("../models");
+const fileAPIService = require("../Services/fileAPIService");
 
 exports.createProject = async (req, res) => {
     const input = req.body;
@@ -177,7 +178,6 @@ exports.getStatusByDepartmentId = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-    console.log(userDetails,"userDetailsuserDetails")
     const departmentId = input.departmentId;
 
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) == null) {
@@ -396,7 +396,7 @@ exports.bugReportEmail = async (req, res) => {
     }
 
     try {
-        const response = await adminAPIService.bugReportEmail(input.issueDescription, tenantId);
+        const response = await adminAPIService.bugReportEmail(input.issueDescription,input.attachment, tenantId,userDetails);
         return res.status(200).send({
             status: true
         })

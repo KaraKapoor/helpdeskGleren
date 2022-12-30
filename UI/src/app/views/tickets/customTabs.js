@@ -12,6 +12,9 @@ import { MaterialEditor } from 'react-mui-editor';
 import { useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Fragment } from 'react';
+import {Select, MenuItem, InputLabel } from '@mui/material';
+import {  getMasterDropdownData } from 'app/services/adminService';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -47,11 +50,13 @@ function a11yProps(index) {
 }
 
 export default function CustomTabs({ ticketId }) {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(1);
     const [editData, setEditData] = React.useState([]);
     const [commentsData, setCommentsData] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [editorContent, setEditorContent] = React.useState(undefined);
+    const [selectedRecipient, setSelectedRecipient] = React.useState([]);
+    const [agents, setAgents] = React.useState();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -64,9 +69,36 @@ export default function CustomTabs({ ticketId }) {
             getTicketHistoryData(ticketId);
         }
     };
+    const handleRecipientChange= (event)=>{
+        const {target: { value },} = event;
+        setSelectedRecipient(
+          // On autofill we get a stringified value.
+          typeof value === 'string' ? value.split(',') : value,
+        );
+      }
     useEffect(() => {
         setIsLoading(false);
-    }, [])
+        getTicketCommentsData(ticketId);
+    
+    getMasterDropdownData().then((resp) => {
+        if (resp?.status === false) {
+            return Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: resp.error,
+              showCloseButton: true,
+              showConfirmButton: false,
+              width: 400,
+            })
+          } else {
+            console.log(resp.data);
+            setAgents(resp?.data?.agents);
+            //setSelectedAgents(editDetails?.agents?editDetails.agents:[]);
+          }
+
+    })
+},
+     [])
     const getTicketHistoryData = (id) => {
         getTicketHistory({ id: id }).then((resp) => {
             if (resp?.status === false) {
@@ -104,7 +136,7 @@ export default function CustomTabs({ ticketId }) {
         })
     }
     const saveComments = () => {
-        saveTicketComment({ ticketId: ticketId, htmlComments: editorContent }).then((resp) => {
+        saveTicketComment({ ticketId: ticketId, htmlComments: editorContent,emailIds: selectedRecipient }).then((resp) => {
             if (resp?.status === false) {
                 return Swal.fire({
                     icon: 'error',
@@ -141,6 +173,27 @@ export default function CustomTabs({ ticketId }) {
             {
                 !isLoading && <React.Fragment>
                     <TabPanel value={value} index={0}>
+                    <InputLabel  id="recipient">Recipient</InputLabel>
+                        <Select
+                        fullWidth
+                          labelId="recipient"
+                          id="recipient"
+                          multiple
+                          value={selectedRecipient}
+                          label="Recipient"
+                          onChange={handleRecipientChange}
+                          defaultValue={selectedRecipient}
+                        >
+                          {
+                            agents?.map((d, i) => {
+                              return <MenuItem key={i} value={d.email}>{d.first_name} {d.last_name}</MenuItem>
+                            })
+                          }
+                        </Select>
+                        <br>
+                        </br>
+                        <br>
+                        </br>
                         <MaterialEditor editorContent={editorContent} setEditorContent={setEditorContent} placeholder="Add Comment" />
                         <div className='d-flex justify-content-start'>
                             <LoadingButton color="secondary" variant="contained" onClick={saveComments}

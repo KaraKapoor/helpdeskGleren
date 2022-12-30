@@ -1,6 +1,7 @@
 import {
     Box,
     Fab,
+    Button,
     FormControl,
     Grid,
     Icon,
@@ -8,6 +9,7 @@ import {
     MenuItem,
     Select,
     styled,
+    Tooltip,
     Table,
     TablePagination,
     TextField,
@@ -41,15 +43,12 @@ const MyTicketsTable = styled(Table)(() => ({
         boxShadow:
             '0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)',
     },
-    '& td': {
-        borderBottom: 'none',
-    },
     '& td:first-of-type': {
         paddingLeft: '16px !important',
     },
-    '& th:nth-of-type(8)': {
-        width: '90px !important',
-    },
+    // '& th:nth-of-type(8)': {
+    //     width: '90px !important',
+    // },
     '& th:first-of-type': {
         paddingLeft: '16px !important',
     },
@@ -59,6 +58,9 @@ const MyTicketsTable = styled(Table)(() => ({
         flex: 'initial',
         margin: '0.5rem 0',
     },
+    "th:last-child": {
+        width: "55px !important",
+      }
 }))
 
 const MyTickets = ({ setCurrentView }) => {
@@ -84,6 +86,10 @@ const MyTickets = ({ setCurrentView }) => {
     const handleChangePage = (_, newPage) => {
         setPage(newPage);
     };
+
+    const refreshPage = () => {
+        fetchMyTickets();
+      };
 
     const newWindow = (id) => {
         window.open(`/view-ticket/${id}`)     
@@ -112,7 +118,7 @@ const MyTickets = ({ setCurrentView }) => {
         }
         if (selectedDueDate) {
             let date = new Date(selectedDueDate + ' 00:00:00');
-            date = date.toISOString.split('T')[0]();
+            date = date.toISOString();
             queryParam = queryParam + `&dueDate=${date}`
         }
         if (selectedOverdue != null && selectedOverdue !== undefined) {
@@ -343,6 +349,15 @@ const MyTickets = ({ setCurrentView }) => {
                             </Select>
                         </FormControl>
                     </Grid>
+                    <Grid item lg={2} md={2} sm={12} xs={12}>
+                        <Button
+                            variant="contained"
+                            style={{ height: "100%", width: "100%" }}
+                            onClick={refreshPage}
+                        >
+                            Refresh <Icon sx={{ ml: 1.5 }}>refresh</Icon>
+                        </Button>
+                    </Grid>
                 </Grid>
             </form>
 
@@ -350,19 +365,19 @@ const MyTickets = ({ setCurrentView }) => {
                 <MaterialTable
                     title="MyTickets"
                     columns={[
-                        { title: 'Ticket No', field: 'id' },
-                        { title: 'Status', field: 'status' },
-                        { title: 'Summary', field: 'summary' },
-                        { title: 'Project', field: 'project' },
-                        { title: 'Priority', field: 'priority' },
-                        { title: 'Category', field: 'category' },
-                        { title: 'Overdue', field: 'overdue' },
-                        { title: 'Created At ', field: 'createdAt' },
+                        { title: "Ticket No", field: "id", cellStyle: { width: "9%" } },
+                        { title: "Status", field: "status", cellStyle: { width: "8%", wordBreak: "break-word" } },
+                        { title: "Summary", field: "summary", cellStyle: { width: "30%", wordBreak: "break-word" } },
+                        { title: "Project", field: "project", cellStyle: { width: "13%", wordBreak: "break-word" } },
+                        { title: "Priority", field: "priority", cellStyle: { width: "7%" } },
+                        { title: "Category", field: "category", cellStyle: { width: "11%" } },
+                        { title: "Overdue", field: "overdue", cellStyle: { width: "7%" } },
+                        { title: "Created At ", field: "createdAt", cellStyle: { width: "15%" } },
                     ]}
                     data={data.map((e) => {
                         return {
                             id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a>,
-                            status: e.status.name,
+                            status:  <Tooltip title={e.status.name}><p className="status">{e.status.name}</p></Tooltip> ,
                             summary: e.issue_details,
                             priority: e.priority,
                             project: e.project.name,

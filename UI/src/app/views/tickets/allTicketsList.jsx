@@ -13,6 +13,7 @@ import {
   Table,
   TablePagination,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import MaterialTable from "material-table";
 import "./ticketsList.css";
@@ -20,6 +21,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { Strings } from "config/strings";
 import { allTickets } from "app/services/ticketService";
+import "./allTicketList.css";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -45,7 +47,6 @@ const MyTicketsTable = styled(Table)(() => ({
   },
   "& td": {
     borderBottom: "none",
-    // minWidth: "200px",
   },
   "& td:first-of-type": {
     paddingLeft: "16px !important",
@@ -59,6 +60,9 @@ const MyTicketsTable = styled(Table)(() => ({
     flex: "initial",
     margin: "0.5rem 0",
   },
+  "th:last-child": {
+    width: "55px !important",
+  }
 }));
 
 const AllTickets = ({ setCurrentView }) => {
@@ -468,19 +472,19 @@ const AllTickets = ({ setCurrentView }) => {
         <MaterialTable
           title="MyTickets"
           columns={[
-            { title: "Ticket No", field: "id"},
-            { title: "Status", field: "status"},
-            { title: "Summary", field: "summary"},
-            { title: "Project", field: "project" },
-            { title: "Priority", field: "priority" },
-            { title: "Category", field: "category"},
-            { title: "Overdue", field: "overdue" },
-            { title: "Created At ", field: "createdAt" },
+            { title: "Ticket No", field: "id", cellStyle: { width: "9%" } },
+            { title: "Status", field: "status", cellStyle: { width: "8%", wordBreak: "break-word" } },
+            { title: "Summary", field: "summary", cellStyle: { width: "30%", wordBreak: "break-word" } },
+            { title: "Project", field: "project", cellStyle: { width: "13%", wordBreak: "break-word" } },
+            { title: "Priority", field: "priority", cellStyle: { width: "7%" } },
+            { title: "Category", field: "category", cellStyle: { width: "11%" } },
+            { title: "Overdue", field: "overdue", cellStyle: { width: "7%" } },
+            { title: "Created At ", field: "createdAt", cellStyle: { width: "15%" } },
           ]}
           data={data.map((e) => {
             return {
               id: <a href="#" onClick={()=>newWindow(e.id)} style={{cursor:"pointer"}}>{e.id}</a> ,
-              status: e.status.name,
+              status: <Tooltip title={e.status.name}><p className="status">{e.status.name}</p></Tooltip> ,
               summary: e.issue_details,
               priority: e.priority,
               project: e.project.name,

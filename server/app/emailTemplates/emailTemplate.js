@@ -267,4 +267,65 @@ module.exports = {
     
     </html>`,
     UPDATE_TICKET_SUBJECT: " Ticket Assignee Updated",
+
+    MENTIONED_IN_TICKET_SUBJECT: "Mentioned in Ticket",
+    MENTIONED_IN_TICKET_TEMPLATE: `<!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <title>Ticket Assignee Changed</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet" />
+        <style>
+            * {
+                font-family: "Public Sans", sans-serif;
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                background: #F7F9FF;
+            }
+            .heading3 {
+                font-style: normal;
+                font-weight: 700;
+                font-size: 14px;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+            .para {
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 140%;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div>
+        <p class="heading3">Hi,</p>
+        <p class="para">
+            You have been mentioned in the comment for ticket number - {ticketNumber}
+        </p>
+        <p class="para">
+            <strong> Comments: </strong>
+            <hr> {html_comments} <hr>
+        </p><br></br>
+
+       <p class="para">
+       Click <a href="{url}{view_ticket}/{ticketNumber}">here</a> to view ticket
+       </p> 
+            <p class="para">Regards,</p>
+            <p class="para">Team Gleren</p>
+        </div>
+    </body>
+    
+    </html>`,
+    MENTIONED_IN_TICKET_SUBJECT: " Gleren helpdesk",
+
 }
