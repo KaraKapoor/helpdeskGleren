@@ -8,6 +8,9 @@ const ticketAPIService = require("../Services/ticketAPIService");
 const { project, user, status } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
+const emailAPIService = require("../Services/emailAPIService");
+const emailTemplates = require("../emailTemplates/emailTemplate");
+const { VIEW_TICKET } = require("../constants/constants")
 
 exports.createTicket = async (req, res) => {
     const input = req.body;
@@ -490,7 +493,20 @@ exports.saveTicketComments = async (req, res) => {
     }
 
     try {
-        const resp = await ticketAPIService.saveComments(userDetails, tenantId, input.ticketId, input.htmlComments);
+        const resp = await ticketAPIService.saveComments(userDetails, tenantId, input.ticketId, input.htmlComments,input.emailIds);
+        if(await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.emailIds) !== null){
+            const emailIds = input.emailIds;
+            emailIds.map(async id=>{
+                let mentionedInTicketTemplate = emailTemplates.MENTIONED_IN_TICKET_TEMPLATE;
+              //  mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{username}', userDetails.first_name);
+                mentionedInTicketTemplate = mentionedInTicketTemplate.replace(/{ticketNumber}/g, input.ticketId);
+                mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{url}', process.env.BASE_URL);
+                mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{view_ticket}', VIEW_TICKET);
+                mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{html_comments}', input.htmlComments);
+
+                await emailAPIService.sendEmail(id, emailTemplates.MENTIONED_IN_TICKET_SUBJECT, null, null, null, mentionedInTicketTemplate);
+            })
+        }
         return res.status(200).send({ status: true, data: resp });
     } catch (exception) {
         console.log(exception);
