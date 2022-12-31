@@ -95,10 +95,10 @@ const BugReport = (props) => {
         setImageData( image_data => [...image_data,resp.data])
       }
       else{
-        return Swal.fire({
+        return Swal.fire({ 
           icon: "error",
-          title: "Please upload a image jpeg/jpg/pdf",
-          text: resp.error,
+          title: "Error",
+          text: "File Format Not Supported. Please try with PDF or JPEG/JPG Format.",
           showCloseButton: true,
           showConfirmButton: false,
           width: 400,
