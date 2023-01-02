@@ -104,3 +104,24 @@ export const getStatusByDepartment=(formData)=>{
     })
     
 }
+
+export const createFixVersion = (formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.fixversion.create,
+        data: formData,
+    })
+}
+export const getAllVersion = (page,size)=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.fixversion.getAllVersion +`?page=${page}&size=${size}`,
+    })
+}
+export const getVersionAllById = (formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.fixversion.getById,
+        data: formData,
+    })
+}

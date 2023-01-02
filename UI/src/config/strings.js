@@ -7,6 +7,7 @@ export const Strings = {
     PROJECT_NAME_MANDATORY: "Project Name is Mandatory",
     DEPARTMENT_NAME_MANDATORY: "Department Name is Mandatory",
     STATUS_NAME_MANDATORY: "STATUS Name is Mandatory",
+    FIX_VERSION_MANDATORY: "FIX VERSION is Mandatory",
     DATE_FORMAT: "DD/MM/YYYY",
     DATE_TIME_FORMAT: "DD/MM/YYYY hh:mm"
 }

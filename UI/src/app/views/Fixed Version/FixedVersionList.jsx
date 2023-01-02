@@ -9,9 +9,9 @@ import {
   import MaterialTable from "material-table";
   import "./FixedVersion.css";
   import { useEffect, useState } from "react";
-import { getAllStatus } from "app/services/adminService";
+import { getAllVersion } from "app/services/adminService";
   
-  const StatusTable = styled(Table)(() => ({
+  const FixVersionTable = styled(Table)(() => ({
     marginTop: '20px',
     whiteSpace: 'pre',
     '& small': {
@@ -52,13 +52,13 @@ import { getAllStatus } from "app/services/adminService";
     };
   
     useEffect(() => {
-        fetchStatusList()
+        fetchVersionList()
     }, [page])
   
-    const fetchStatusList = () => {
-        getAllStatus(page, rowsPerPage).then((response) => {
+    const fetchVersionList = () => {
+        getAllVersion(page, rowsPerPage)?.then((response) => {
             response?.data?.pagingData?.map((data, i) => {
-                Object.assign(data, { sno: rowsPerPage * page + i + 1 })
+                Object?.assign(data, { sno: rowsPerPage * page + i + 1 })
             })
             setData(response?.data?.pagingData)
             setTotalRecords(response?.data?.totalItems)
@@ -72,27 +72,27 @@ import { getAllStatus } from "app/services/adminService";
             }}>
                 <Icon>add</Icon>
             </Fab>
-            <StatusTable>
+            <FixVersionTable>
             <MaterialTable
-                        title="Status"
+                        title="FixVersion"
                         columns={[
                             { title: 'Fix version', field: 'fix_version'},
                             { title: 'Projects', field: 'projects'}
                         ]}
                         data={data?.map((e) => {
                             return {
-                                statusName: e.name,
-                                status: e.is_active,
-                                statusId: e.id
+                                fix_version: e.fixversion,
+                                projects: e.project,
+                                projectId:e.id
                             }
                         })}
                         actions={[
                             {
                                 icon: 'edit',
-                                tooltip: 'Edit Status',
+                                tooltip: 'Edit fix version',
                                 onClick: (event, rowData) => {
                                     onEditClick &&
-                                        onEditClick(rowData.statusId)
+                                        onEditClick(rowData?.projectId)
                                 },
                             }
                         ]}
@@ -129,7 +129,7 @@ import { getAllStatus } from "app/services/adminService";
                             ),
                         }}
                     />
-            </StatusTable>
+            </FixVersionTable>
   
   
         </Box>

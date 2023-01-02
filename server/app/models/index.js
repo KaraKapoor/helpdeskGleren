@@ -33,6 +33,7 @@ db.comments = require("./comments.model.js")(sequelize, Sequelize);
 db.ticketHistory = require("./ticketHistory.model.js")(sequelize, Sequelize);
 db.uploads = require("./uploads.model.js")(sequelize, Sequelize);
 db.ticketFiles = require("./ticketFiles.model.js")(sequelize, Sequelize);
+db.fix_version = require("./fixversion.model.js")(sequelize, Sequelize)
 
 db.user.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
@@ -154,6 +155,5 @@ db.ticketFiles.belongsTo(db.ticket, {
 db.ticketFiles.belongsTo(db.uploads, {
     foreignKey: "upload_id", //1:1
 });
-
 
 module.exports = db;

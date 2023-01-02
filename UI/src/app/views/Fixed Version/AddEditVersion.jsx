@@ -7,17 +7,15 @@ import { Card, Checkbox, Divider, FormControl, FormControlLabel, Icon, InputLabe
 import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
-import { createStatus, getMasterDropdownData } from 'app/services/adminService';
+import { createFixVersion, getMasterDropdownData } from 'app/services/adminService';
 import "./FixedVersion.css";
 import * as Yup from 'yup';
 
 const AddEditVersion = ({ onClose, editDetails }) => {
     const [valid, setValid] = React.useState(false)
     const [isActive, setIsActive] = React.useState(editDetails?.is_active ? editDetails.is_active : true);
-    const [statusTypes, setStatusType] = React.useState([]);
-    const [departmentvalue, setDepartmentValue] = React.useState([]);
-    const [selectedStatusType, setSelectedStatusType] = React.useState();
-    const [department, setDepartment] = React.useState();
+    const [ProjectValue, setProjectValue] = React.useState([]);
+    const [Project, setProject] = React.useState();
     const handleClose = (event) => !!onClose && onClose(event) && setValid(false)
     const navigate = useNavigate();
 
@@ -43,12 +41,10 @@ const AddEditVersion = ({ onClose, editDetails }) => {
         if (editDetails) {
             {
                 setIsActive(editDetails?.is_active);
-                setSelectedStatusType(editDetails?.status_type);
-                setDepartment(editDetails?.department_id);
-            
+                setProject(editDetails?.project);
             }
         }
-        getMasterDropdownData().then((resp) => {
+        getMasterDropdownData()?.then((resp) => {
             if (resp?.status === false) {
                 return Swal.fire({
                     icon: 'error',
@@ -59,36 +55,34 @@ const AddEditVersion = ({ onClose, editDetails }) => {
                     width: 400,
                 })
             } else {
-                setStatusType(resp?.data?.statusTypes)
-                setDepartmentValue(resp?.data?.departments)
+                setProjectValue(resp?.data?.projects)
             }
         })
     }, [])
+    
     const validationSchema = Yup.object().shape({
-        statusName: Yup.string()
-          .max(20, 'Status Name can not be more than 20 characters long'),
+        fixversion: Yup.string()
+          .max(20, 'FixVersion Name can not be more than 20 characters long'),
       });
-
     const onSubmit = (values) => {
         const reqBody = {
-            statusName: values.statusName,
-            statusType: selectedStatusType,
-            departmentId: department,
+            fixversion: values.fixversion,
+            project: Project,
             is_active: isActive
         };
         if (editDetails?.id) {
             reqBody.id = editDetails.id
-        } else if (!values.statusName) {
+        } else if (!values.fixversion) {
             return Swal.fire({
                 icon: 'warning',
                 title: 'Warning',
-                text: Strings.STATUS_NAME_MANDATORY,
+                text: Strings.FIX_VERSION_MANDATORY,
                 showCloseButton: true,
                 showConfirmButton: false,
                 width: 400,
             })
         }
-        createStatus(reqBody).then((resp) => {
+        createFixVersion(reqBody)?.then((resp) => {
             if (resp?.status === false) {
                 return Swal.fire({
                     icon: 'error',
@@ -113,7 +107,7 @@ const AddEditVersion = ({ onClose, editDetails }) => {
         })
     }
     const initialValues = {
-        statusName: editDetails?.name ? editDetails.name : ''
+        fixversion: editDetails?.fixversion ? editDetails.fixversion : ''
     }
     const handleCheckBoxChange = (event) => {
         if (event?.target.checked) {
@@ -122,11 +116,8 @@ const AddEditVersion = ({ onClose, editDetails }) => {
             setIsActive(true);
         }
     }
-    const handleStatusType = (event) => {
-        setSelectedStatusType(event.target.value);
-    }
     const handleDepartment = (event) => {
-        setDepartment(event.target.value);
+        setProject(event.target.value);
     }
     return (
         <>
@@ -161,15 +152,15 @@ const AddEditVersion = ({ onClose, editDetails }) => {
                                         <TextField
                                             fullWidth
                                             size="large"
-                                            name="statusName"
+                                            name="fixversion"
                                             type="text"
                                             label="Fix Version"
                                             variant="outlined"
                                             onBlur={handleBlur}
-                                            value={values.statusName}
+                                            value={values.fixversion}
                                             onChange={handleChange}
-                                            error={Boolean(errors.statusName && touched.statusName)}
-                                            helperText={touched.statusName && errors.statusName}
+                                            error={Boolean(errors.fixversion && touched.fixversion)}
+                                            helperText={touched.fixversion && errors.fixversion}
                                             sx={{ mb: 1.5 }}
                                         />
                                         <br />
@@ -183,14 +174,14 @@ const AddEditVersion = ({ onClose, editDetails }) => {
                                                 labelId="projects"
                                                 id="projects"
                                                 required={true}
-                                                value={department}
+                                                value={Project}
                                                 label="Project Name"
                                                 onChange={handleDepartment}
-                                                defaultValue={department}
+                                                defaultValue={Project}
                                             >
                                                 {
-                                                    departmentvalue?.filter((d,i) => (d.is_active === true)).map((d, i) => {
-                                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                                                    ProjectValue?.filter((d,i) => (d.is_active === true)).map((d, i) => {
+                                                        return <MenuItem key={i} value={d.name}>{d.name}</MenuItem>
                                                     })
                                                 }
                                             </Select>

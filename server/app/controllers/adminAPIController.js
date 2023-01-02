@@ -4,8 +4,7 @@ const generalMethodService = require("../Services/generalMethodAPIService");
 const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 const adminAPIService = require("../Services/adminAPIService");
-const { project } = require("../models");
-const fileAPIService = require("../Services/fileAPIService");
+const fixversionAPIService = require("../Services/fixversionAPIService");
 
 exports.createProject = async (req, res) => {
     const input = req.body;
@@ -578,6 +577,52 @@ exports.getTeamById = async (req, res) => {
 
     try {
         const response = await adminAPIService.getTeamById(input.id, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.createFixVersion = async (req,res)=>{
+    const input = req.body
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenant_id = userDetails.tenant_id;
+    try {
+        const response = await fixversionAPIService.CreateFixVersion(input.fixversion,input.is_active,input.project,input.ticket_id,userDetails.id,tenant_id,input.id);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+
+exports.getAllversions = async(req,res)=>{
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    const { page, size } = req.query;
+    try {
+        const response = await fixversionAPIService.getPaginationVersion(page, size, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+
+exports.getVersionAllById = async(req, res)=>{
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    try {
+        const response = await fixversionAPIService.getVersionById(input.id, tenantId);
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
         console.log(exception);
