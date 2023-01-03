@@ -29,6 +29,7 @@ import {
   updateTicket,
 } from "app/services/ticketService";
 import CustomTabs from "./customTabs";
+import CircularProgress from "../../components/MatxLoading";
 
 const ViewTicket = ({ onClose }) => {
   const [assignees, setAssignee] = React.useState([]);
@@ -48,6 +49,7 @@ const ViewTicket = ({ onClose }) => {
   const [selectedReviewedBy, setSelectedReviewedBy] = React.useState();
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [fileLoading, setfileLoading] = React.useState(false);
   const navigate = useNavigate();
 
   const HeaderTitle = styled.div`
@@ -260,6 +262,7 @@ const ViewTicket = ({ onClose }) => {
     updateTicketDetails(event.target.value, "priority");
   };
   const onChangeFile = (event) => {
+   setfileLoading(true);
     if (!event?.target?.files[0]) {
       return null;
     }
@@ -277,6 +280,7 @@ const ViewTicket = ({ onClose }) => {
         });
       } else {
         updateTicketDetails(resp.data, "files");
+        setfileLoading(false);
       }
     });
   };
@@ -372,6 +376,7 @@ const ViewTicket = ({ onClose }) => {
                           />
                           <Card sx={{ px: 3, py: 2, mb: 3 }}>
                             <InputLabel>Attachments</InputLabel>
+                            {fileLoading && <CircularProgress></CircularProgress>}                            
                             {editData.ticketFiles?.map((f, index) => {
                               return (
                                 <Fragment>
