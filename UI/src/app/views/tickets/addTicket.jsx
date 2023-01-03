@@ -50,7 +50,6 @@ const CreateTicket = ({ onClose }) => {
   const [priority, setPriority] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [fixverions, setFixverions] = React.useState([]);
-  console.log(fixverions,"fixverions")
   const navigate = useNavigate();
 
   const HeaderTitle = styled.div`
@@ -132,7 +131,6 @@ const CreateTicket = ({ onClose }) => {
           width: 400,
         });
       } else {
-        console.log(resp.data,"hshshs")
         setCategory(resp?.data?.ticketCategory);
         //setPriorityOption(resp?.data?.ticketPriorites);
         setDepartments(resp?.data?.departments);
@@ -154,7 +152,6 @@ const CreateTicket = ({ onClose }) => {
       setStatus(response.data);
     })
   }
-  console.log(selectedProject,"selectedProjectselectedProject")
   
   const handleProjectChange = (event) => {
     setSelectedProject(event.target.value);
