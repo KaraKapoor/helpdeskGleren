@@ -25,7 +25,6 @@ import * as Yup from 'yup';
 import { Strings } from "config/strings";
 import { authRoles } from "app/auth/authRoles";
 import { getMasterDropdownData,getStatusByDepartment } from "app/services/adminService";
-import {getLoggedInUserDetails} from "app/services/userService";
 import {
   createTicket,
   deleteFile,
@@ -120,8 +119,6 @@ const CreateTicket = ({ onClose }) => {
     navigate("/");
   };
   useEffect(async() => {
-    const departmentDetails= await getLoggedInUserDetails();
-    const departmentId = departmentDetails.data.department_id;
     getMasterDropdownData().then((resp) => {
       if (resp?.status === false) {
         return Swal.fire({
@@ -135,11 +132,7 @@ const CreateTicket = ({ onClose }) => {
       } else {
         setCategory(resp?.data?.ticketCategory);
         //setPriorityOption(resp?.data?.ticketPriorites);
-        //setDepartments(resp?.data?.departments);
-        setDepartments(resp?.data?.departments.filter(function(e)
-        {
-         return e.id === departmentId;
-        }));
+        setDepartments(resp?.data?.currentUserDepartments);
         setProjects(resp?.data?.currentUserProjects);
         setAssignee(resp?.data?.agents);
         // setStatus(resp?.data?.activeStatus);

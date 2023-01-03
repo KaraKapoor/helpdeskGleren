@@ -160,6 +160,14 @@ exports.masterDropdownData = async (tenantId, currentUserId) => {
     currenUserProjectsQuery = currenUserProjectsQuery.replace(/:tenantId/g, tenantId)
     const currenUserProjects = await this.executeRawSelectQuery(currenUserProjectsQuery);
     response["currentUserProjects"] = currenUserProjects;
+
+    let currentUserDepartmentsQuery = queries.GET_LOGGED_IN_USER_DEPARTMENTS;
+    currentUserDepartmentsQuery = currentUserDepartmentsQuery.replace(/:id/g, currentUserId);
+    currentUserDepartmentsQuery = currentUserDepartmentsQuery.replace(/:tenantId/g, tenantId);
+    const currenUserDepartments = await this.executeRawSelectQuery(currentUserDepartmentsQuery);
+    response["currentUserDepartments"] = currenUserDepartments;
+
+
     const onlyUsersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.notIn]: ['admin', 'agent', 'teamLead'] } }] } });
     response["users"] = onlyUsersData;
     const statusType = ["ToDo", "InProgress", "Close"];
