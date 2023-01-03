@@ -277,6 +277,7 @@ setSelectedDepartment(event.target.value);
 
                   <TextField
                     fullWidth
+                    label="Profile Image"
                     size="large"
                     name="files"
                     type="file"
@@ -285,6 +286,7 @@ setSelectedDepartment(event.target.value);
                     onChange={onChangeFile}
                     sx={{ mb: 1.5 }}
                     value=""
+                    InputLabelProps={{ shrink: true }}
                   />
                   
                   <label htmlFor="upload-button">
