@@ -57,9 +57,17 @@ exports.verifyOTP = async (email, otp) => {
     return response;
 }
 
-exports.login = async (email, password) => {
+exports.login = async (email, password, workplace) => {
     let response = null;
     const user = await userAPIService.getByEmail(email);
+    const tenantDetails = await tenantAPIService.findTenantByName(workplace);
+    if((tenantDetails) === null){
+         response = {
+            status: false,
+            error: errorConstants.WORKPLACE_DOESNOT_EXISTS_ERROR
+        }
+        return response;       
+    }
     if (user && user.id) {
         if (user.is_active === false) {
             response = {
@@ -75,6 +83,15 @@ exports.login = async (email, password) => {
             }
             return response;
         }
+        if(user.tenant_id !== tenantDetails.id){
+            response = {
+                status: false,
+                error: errorConstants.WORKPLACE_NOT_MATCHING_ERROR
+            }
+            return response;
+
+        }
+    
         if (user && (await bcrypt.compare(password, user.password))) {
             // Create token
             const JWTtoken = await jwt.sign(
