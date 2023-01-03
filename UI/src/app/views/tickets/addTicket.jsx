@@ -29,6 +29,7 @@ import {
   createTicket,
   deleteFile,
   fileUpload,
+  getFixVersionByProject,
 } from "app/services/ticketService";
 import {getStatusByDepId} from "../../utils/utils";
 
@@ -48,6 +49,8 @@ const CreateTicket = ({ onClose }) => {
   const [status, setStatus] = React.useState([]);
   const [priority, setPriority] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [fixverions, setFixverions] = React.useState([]);
+  console.log(fixverions,"fixverions")
   const navigate = useNavigate();
 
   const HeaderTitle = styled.div`
@@ -72,7 +75,6 @@ const CreateTicket = ({ onClose }) => {
     storyPoints: Yup.number()
       .max(20, 'Story Points can not be more than 20 numbers long'),
   });
- 
   const onSubmit = (values) => {
     const reqBody = {
       departmentId: selectedDepartment,
@@ -130,10 +132,11 @@ const CreateTicket = ({ onClose }) => {
           width: 400,
         });
       } else {
+        console.log(resp.data,"hshshs")
         setCategory(resp?.data?.ticketCategory);
         //setPriorityOption(resp?.data?.ticketPriorites);
         setDepartments(resp?.data?.departments);
-        setProjects(resp?.data?.currentUserProjects);
+        setProjects(resp?.data?.projects);
         setAssignee(resp?.data?.agents);
         // setStatus(resp?.data?.activeStatus);
         setPriority(resp?.data?.ticketPriorites);
@@ -151,7 +154,7 @@ const CreateTicket = ({ onClose }) => {
       setStatus(response.data);
     })
   }
-  
+  console.log(selectedProject,"selectedProjectselectedProject")
   
   const handleProjectChange = (event) => {
     setSelectedProject(event.target.value);
@@ -189,7 +192,14 @@ const CreateTicket = ({ onClose }) => {
       }
     });
   };
-
+useEffect(()=>{
+  if(selectedProject){
+    const queryParams=`?project_id=${selectedProject}`
+    getFixVersionByProject(queryParams).then((data)=>{
+      setFixverions(data?.data)
+    })
+  }
+},[selectedProject])
   return (
     <>
       <div>
@@ -366,7 +376,11 @@ const CreateTicket = ({ onClose }) => {
                       </FormControl>
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
-                      <TextField
+                    <FormControl fullWidth>
+                    <InputLabel required={true} id="fixVersion">
+                          fixVersion
+                        </InputLabel>
+                      <Select
                         fullWidth
                         size="large"
                         name="fixVersion"
@@ -377,7 +391,16 @@ const CreateTicket = ({ onClose }) => {
                         value={values.fixVersion}
                         onChange={handleChange}
                         sx={{ mb: 1.5 }}
-                      />
+                      >
+                        {fixverions?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id}>
+                                {d.fixversion}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField

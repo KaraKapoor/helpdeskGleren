@@ -24,6 +24,7 @@ module.exports = (app) => {
     router.post("/department/getStatus", adminController.getStatusByDepartmentId);
     router.post("/fixversion/createfixversion",adminController.createFixVersion);
     router.get("/fixversion/getallfixversion",adminController.getAllversions);
-    router.post("/fixversion/getById",adminController.getVersionAllById);
+    router.post("/fixversion/getById",adminController.getVersionById);
+    router.get("/fixversion/getByProject",adminController.getVersionByProject);
     app.use("/api/admin", auth, router);
 };

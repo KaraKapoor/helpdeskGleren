@@ -25,6 +25,7 @@ import {
   deleteFile,
   downloadFile,
   fileUpload,
+  getFixVersionByProject,
   getTicketById,
   updateTicket,
 } from "app/services/ticketService";
@@ -48,6 +49,8 @@ const ViewTicket = ({ onClose }) => {
   const [selectedReviewedBy, setSelectedReviewedBy] = React.useState();
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [fixverions, setFixverions] = React.useState([]);
+
   const navigate = useNavigate();
 
   const HeaderTitle = styled.div`
@@ -203,7 +206,7 @@ const ViewTicket = ({ onClose }) => {
         setSelectedDepartment(resp.data.department.name);
         console.log(resp.data);
         await getStatusByDepId(resp.data.department_id);
-        setSelectedProject(resp.data.project.name);
+        setSelectedProject(resp.data.project);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);
         setSelectedStatus(resp.data.status_id);
@@ -280,7 +283,14 @@ const ViewTicket = ({ onClose }) => {
       }
     });
   };
-
+  useEffect(()=>{
+    if(selectedProject?.id){
+      const queryParams=`?project_id=${selectedProject?.id}`
+      getFixVersionByProject(queryParams).then((data)=>{
+        setFixverions(data?.data)
+      })
+    }
+  },[selectedProject?.id])
   return (
     <>
       {!loading && (
@@ -456,7 +466,7 @@ const ViewTicket = ({ onClose }) => {
                               label="Project"
                               variant="outlined"
                               onBlur={handleBlur}
-                              value={selectedProject}
+                              value={selectedProject?.name}
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
                             />
@@ -551,7 +561,7 @@ const ViewTicket = ({ onClose }) => {
                                 })}
                               </Select>
                             </FormControl>
-                            <TextField
+                            {/* <TextField
                               fullWidth
                               size="small"
                               className="mt-2"
@@ -568,7 +578,39 @@ const ViewTicket = ({ onClose }) => {
                               value={values.fixVersion}
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
-                            />
+                            /> */}
+                             <FormControl   fullWidth
+                              size="small"
+                              className="mt-2">
+                    <InputLabel required={true} id="fixVersion">
+                          fixVersion
+                        </InputLabel>
+                      <Select
+                        fullWidth
+                        size="large"
+                        name="fixVersion"
+                        type="text"
+                        label="Fix Version"
+                        variant="outlined"
+                        value={values.fixVersion}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                        onBlur={(e) => {
+                          updateTicketDetails(
+                            e.target.value,
+                            "fixVersion"
+                          );
+                        }}
+                      >
+                        {fixverions?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id}>
+                                {d.fixversion}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
                             <TextField
                               fullWidth
                               size="small"

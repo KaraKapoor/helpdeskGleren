@@ -118,7 +118,7 @@ export const getAllVersion = (page,size)=>{
         url: BASE_URL + config.fixversion.getAllVersion +`?page=${page}&size=${size}`,
     })
 }
-export const getVersionAllById = (formData)=>{
+export const getVersionById = (formData)=>{
     return appRequest({
         method: RequestMethod.POST,
         url: BASE_URL + config.fixversion.getById,

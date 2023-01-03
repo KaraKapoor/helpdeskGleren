@@ -155,5 +155,11 @@ db.ticketFiles.belongsTo(db.ticket, {
 db.ticketFiles.belongsTo(db.uploads, {
     foreignKey: "upload_id", //1:1
 });
-
+db.fix_version.belongsTo(db.tenant, {
+    foreignKey: "tenant_id", //1:1
+});
+db.fix_version.belongsTo(db.project, {
+    foreignKey: "project_id", //1:1,
+    onDelete: 'CASCADE',
+});
 module.exports = db;

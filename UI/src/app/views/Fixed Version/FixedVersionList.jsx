@@ -82,7 +82,7 @@ import { getAllVersion } from "app/services/adminService";
                         data={data?.map((e) => {
                             return {
                                 fix_version: e.fixversion,
-                                projects: e.project,
+                                projects: e.project_id,
                                 projectId:e.id
                             }
                         })}

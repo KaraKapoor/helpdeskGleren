@@ -1,220 +1,254 @@
-import React from 'react'
-import { useNavigate } from 'react-router'
-import Swal from 'sweetalert2'
-import moment from 'moment'
-import { Formik } from 'formik';
-import { Card, Checkbox, Divider, FormControl, FormControlLabel, Icon, InputLabel, MenuItem, Select, TextField } from '@mui/material'
-import styled from '@emotion/styled'
-import { LoadingButton } from '@mui/lab'
-import { Strings } from 'config/strings'
-import { createFixVersion, getMasterDropdownData } from 'app/services/adminService';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
+import moment from "moment";
+import { Formik } from "formik";
+import {
+  Card,
+  Checkbox,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Icon,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import styled from "@emotion/styled";
+import { LoadingButton } from "@mui/lab";
+import { Strings } from "config/strings";
+import {
+  createFixVersion,
+  getMasterDropdownData,
+} from "app/services/adminService";
 import "./FixedVersion.css";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 const AddEditVersion = ({ onClose, editDetails }) => {
-    const [valid, setValid] = React.useState(false)
-    const [isActive, setIsActive] = React.useState(editDetails?.is_active ? editDetails.is_active : true);
-    const [ProjectValue, setProjectValue] = React.useState([]);
-    const [Project, setProject] = React.useState();
-    const handleClose = (event) => !!onClose && onClose(event) && setValid(false)
-    const navigate = useNavigate();
+  const [valid, setValid] = React.useState(false);
+  const [isActive, setIsActive] = React.useState(
+editDetails?.is_active ? editDetails.is_active : true
+);
+  const [ProjectValue, setProjectValue] = React.useState([]);
+  const [Project, setProject] = React.useState();
+  const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
+  const navigate = useNavigate();
 
-    const HeaderTitle = styled.div`
+  const HeaderTitle = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
     font-size: 1.5rem;
-`
-    const FormContainer = styled.div`
+  `;
+  const FormContainer = styled.div`
     display: grid;
-    grid-template-columns: ${(props) => (props.divide ? '50% 48.4%' : '100%')};
+    grid-template-columns: ${(props) => (props.divide ? "50% 48.4%" : "100%")};
     padding: 1rem 1rem 0 1rem;
     gap: 1rem;
-`
-    const MyErrorMessage = styled.div`
-    color: red;
-    font-size: 13px;
-`
+  `;
 
-    React.useEffect(() => {
-        if (editDetails) {
-            {
-                setIsActive(editDetails?.is_active);
-                setProject(editDetails?.project);
-            }
-        }
-        getMasterDropdownData()?.then((resp) => {
-            if (resp?.status === false) {
-                return Swal.fire({
-                    icon: 'error',
-                    title: 'Error hi',
-                    text: resp.error,
-                    showCloseButton: true,
-                    showConfirmButton: false,
-                    width: 400,
-                })
-            } else {
-                setProjectValue(resp?.data?.projects)
-            }
-        })
-    }, [])
-    
-    const validationSchema = Yup.object().shape({
-        fixversion: Yup.string()
-          .max(20, 'FixVersion Name can not be more than 20 characters long'),
+  useEffect(() => {
+    if (editDetails) {
+      {
+        setIsActive(editDetails?.is_active);
+        setProject(editDetails?.project);
+      }
+    }
+    getMasterDropdownData()?.then((resp) => {
+      if (resp?.status === false) {
+        return Swal.fire({
+          icon: "error",
+          title: "Error hi",
+          text: resp.error,
+          showCloseButton: true,
+          showConfirmButton: false,
+          width: 400,
+        });
+      } else {
+        setProjectValue(resp?.data?.projects);
+      }
+    });
+  }, []);
+
+  const validationSchema = Yup.object().shape({
+    fixversion: Yup.string().max(
+      20,
+      "FixVersion Name can not be more than 20 characters long"
+    ),
+  });
+  const onSubmit = (values) => {
+    const reqBody = {
+      fixversion: values.fixversion,
+      project_id: Project,
+
+      is_active: isActive,
+    };
+    if (editDetails?.id) {
+      reqBody.id = editDetails.id;
+    } else if (!values.fixversion) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: Strings.FIX_VERSION_MANDATORY,
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
       });
-    const onSubmit = (values) => {
-        const reqBody = {
-            fixversion: values.fixversion,
-            project: Project,
-            is_active: isActive
-        };
-        if (editDetails?.id) {
-            reqBody.id = editDetails.id
-        } else if (!values.fixversion) {
-            return Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: Strings.FIX_VERSION_MANDATORY,
-                showCloseButton: true,
-                showConfirmButton: false,
-                width: 400,
-            })
-        }
-        createFixVersion(reqBody)?.then((resp) => {
-            if (resp?.status === false) {
-                return Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: resp.error,
-                    showCloseButton: true,
-                    showConfirmButton: false,
-                    width: 400,
-                })
-            } else {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: editDetails?.id ? Strings.UPDATED_SUCCESSFULLY : Strings.CREATED_SUCCESSFULLY,
-                    showCloseButton: true,
-                    showConfirmButton: false,
-                    width: 400,
-                })
-                return navigate('/fixedversion');
-            }
-
-        })
     }
-    const initialValues = {
-        fixversion: editDetails?.fixversion ? editDetails.fixversion : ''
+    createFixVersion(reqBody)?.then((resp) => {
+      if (resp?.status === false) {
+        return Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: resp.error,
+          showCloseButton: true,
+          showConfirmButton: false,
+          width: 400,
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: editDetails?.id
+            ? Strings.UPDATED_SUCCESSFULLY
+            : Strings.CREATED_SUCCESSFULLY,
+          showCloseButton: true,
+          showConfirmButton: false,
+          width: 400,
+        });
+        return navigate("/fixedversion");
+      }
+    });
+  };
+  const initialValues = {
+    fixversion: editDetails?.fixversion ? editDetails.fixversion : "",
+  };
+  const handleCheckBoxChange = (event) => {
+    if (event?.target.checked) {
+      setIsActive(false);
+    } else {
+      setIsActive(true);
     }
-    const handleCheckBoxChange = (event) => {
-        if (event?.target.checked) {
-            setIsActive(false);
-        } else {
-            setIsActive(true);
-        }
-    }
-    const handleDepartment = (event) => {
-        setProject(event.target.value);
-    }
-    return (
-        <>
+  };
+  const handleDepartment = (event) => {
+    console.log(event, "jsjsjs");
+    setProject(event.target.value);
+  };
+  return (
+    <>
+      <div>
+        <Card elevation={3} sx={{ pt: 0, mb: 0, minHeight: "50vh" }}>
+          <HeaderTitle>
             <div>
-                <Card elevation={3} sx={{ pt: 0, mb: 0, minHeight: '50vh' }}>
-                    <HeaderTitle>
-                        <div>
-                            {editDetails?.id ? 'Edit Fix version' : 'Add Fix version'}
-                        </div>
-                        <div onClick={handleClose}>
-                            <Icon
-                                sx={{
-                                    color: '#59B691',
-                                    fontSize: '35px !important',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                cancelsharp
-                            </Icon>
-                        </div>
-                    </HeaderTitle>
-                    <Divider />
-                    <Formik
-                        onSubmit={onSubmit}
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                    >
-                        {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-                            <form onSubmit={handleSubmit}>
-                                <FormContainer divide={true}>
-                                    <div>
-                                        <TextField
-                                            fullWidth
-                                            size="large"
-                                            name="fixversion"
-                                            type="text"
-                                            label="Fix Version"
-                                            variant="outlined"
-                                            onBlur={handleBlur}
-                                            value={values.fixversion}
-                                            onChange={handleChange}
-                                            error={Boolean(errors.fixversion && touched.fixversion)}
-                                            helperText={touched.fixversion && errors.fixversion}
-                                            sx={{ mb: 1.5 }}
-                                        />
-                                        <br />
-
-                                    </div>
-                                    
-                                    <div>
-                                        <FormControl fullWidth>
-                                            <InputLabel required={true} id="projects">Projects</InputLabel>
-                                            <Select
-                                                labelId="projects"
-                                                id="projects"
-                                                required={true}
-                                                value={Project}
-                                                label="Project Name"
-                                                onChange={handleDepartment}
-                                                defaultValue={Project}
-                                            >
-                                                {
-                                                    ProjectValue?.filter((d,i) => (d.is_active === true)).map((d, i) => {
-                                                        return <MenuItem key={i} value={d.name}>{d.name}</MenuItem>
-                                                    })
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div>
-                                        <FormControlLabel
-                                            control={<Checkbox />}
-                                            disabled={!editDetails?.id}
-                                            checked={!isActive}
-                                            onChange={handleCheckBoxChange}
-                                            label="Inactive"
-                                        />
-                                    </div>
-                                </FormContainer>
-                                <div className='d-flex justify-content-end'>
-                                    <LoadingButton
-                                        type="submit"
-                                        color="primary"
-                                        variant="contained"
-                                        sx={{ my: 2, top: "100", marginRight: "10px", marginTop: "45vh" }}
-                                    >
-                                        Submit
-                                    </LoadingButton>
-                                </div>
-                            </form>
-                        )}
-                    </Formik>
-                </Card>
+              {editDetails?.id ? "Edit Fix version" : "Add Fix version"}
             </div>
+            <div onClick={handleClose}>
+              <Icon
+                sx={{
+                  color: "#59B691",
+                  fontSize: "35px !important",
+                  cursor: "pointer",
+                }}
+              >
+                cancelsharp
+              </Icon>
+            </div>
+          </HeaderTitle>
+          <Divider />
+          <Formik
+            onSubmit={onSubmit}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <FormContainer divide={true}>
+                  <div>
+                    <TextField
+                      fullWidth
+                      size="large"
+                      name="fixversion"
+                      type="text"
+                      label="Fix Version"
+                      required={true}
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      value={values.fixversion}
+                      onChange={handleChange}
+                      error={Boolean(errors.fixversion && touched.fixversion)}
+                      helperText={touched.fixversion && errors.fixversion}
+                      sx={{ mb: 1.5 }}
+                    />
+                    <br />
+                  </div>
 
-        </>
-    )
-}
+                  <div>
+                    <FormControl fullWidth>
+                      <InputLabel required={true} id="projects">
+                        Projects
+                      </InputLabel>
+                      <Select
+                        labelId="projects"
+                        id="projects"
+                        required={true}
+                        value={Project}
+                        label="Project Name"
+                        onChange={(w) => handleDepartment(w)}
+                        defaultValue={Project}
+                      >
+                        {ProjectValue?.filter(
+                          (d, i) => d.is_active === true
+                        ).map((d, i) => {
+                          return (
+                            <MenuItem key={i} value={d.id}>
+                              {d.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div>
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      disabled={!editDetails?.id}
+                      checked={!isActive}
+                      onChange={handleCheckBoxChange}
+                      label="Inactive"
+                    />
+                  </div>
+                </FormContainer>
+                <div className="d-flex justify-content-end">
+                  <LoadingButton
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                    sx={{
+                      my: 2,
+                      top: "100",
+                      marginRight: "10px",
+                      marginTop: "45vh",
+                    }}
+                  >
+                    Submit
+                  </LoadingButton>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </Card>
+      </div>
+    </>
+  );
+};
 
-export default AddEditVersion
+export default AddEditVersion;

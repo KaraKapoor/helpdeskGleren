@@ -6,19 +6,15 @@ const generalMethodService = require("../Services/generalMethodAPIService");
 exports.CreateFixVersion = async (
   fixversion,
   is_active,
-  project,
-  ticket_id,
-  user_id,
   tenant_id,
+  project_id,
   id
 ) => {
   const body = {
     fixversion: fixversion,
     is_active: is_active,
-    project: project,
-    ticket_id: ticket_id,
-    user_id: user_id,
     tenantId: tenant_id,
+    project_id:project_id
   };
   if (
     (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id)) !== null
@@ -46,8 +42,13 @@ exports.getPaginationVersion = async (page, size, tenantId) => {
   return response;
 };
 
-exports.getVersionById = async (id, tenantId) => {
+exports.getFixVersionById = async (id, tenantId) => {
   return await fix_version.findOne({
     where: { [Op.and]: [{ id: id }, { tenantId: tenantId }] },
+  });
+};
+exports.getFixVersionByProject = async (project_id) => {
+  return await fix_version.findAll({
+    where: { [Op.and]: [{ project_id: project_id }] },
   });
 };

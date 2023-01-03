@@ -591,7 +591,7 @@ exports.createFixVersion = async (req,res)=>{
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenant_id = userDetails.tenant_id;
     try {
-        const response = await fixversionAPIService.CreateFixVersion(input.fixversion,input.is_active,input.project,input.ticket_id,userDetails.id,tenant_id,input.id);
+        const response = await fixversionAPIService.CreateFixVersion(input.fixversion,input.is_active,tenant_id,input.project_id,input.id);
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
         console.log(exception);
@@ -617,12 +617,25 @@ exports.getAllversions = async(req,res)=>{
     }
 }
 
-exports.getVersionAllById = async(req, res)=>{
+exports.getVersionById = async(req, res)=>{
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
     try {
-        const response = await fixversionAPIService.getVersionById(input.id, tenantId);
+        const response = await fixversionAPIService.getFixVersionById(input.id, tenantId);
+        return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+}
+exports.getVersionByProject = async(req, res)=>{
+    const input = req.query.project_id;
+    try {
+        const response = await fixversionAPIService.getFixVersionByProject(input);
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
         console.log(exception);

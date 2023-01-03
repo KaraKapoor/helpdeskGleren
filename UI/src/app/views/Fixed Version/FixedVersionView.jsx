@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material"
 import { styled } from "@mui/system"
-import { getVersionAllById } from "app/services/adminService";
+import { getVersionById } from "app/services/adminService";
 import { Fragment, useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AddEditVersion from "./AddEditVersion";
@@ -32,7 +32,7 @@ const FixedVersionView = () => {
     }, [query])
 
     const onEditClick = async(id) => {
-        await getVersionAllById({id:id}).then((response) => {
+        await getVersionById({id:id}).then((response) => {
             setEditDetails(response?.data)
         })
         setCurrentView('Edit')
