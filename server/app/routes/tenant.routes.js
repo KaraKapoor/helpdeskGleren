@@ -5,6 +5,5 @@ module.exports = (app) => {
     const auth = require("../middleware/auth");
 
     router.get("/getTenantInfo", tenantController.getTenantInfo);
-    router.get("/getTenantInfoByName",tenantController.getTenantInfoByTenantName);
     app.use("/api/tenant", auth, router);
 };

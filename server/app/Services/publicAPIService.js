@@ -60,11 +60,12 @@ exports.verifyOTP = async (email, otp) => {
 exports.login = async (email, password, workplace) => {
     let response = null;
     const user = await userAPIService.getByEmail(email);
-    const tenantId = await tenantAPIService.getTenantInfoByTenantName(workplace);
+    const tenantDetails = await tenantAPIService.findTenantByName(workplace);
+    const tenantId = tenantDetails? tenantDetails.id:"Error Message";
     if(tenantId==="Error Message"){
         response = {
             status: false,
-            error: errorConstants.WORKPLACE_EXISTS_ERROR
+            error: errorConstants.WORKPLACE_DOESNOT_EXISTS_ERROR
         }
         return response;
     }
@@ -86,7 +87,7 @@ exports.login = async (email, password, workplace) => {
         if(user.tenant_id !== tenantId){
             response = {
                 status: false,
-                error: errorConstants.WORKPLACE_ERROR
+                error: errorConstants.WORKPLACE_NOT_MATCHING_ERROR
             }
             return response;
 
