@@ -17,12 +17,5 @@ exports.createTenant = async (name) => {
 }
 
 exports.findTenantByName = async (name) => {
-   try {      
-      const resp = await tenant.findOne({ where: { name: name } });
-      console.log("Jatin",resp);
-      return resp;
-      
-   } catch (error) {
-          return "Error Message";      
-   }
+   return await tenant.findOne({ where: { name: name } });
 }

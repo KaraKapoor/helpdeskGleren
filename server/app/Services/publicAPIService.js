@@ -61,15 +61,14 @@ exports.login = async (email, password, workplace) => {
     let response = null;
     const user = await userAPIService.getByEmail(email);
     const tenantDetails = await tenantAPIService.findTenantByName(workplace);
-    const tenantId = tenantDetails? tenantDetails.id:"Error Message";
-    if(tenantId==="Error Message"){
-        response = {
+    if((tenantDetails) === null){
+         response = {
             status: false,
             error: errorConstants.WORKPLACE_DOESNOT_EXISTS_ERROR
         }
-        return response;
+        return response;       
     }
-   else if (user && user.id) {
+    if (user && user.id) {
         if (user.is_active === false) {
             response = {
                 status: false,
@@ -84,7 +83,7 @@ exports.login = async (email, password, workplace) => {
             }
             return response;
         }
-        if(user.tenant_id !== tenantId){
+        if(user.tenant_id !== tenantDetails.id){
             response = {
                 status: false,
                 error: errorConstants.WORKPLACE_NOT_MATCHING_ERROR
