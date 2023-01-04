@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/app/views/projects/projectList.css"],"names":[],"mappings":"AAAA,QACI,WAAY,CACZ,kBACJ","file":"15.e73c5ef1.chunk.css","sourcesContent":[".addBtn{\r\n    float: right;\r\n    margin-bottom:10px ;\r\n}"]}

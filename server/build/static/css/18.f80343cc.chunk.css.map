@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/app/views/users/userList.css"],"names":[],"mappings":"AAAA,QACI,WAAY,CACZ,kBACJ","file":"18.f80343cc.chunk.css","sourcesContent":[".addBtn{\r\n    float: right;\r\n    margin-bottom:10px ;\r\n}"]}

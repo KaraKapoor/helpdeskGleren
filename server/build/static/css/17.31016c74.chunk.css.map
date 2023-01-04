@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/app/views/teams/teamList.css"],"names":[],"mappings":"AAAA,QACI,WAAY,CACZ,kBACJ","file":"17.31016c74.chunk.css","sourcesContent":[".addBtn{\r\n    float: right;\r\n    margin-bottom:10px ;\r\n}"]}
