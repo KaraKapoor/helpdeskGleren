@@ -11,9 +11,9 @@ exports.CreateFixVersion = async (
   id
 ) => {
   const body = {
-    fixversion: fixversion,
+    fix_version: fixversion,
     is_active: is_active,
-    tenantId: tenant_id,
+    tenant_id: tenant_id,
     project_id:project_id
   };
   if (
@@ -34,7 +34,7 @@ exports.getPaginationVersion = async (page, size, tenantId) => {
     size
   );
   await fix_version
-    .findAndCountAll({ limit, offset, where: { tenantId: tenantId } })
+    .findAndCountAll({ limit, offset, where: { tenant_id: tenantId } })
     .then(async (data) => {
       const res = await generalMethodService.getPagingData(data, page, limit);
       response = res;
@@ -44,11 +44,11 @@ exports.getPaginationVersion = async (page, size, tenantId) => {
 
 exports.getFixVersionById = async (id, tenantId) => {
   return await fix_version.findOne({
-    where: { [Op.and]: [{ id: id }, { tenantId: tenantId }] },
+    where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] },
   });
 };
-exports.getFixVersionByProject = async (project_id) => {
+exports.getFixVersionByProject = async (project_id,tenantId) => {
   return await fix_version.findAll({
-    where: { [Op.and]: [{ project_id: project_id }] },
+    where: { [Op.and]: [{ project_id: project_id },{ tenant_id: tenantId }] },
   });
 };

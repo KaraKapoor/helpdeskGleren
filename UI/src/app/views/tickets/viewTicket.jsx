@@ -227,7 +227,7 @@ const ViewTicket = ({ onClose }) => {
           issueSummary: resp?.data?.issue_summary
             ? resp.data.issue_summary
             : "",
-          fixVersion: resp?.data?.fix_version ? resp.data.fix_version : "",
+          fixVersion: resp?.data?.fix_version_id ? resp.data.fix_version_id : "",
           storyPoints: resp?.data?.story_points ? resp.data.story_points : 0,
           dueDate: dueDate,
         });
@@ -613,7 +613,7 @@ const ViewTicket = ({ onClose }) => {
                         {fixverions?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
-                                {d.fixversion}
+                                {d.fix_version}
                               </MenuItem>
                             );
                           })}

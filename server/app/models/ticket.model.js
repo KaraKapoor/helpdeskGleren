@@ -21,9 +21,6 @@ module.exports = (sequelize, Sequelize) => {
         priority:{
             type: Sequelize.STRING,
         },
-        fix_version:{
-            type: Sequelize.STRING,
-        },
         issue_details:{
             type: Sequelize.STRING,
         },

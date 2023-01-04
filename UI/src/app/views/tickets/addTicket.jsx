@@ -259,6 +259,7 @@ useEffect(()=>{
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <FormControl fullWidth>
                         <InputLabel required={true} id="project">
+                          
                           Project
                         </InputLabel>
                         <Select
@@ -396,7 +397,7 @@ useEffect(()=>{
                         {fixverions?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
-                                {d.fixversion}
+                                {d.fix_version}
                               </MenuItem>
                             );
                           })}

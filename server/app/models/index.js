@@ -140,6 +140,10 @@ db.ticketHistory.belongsTo(db.tenant, {
 db.ticketHistory.belongsTo(db.ticket, {
     foreignKey: "ticket_id", //1:1
 });
+db.ticket.belongsTo(db.fix_version, {
+    foreignKey: "fix_version_id", //1:1,
+    onDelete: 'CASCADE',
+});
 db.uploads.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });

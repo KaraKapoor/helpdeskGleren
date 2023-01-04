@@ -38,7 +38,8 @@
     ,"fixversion":{
         "create": "api/admin/fixversion/createfixversion",
         "getById": "api/admin/fixversion/getById",
-        "getAllVersion": "api/admin/fixversion/getallfixversion"
+        "getAllVersion": "api/admin/fixversion/getallfixversion",
+        "getByProject": "api/admin/fixversion/getByProject"
     },
     "escalation": {
         "create": "api/admin/escalations/createEscalation",
