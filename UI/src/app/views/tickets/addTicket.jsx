@@ -475,8 +475,12 @@ const CreateTicket = ({ onClose }) => {
                         sx={{ mb: 1.5 }}
                         value=""
                       />
-                      <br></br>
-                      {fileLoading && <CircularProgress></CircularProgress>}
+                      <br></br>                     
+                      {fileLoading && 
+                      <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
+                      <CircularProgress ></CircularProgress>                                          
+                      </div>  }
+
                       {selectedFiles.map((f, index) => {
                         return (
                           <Fragment>

@@ -152,7 +152,10 @@ const BugReport = (props) => {
             />
             <Card sx={{ px: 3, py: 2, mb: 3 }}>
               <InputLabel>Attachments</InputLabel>
-              {fileLoading && <CircularProgress></CircularProgress>}
+                     {fileLoading && 
+                      <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
+                      <CircularProgress ></CircularProgress>                                          
+                      </div>  }
                   <Fragment>
                     {image_data.map((obj,index)=>{
                     return(
