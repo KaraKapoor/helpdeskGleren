@@ -79,14 +79,14 @@ editDetails?.is_active ? editDetails.is_active : true
   });
   const onSubmit = (values) => {
     const reqBody = {
-      fixversion: values.fixversion,
+      fixversion: values.fix_version,
       project_id: Project,
 
       is_active: isActive,
     };
     if (editDetails?.id) {
       reqBody.id = editDetails.id;
-    } else if (!values.fixversion) {
+    } else if (!values.fix_version) {
       return Swal.fire({
         icon: "warning",
         title: "Warning",
