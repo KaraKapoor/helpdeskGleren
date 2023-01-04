@@ -48,12 +48,11 @@ editDetails?.is_active ? editDetails.is_active : true
     padding: 1rem 1rem 0 1rem;
     gap: 1rem;
   `;
-
   useEffect(() => {
     if (editDetails) {
       {
         setIsActive(editDetails?.is_active);
-        setProject(editDetails?.project);
+        setProject(editDetails?.project_id);
       }
     }
     getMasterDropdownData()?.then((resp) => {
@@ -123,7 +122,7 @@ editDetails?.is_active ? editDetails.is_active : true
     });
   };
   const initialValues = {
-    fixversion: editDetails?.fixversion ? editDetails.fixversion : "",
+    fix_version: editDetails?.fix_version ? editDetails.fix_version : "",
   };
   const handleCheckBoxChange = (event) => {
     if (event?.target.checked) {
@@ -176,13 +175,13 @@ editDetails?.is_active ? editDetails.is_active : true
                     <TextField
                       fullWidth
                       size="large"
-                      name="fixversion"
+                      name="fix_version"
                       type="text"
                       label="Fix Version"
                       required={true}
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.fixversion}
+                      value={values.fix_version}
                       onChange={handleChange}
                       error={Boolean(errors.fixversion && touched.fixversion)}
                       helperText={touched.fixversion && errors.fixversion}
@@ -208,6 +207,7 @@ editDetails?.is_active ? editDetails.is_active : true
                         {ProjectValue?.filter(
                           (d, i) => d.is_active === true
                         ).map((d, i) => {
+                          console.log(ProjectValue,"hshshs")
                           return (
                             <MenuItem key={i} value={d.id}>
                               {d.name}
