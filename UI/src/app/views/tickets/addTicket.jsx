@@ -29,6 +29,7 @@ import {
   createTicket,
   deleteFile,
   fileUpload,
+  getFixVersionByProject,
 } from "app/services/ticketService";
 import CircularProgress from "../../components/MatxLoading";
 import {getStatusByDepId} from "../../utils/utils";
@@ -49,6 +50,7 @@ const CreateTicket = ({ onClose }) => {
   const [status, setStatus] = React.useState([]);
   const [priority, setPriority] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [fixverions, setFixverions] = React.useState([]);
   const [fileLoading, setfileLoading] = React.useState(false);
   const navigate = useNavigate();
 
@@ -74,7 +76,6 @@ const CreateTicket = ({ onClose }) => {
     storyPoints: Yup.number()
       .max(20, 'Story Points can not be more than 20 numbers long'),
   });
- 
   const onSubmit = (values) => {
     const reqBody = {
       departmentId: selectedDepartment,
@@ -154,7 +155,6 @@ const CreateTicket = ({ onClose }) => {
     })
   }
   
-  
   const handleProjectChange = (event) => {
     setSelectedProject(event.target.value);
   };
@@ -193,7 +193,14 @@ const CreateTicket = ({ onClose }) => {
       }
     });
   };
-
+useEffect(()=>{
+  if(selectedProject){
+    const queryParams=`?project_id=${selectedProject}`
+    getFixVersionByProject(queryParams).then((data)=>{
+      setFixverions(data?.data)
+    })
+  }
+},[selectedProject])
   return (
     <>
       <div>
@@ -252,6 +259,7 @@ const CreateTicket = ({ onClose }) => {
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <FormControl fullWidth>
                         <InputLabel required={true} id="project">
+                          
                           Project
                         </InputLabel>
                         <Select
@@ -370,7 +378,11 @@ const CreateTicket = ({ onClose }) => {
                       </FormControl>
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
-                      <TextField
+                    <FormControl fullWidth>
+                    <InputLabel required={true} id="fixVersion">
+                          fixVersion
+                        </InputLabel>
+                      <Select
                         fullWidth
                         size="large"
                         name="fixVersion"
@@ -381,7 +393,16 @@ const CreateTicket = ({ onClose }) => {
                         value={values.fixVersion}
                         onChange={handleChange}
                         sx={{ mb: 1.5 }}
-                      />
+                      >
+                        {fixverions?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id}>
+                                {d.fix_version}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <TextField

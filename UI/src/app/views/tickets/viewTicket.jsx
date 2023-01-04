@@ -25,6 +25,7 @@ import {
   deleteFile,
   downloadFile,
   fileUpload,
+  getFixVersionByProject,
   getTicketById,
   updateTicket,
 } from "app/services/ticketService";
@@ -49,6 +50,8 @@ const ViewTicket = ({ onClose }) => {
   const [selectedReviewedBy, setSelectedReviewedBy] = React.useState();
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [fixverions, setFixverions] = React.useState([]);
+
   const [fileLoading, setfileLoading] = React.useState(false);
   const navigate = useNavigate();
 
@@ -205,7 +208,7 @@ const ViewTicket = ({ onClose }) => {
         setSelectedDepartment(resp.data.department.name);
         console.log(resp.data);
         await getStatusByDepId(resp.data.department_id);
-        setSelectedProject(resp.data.project.name);
+        setSelectedProject(resp.data.project);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);
         setSelectedStatus(resp.data.status_id);
@@ -224,7 +227,7 @@ const ViewTicket = ({ onClose }) => {
           issueSummary: resp?.data?.issue_summary
             ? resp.data.issue_summary
             : "",
-          fixVersion: resp?.data?.fix_version ? resp.data.fix_version : "",
+          fixVersion: resp?.data?.fix_version_id ? resp.data.fix_version_id : "",
           storyPoints: resp?.data?.story_points ? resp.data.story_points : 0,
           dueDate: dueDate,
         });
@@ -284,7 +287,14 @@ const ViewTicket = ({ onClose }) => {
       }
     });
   };
-
+  useEffect(()=>{
+    if(selectedProject?.id){
+      const queryParams=`?project_id=${selectedProject?.id}`
+      getFixVersionByProject(queryParams).then((data)=>{
+        setFixverions(data?.data)
+      })
+    }
+  },[selectedProject?.id])
   return (
     <>
       {!loading && (
@@ -464,7 +474,7 @@ const ViewTicket = ({ onClose }) => {
                               label="Project"
                               variant="outlined"
                               onBlur={handleBlur}
-                              value={selectedProject}
+                              value={selectedProject?.name}
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
                             />
@@ -559,7 +569,7 @@ const ViewTicket = ({ onClose }) => {
                                 })}
                               </Select>
                             </FormControl>
-                            <TextField
+                            {/* <TextField
                               fullWidth
                               size="small"
                               className="mt-2"
@@ -576,7 +586,39 @@ const ViewTicket = ({ onClose }) => {
                               value={values.fixVersion}
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
-                            />
+                            /> */}
+                             <FormControl   fullWidth
+                              size="small"
+                              className="mt-2">
+                    <InputLabel required={true} id="fixVersion">
+                          fixVersion
+                        </InputLabel>
+                      <Select
+                        fullWidth
+                        size="large"
+                        name="fixVersion"
+                        type="text"
+                        label="Fix Version"
+                        variant="outlined"
+                        value={values.fixVersion}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                        onBlur={(e) => {
+                          updateTicketDetails(
+                            e.target.value,
+                            "fixVersion"
+                          );
+                        }}
+                      >
+                        {fixverions?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id}>
+                                {d.fix_version}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
                             <TextField
                               fullWidth
                               size="small"

@@ -34,6 +34,12 @@
         "getById": "api/admin/status/getById",
         "getAllStatus": "api/admin/status/getAllStatus",
         "getStatusByDepartmentId":"api/admin/department/getStatus"
+    }
+    ,"fixversion":{
+        "create": "api/admin/fixversion/createfixversion",
+        "getById": "api/admin/fixversion/getById",
+        "getAllVersion": "api/admin/fixversion/getallfixversion",
+        "getByProject": "api/admin/fixversion/getByProject"
     },
     "escalation": {
         "create": "api/admin/escalations/createEscalation",

@@ -104,7 +104,7 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
         category: category,
         status_id: statusId,
         priority: priority,
-        fix_version: fixVersion,
+        fix_version_id: fixVersion,
         issue_details: issueDetails,
         issue_summary: issueSummary,
         due_dt: dueDate,

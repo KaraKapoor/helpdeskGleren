@@ -84,3 +84,9 @@ export const getTicketComments = (data) => {
         data: data
     })
 }
+export const getFixVersionByProject = (queryParams) => {
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.fixversion.getByProject +queryParams,
+    })
+}
