@@ -120,7 +120,7 @@ const CreateTicket = ({ onClose }) => {
   const onClickClose = () => {
     navigate("/");
   };
-  useEffect(() => {
+  useEffect(async() => {
     getMasterDropdownData().then((resp) => {
       if (resp?.status === false) {
         return Swal.fire({
@@ -134,7 +134,7 @@ const CreateTicket = ({ onClose }) => {
       } else {
         setCategory(resp?.data?.ticketCategory);
         //setPriorityOption(resp?.data?.ticketPriorites);
-        setDepartments(resp?.data?.departments);
+        setDepartments(resp?.data?.currentUserDepartments);
         setProjects(resp?.data?.currentUserProjects);
         setAssignee(resp?.data?.agents);
         // setStatus(resp?.data?.activeStatus);
