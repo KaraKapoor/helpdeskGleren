@@ -162,6 +162,7 @@ exports.getMyTickets = async (conditionArray, userId, tenantId, limit, offset, p
         conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { created_by: userId }, { tenant_id: tenantId }] }
     }
     const resp = await ticket.findAndCountAll({
+        order:[ ['createdAt', 'DESC'] ],
         limit, offset, where: conditions, include: [
             { model: db.project },
             { model: db.department },
@@ -185,6 +186,7 @@ exports.getAllTickets = async (conditionArray, tenantId, limit, offset, page, se
         conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { tenant_id: tenantId }, projectIdCondition] }
     }
     const resp = await ticket.findAndCountAll({
+        order:[ ['createdAt', 'DESC'] ],
         limit, offset, where: conditions, include: [
             { model: db.project },
             { model: db.department },

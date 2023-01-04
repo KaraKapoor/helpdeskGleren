@@ -5,12 +5,14 @@ import { reportBug } from "app/services/adminService";import { useNavigate } fro
 import Swal from "sweetalert2";
 import { Formik } from "formik";
 import {downloadFile,fileUpload} from "app/services/ticketService";
+import CircularProgress from "../../components/MatxLoading";
 import './bugReport.css';
 
 const BugReport = (props) => {
     const [issueDescription, setIssueDescription] = useState();
     const [image_data, setImageData] = useState([]);
     const [AttachmentsId,SetAttachmentId] = useState([]);
+    const [fileLoading, setfileLoading] = React.useState(false);
     const navigate = useNavigate();
     const handleChange = (event) => {
         setIssueDescription(event.target.value);
@@ -62,6 +64,7 @@ const BugReport = (props) => {
     }
     console.log(AttachmentsId,"AttachmentsId");
   const onChangeFile = (event) => {
+    setfileLoading(true);
     let file = event.target.files[0];
     if (!event?.target?.files[0]) {
       return null;
@@ -81,6 +84,7 @@ const BugReport = (props) => {
         });
       }
        else if (file.size > 10e6) {
+        setfileLoading(false);
         return Swal.fire({
             icon: "error",
             title: "Please upload a file smaller than 10 MB",
@@ -95,15 +99,17 @@ const BugReport = (props) => {
         setImageData( image_data => [...image_data,resp.data])
       }
       else{
+        setfileLoading(false);
         return Swal.fire({
           icon: "error",
-          title: "Please upload a image jpeg/jpg/pdf",
-          text: resp.error,
+          title: "Error",
+          text: "File Format Not Supported. Please try with PDF or JPEG/JPG Format.",
           showCloseButton: true,
           showConfirmButton: false,
           width: 400,
         });
       }
+      setfileLoading(false);
     });
   };
   const deleteFunction =(value)=>{
@@ -146,6 +152,10 @@ const BugReport = (props) => {
             />
             <Card sx={{ px: 3, py: 2, mb: 3 }}>
               <InputLabel>Attachments</InputLabel>
+                     {fileLoading && 
+                      <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
+                      <CircularProgress ></CircularProgress>                                          
+                      </div>  }
                   <Fragment>
                     {image_data.map((obj,index)=>{
                     return(
