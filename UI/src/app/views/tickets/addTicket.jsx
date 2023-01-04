@@ -30,6 +30,7 @@ import {
   deleteFile,
   fileUpload,
 } from "app/services/ticketService";
+import CircularProgress from "../../components/MatxLoading";
 import {getStatusByDepId} from "../../utils/utils";
 
 const CreateTicket = ({ onClose }) => {
@@ -48,6 +49,7 @@ const CreateTicket = ({ onClose }) => {
   const [status, setStatus] = React.useState([]);
   const [priority, setPriority] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [fileLoading, setfileLoading] = React.useState(false);
   const navigate = useNavigate();
 
   const HeaderTitle = styled.div`
@@ -169,6 +171,7 @@ const CreateTicket = ({ onClose }) => {
     setSelectedPriority(event.target.value);
   };
   const onChangeFile = (event) => {
+    setfileLoading(true);
     if (!event?.target?.files[0]) {
       return null;
     }
@@ -186,6 +189,7 @@ const CreateTicket = ({ onClose }) => {
         });
       } else {
         setSelectedFiles([...selectedFiles, resp.data]);
+        setfileLoading(false);
       }
     });
   };
@@ -471,7 +475,12 @@ const CreateTicket = ({ onClose }) => {
                         sx={{ mb: 1.5 }}
                         value=""
                       />
-                      <br></br>
+                      <br></br>                     
+                      {fileLoading && 
+                      <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
+                      <CircularProgress ></CircularProgress>                                          
+                      </div>  }
+
                       {selectedFiles.map((f, index) => {
                         return (
                           <Fragment>
