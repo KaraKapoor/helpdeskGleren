@@ -48,7 +48,7 @@ const ForgotPassword = () => {
           return Swal.fire({
             icon: "error",
             title: "Error",
-            text: "Incorrect Email Address",
+            text: resp.error,
             showCloseButton: true,
             showConfirmButton: false,
             width: 400,

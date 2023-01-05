@@ -2,6 +2,7 @@ const errorConstants = require("../constants/errorConstants");
 const coreSettingsService = require("../Services/coreSettingAPIService");
 const generalMethodService = require("../Services/generalMethodAPIService");
 const publicAPIService = require("../Services/publicAPIService");
+const userAPIService = require("../Services/userAPIService");
 
 exports.sendOTPEmail = async (req, res) => {
     const input = req.body;
@@ -145,10 +146,16 @@ exports.registerTenant = async (req, res) => {
 
 exports.forgetPasswordEmail = async (req, res) => {
     const input = req.body;
+    const userDetails = await userAPIService.getByEmail(input.email);
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.email) == null) {
-
         return res.status(200).send({
             error: errorConstants.EMAIL_MANDATORY_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(userDetails) == null) {
+        return res.status(200).send({
+            error: errorConstants.EMAIL_NOT_EXIST_ERROR,
             status: false
         });
     }

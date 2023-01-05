@@ -1,5 +1,6 @@
 module.exports = {
     EMAIL_MANDATORY_ERROR: "Email is mandatory",
+    EMAIL_NOT_EXIST_ERROR: "Email is not exist or invalid email",
     PASSWORD_MANDATORY_ERROR: "Password is mandatory",
     WORKPLACE_MANDATORY_ERROR:"Work Place is manadatory",
     WORKPLACE_NOT_MATCHING_ERROR:"This User Does not exist for this Work Place",
