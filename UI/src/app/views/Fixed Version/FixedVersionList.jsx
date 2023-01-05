@@ -77,12 +77,14 @@ import { getAllVersion } from "app/services/adminService";
                         title="FixVersion"
                         columns={[
                             { title: 'Fix version', field: 'fix_version'},
-                            { title: 'Projects', field: 'projects'}
+                            { title: 'Projects', field: 'projects'},
+                            { title: 'Active', field: 'is_active'}
                         ]}
                         data={data?.map((e) => {
                             return {
                                 fix_version: e.fix_version,
                                 projects: e.project_id,
+                                is_active: e.is_active,
                                 projectId:e.id
                             }
                         })}

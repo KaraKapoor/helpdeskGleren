@@ -47,6 +47,7 @@ module.exports = {
     FIELD_ERROR: "Field is mandatory",
     FILES_ERROR: "Files is mandatory",
     FIX_VERSION_ERROR: "Fix Version is mandatory",
+    FIX_VERSION__ID_ERROR: "ID does not exist or Invalid ID",
     DUE_DATE_ERROR:"Due Date is mandatory",
     STORY_POINT_ERROR:"Story Point is mandatory",
     RESOLVED_BY_ERROR:"Resolved By is mandatory",
