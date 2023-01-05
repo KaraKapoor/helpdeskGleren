@@ -34,7 +34,7 @@ exports.getPaginationVersion = async (page, size, tenantId) => {
     size
   );
   await fix_version
-    .findAndCountAll({ limit, offset, where: { tenant_id: tenantId } })
+    .findAndCountAll({ limit, offset, where: { tenant_id: tenantId }, include:[{model: db.project}] })
     .then(async (data) => {
       const res = await generalMethodService.getPagingData(data, page, limit);
       response = res;

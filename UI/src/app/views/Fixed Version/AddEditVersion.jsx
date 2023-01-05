@@ -72,7 +72,7 @@ editDetails?.is_active ? editDetails.is_active : true
   }, []);
 
   const validationSchema = Yup.object().shape({
-    fixversion: Yup.string().max(
+    fix_version: Yup.string().max(
       20,
       "FixVersion Name can not be more than 20 characters long"
     ),
@@ -183,8 +183,8 @@ editDetails?.is_active ? editDetails.is_active : true
                       onBlur={handleBlur}
                       value={values.fix_version}
                       onChange={handleChange}
-                      error={Boolean(errors.fixversion && touched.fixversion)}
-                      helperText={touched.fixversion && errors.fixversion}
+                      error={Boolean(errors.fix_version && touched.fix_version)}
+                      helperText={touched.fix_version && errors.fix_version}
                       sx={{ mb: 1.5 }}
                     />
                     <br />
