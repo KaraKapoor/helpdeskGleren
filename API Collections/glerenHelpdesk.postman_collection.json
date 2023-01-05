@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "3b25b809-7412-4860-8eea-ea8b86a8be76",
+		"_postman_id": "17abb43f-b964-4c6a-8a3d-7c4e9332a812",
 		"name": "glerenHelpdesk",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "24877492"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -122,6 +121,204 @@
 		{
 			"name": "Admin",
 			"item": [
+				{
+					"name": "fix version",
+					"item": [
+						{
+							"name": "createfixversion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fixversion\": \"1.2.2.2\",\r\n    \"project_id\": 26,\r\n    \"is_active\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/admin/fixversion/createfixversion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"admin",
+										"fixversion",
+										"createfixversion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "editfixversion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fixversion\": \"fdhfgh\",\r\n    \"project_id\": 25,\r\n    \"is_active\": true,\r\n    \"id\": 5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/admin/fixversion/createfixversion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"admin",
+										"fixversion",
+										"createfixversion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllversion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/admin/fixversion/getallfixversion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"admin",
+										"fixversion",
+										"getallfixversion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getByID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":\"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/admin/fixversion/getById",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"admin",
+										"fixversion",
+										"getById"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getByProject",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/admin/fixversion/getByProject?project_id=26",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"admin",
+										"fixversion",
+										"getByProject"
+									],
+									"query": [
+										{
+											"key": "project_id",
+											"value": "26"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "createStatus",
 					"request": {
@@ -619,6 +816,14 @@
 								"create"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
