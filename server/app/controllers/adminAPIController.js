@@ -621,6 +621,13 @@ exports.getVersionById = async(req, res)=>{
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
+    const fixVersionId = await fixversionAPIService.getFixVersionById(input.id,tenantId);
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(fixVersionId) == null) {
+        return res.status(200).send({
+            error: errorConstants.FIX_VERSION__ID_ERROR,
+            status: false
+        });
+    }
     try {
         const response = await fixversionAPIService.getFixVersionById(input.id, tenantId);
         return res.status(200).send({ status: true, data: response });
