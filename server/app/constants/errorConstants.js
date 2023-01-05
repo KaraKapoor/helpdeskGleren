@@ -1,5 +1,6 @@
 module.exports = {
     EMAIL_MANDATORY_ERROR: "Email is mandatory",
+    EMAIL_NOT_EXIST_ERROR: "Email is not exist or invalid email",
     PASSWORD_MANDATORY_ERROR: "Password is mandatory",
     FIRST_NAME_MANDATORY_ERROR: "FirstName is mandatory",
     LAST_NAME_MANDATORY_ERROR: "LastName is mandatory",
