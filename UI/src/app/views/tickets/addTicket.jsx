@@ -195,8 +195,7 @@ const CreateTicket = ({ onClose }) => {
   };
 useEffect(()=>{
   if(selectedProject){
-    const queryParams=`?project_id=${selectedProject}`
-    getFixVersionByProject(queryParams).then((data)=>{
+    getFixVersionByProject({project_id:[selectedProject]}).then((data)=>{
       setFixverions(data?.data)
     })
   }
