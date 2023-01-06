@@ -343,7 +343,7 @@ useEffect(()=>{
                           onChange={handleStatusChange}
                           defaultValue={selectedStatus}
                         >
-                          {status?.map((d, i) => {
+                          {status?.filter(data=>data.is_active).map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.name}
