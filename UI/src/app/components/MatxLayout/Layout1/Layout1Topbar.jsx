@@ -130,9 +130,9 @@ const Layout1Topbar = () => {
     <TopbarRoot>
       <TopbarContainer>
         <Box display="flex">
-          <StyledIconButton onClick={handleSidebarToggle}>
+          {/* <StyledIconButton onClick={handleSidebarToggle}>
             <Icon>menu</Icon>
-          </StyledIconButton>
+          </StyledIconButton> */}
           <IconBox>
             <StyledIconButton>
               <Link to="/create-ticket">

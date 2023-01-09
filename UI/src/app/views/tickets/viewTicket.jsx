@@ -359,7 +359,7 @@ const ViewTicket = ({ onClose }) => {
                             required={true}
                             name="issueSummary"
                             type="textarea"
-                            label="Issue Summary"
+                            label="Issue Name"
                             placeholder="Issue Description"
                             variant="outlined"
                             onBlur={(e) => {

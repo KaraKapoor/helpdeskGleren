@@ -54,12 +54,6 @@ const validationSchema = Yup.object().shape({
     .required("required")
     .max(20,"Last-name can not be more than 20 characters long" ),
 
-    mobile : Yup.string()
-    .required("required")
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .min(10, "too short")
-    .max(13, "too long"),
-
   });
 
   React.useEffect(() => {
@@ -202,9 +196,8 @@ const validationSchema = Yup.object().shape({
                         value={values.email} onChange={handleChange} sx={{ mb: 1.5 }} />
                     </Grid>
                     <Grid item lg={6} md={6} sm={12} xs={12}>
-                      <TextField fullWidth size="large" name="mobile" required={true} type="text" label="Mobile"
+                      <TextField fullWidth size="large" name="mobile" type="text" label="Mobile"
                         variant="outlined" onBlur={handleBlur} value={values.mobile} onChange={handleChange}
-                        error={Boolean(errors.mobile && touched.mobile)} 
                         helperText={touched.mobile && errors.mobile}
                         sx={{ mb: 1.5 }} />
                     </Grid>
