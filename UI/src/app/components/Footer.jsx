@@ -39,11 +39,11 @@ const Footer = () => {
   return (
     <ThemeProvider theme={footerTheme}>
       <AppBar color="primary" position="static" sx={{ zIndex: 96 }}>
-        <AppFooter>
-          <FooterContent>
-            <Paragraph sx={{ m: 0 }}>Version: {Strings.VERSION}</Paragraph>
-            <Span sx={{ m: 'auto' }}></Span>
-            <Paragraph>
+        <AppFooter sx={{paddingLeft:"0 !important"}} className='test3'>
+          <FooterContent sx={{paddingLeft:"0 !important",margin:"5px !important"}}  className='test1' >
+            <Paragraph className='test2' >Version: {Strings.VERSION}</Paragraph>
+            <Span sx={{ margin: 'auto' }}></Span>
+            <Paragraph sx={{paddingRight:"0 !important"}}>
               Gleren Technologies Pvt Ltd
             </Paragraph>
           </FooterContent>
