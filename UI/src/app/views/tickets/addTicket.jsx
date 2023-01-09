@@ -270,7 +270,7 @@ useEffect(()=>{
                           onChange={handleProjectChange}
                           defaultValue={selectedProject}
                         >
-                          {projects?.map((d, i) => {
+                          {projects?.filter((project)=>project.is_active === 1).map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.name}
