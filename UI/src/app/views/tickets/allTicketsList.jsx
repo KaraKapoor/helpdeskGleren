@@ -132,9 +132,7 @@ const AllTickets = ({ setCurrentView }) => {
       queryParam = queryParam + `&fixVersion=${selectedFixVersion}`;
     }
     if (selectedDueDate) {
-      let date = new Date(selectedDueDate + " 00:00:00");
-      date = date.toISOString();
-      queryParam = queryParam + `&dueDate=${date}`;
+      queryParam = queryParam + `&dueDate=${selectedDueDate}`;
     }
     if (selectedOverdue != null && selectedOverdue !== undefined) {
       queryParam = queryParam + `&overdue=${selectedOverdue}`;

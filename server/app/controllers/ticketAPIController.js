@@ -10,6 +10,7 @@ const db = require("../models");
 const Op = db.Sequelize.Op;
 const emailAPIService = require("../Services/emailAPIService");
 const emailTemplates = require("../emailTemplates/emailTemplate");
+const moment = require("moment");
 const { VIEW_TICKET } = require("../constants/constants")
 
 exports.createTicket = async (req, res) => {
@@ -123,7 +124,7 @@ exports.getMyTickets = async (req, res) => {
         conditionArray.push({ due_dt: input.dueDate });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.overdue) !== null) {
-        conditionArray.push({ is_overdue: input.overdue === 'true' ? true : false });
+        conditionArray.push({ is_overdue: input.overdue === 'true' ? 1 : 0 });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reviewedBy) !== null) {
         conditionArray.push({ reviewed_by: { [Op.in]: generalMethodService.csvToArray(input.reviewedBy) } });
@@ -187,7 +188,7 @@ exports.getAllTickets = async (req, res) => {
         conditionArray.push({ due_dt: input.dueDate });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.overdue) !== null) {
-        conditionArray.push({ is_overdue: input.overdue === 'true' ? true : false });
+        conditionArray.push({ is_overdue: input.overdue === 'true' ? 1 : 0 });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reviewedBy) !== null) {
         conditionArray.push({ reviewed_by: { [Op.in]: generalMethodService.csvToArray(input.reviewedBy) } });
@@ -390,8 +391,8 @@ exports.updateTicket = async (req, res) => {
                 });
             }
             type = 'dueDate';
-            updateObj.due_dt = input.dueDate;
-            changedValue = input.dueDate;
+            updateObj.due_dt = await generalMethodService.convertDateToUTC(input.dueDate);
+            changedValue = input.dueDateInput;
             break;
         case 'storyPoints':
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.storyPoints) == null) {
