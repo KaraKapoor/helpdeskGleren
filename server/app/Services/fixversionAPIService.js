@@ -52,3 +52,8 @@ exports.getFixVersionByProject = async (project_id,tenantId) => {
     where: { [Op.and]: [{ project_id: project_id },{ tenant_id: tenantId }] },
   });
 };
+exports.getFixVersionByProjectSingle = async (project_id,tenantId) => {
+  return await fix_version.findOne({
+    where: { [Op.and]: [{ project_id: project_id },{ tenant_id: tenantId }] },
+  });
+};
