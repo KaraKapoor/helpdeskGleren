@@ -640,9 +640,9 @@ exports.getVersionById = async(req, res)=>{
     }
 }
 exports.getVersionByProject = async(req, res)=>{
-    const input = req.query.project_id;
-    const userDetails = await userAPIService.getUserById(req.user.user_id);
-    const tenantId = userDetails.tenant_id;
+    const input = req.body.project_id;
+    // const userDetails = await userAPIService.getUserById(req.user.user_id);
+    // const tenantId = userDetails.tenant_id;
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input) == null) {
         return res.status(200).send({
             error: errorConstants.PROJECT_ID_ERROR,
@@ -650,8 +650,9 @@ exports.getVersionByProject = async(req, res)=>{
         });
     }
     try {
-        const response = await fixversionAPIService.getFixVersionByProject(input,tenantId);
-        return res.status(200).send({ status: true, data: response });
+        const attachmentData =  await generalMethodService.executeRawSelectQuery(`select * from fix_versions where project_id in (${String(input)})`)
+        // const response = await fixversionAPIService.getFixVersionByProject(input,tenantId);
+        return res.status(200).send({ status: true, data: attachmentData });
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({

@@ -20,7 +20,7 @@ import "./ticketsList.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { Strings } from "config/strings";
-import { allTickets } from "app/services/ticketService";
+import { allTickets, getFixVersionByProject } from "app/services/ticketService";
 import "./allTicketList.css";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
@@ -86,6 +86,8 @@ const AllTickets = ({ setCurrentView }) => {
     const [projects, setProjects] = useState([]);
     const [assignees, setAssignee] = useState([]);
     const [reviewedBy, setReviewedBy] = useState([]);
+    const [fixverions, setFixverions] = useState([]);
+    const [handfixverions, sethandFixverions] = useState([]);
     const navigate = useNavigate()
 
   const handleChangePage = (_, newPage) => {
@@ -104,7 +106,14 @@ const AllTickets = ({ setCurrentView }) => {
     fetchMyTickets();
   }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy, selectedReportedBy
   ]);
-
+  useEffect(()=>{
+   
+      if(selectedProject){
+          getFixVersionByProject({project_id:selectedProject}).then((data)=>{
+            setFixverions(data?.data)
+          })
+        }
+  },[selectedProject])
   const fetchMyTickets = (search) => {
     let queryParam = `?page=${page}&size=${rowsPerPage}`;
     if (search !== undefined) {
@@ -180,7 +189,7 @@ const AllTickets = ({ setCurrentView }) => {
     setSelectedAssignee(event.target.value);
   };
   const handleFixVersionChange = (event) => {
-    setSelectedFixVersion(event.target.value);
+    sethandFixverions(event.target.value);
   };
   const handleDueDateChange = (event) => {
     setSelectedDueDate(event.target.value);
@@ -330,7 +339,7 @@ const AllTickets = ({ setCurrentView }) => {
             </FormControl>
           </Grid>
           <Grid item lg={2} md={2} sm={12} xs={12}>
-            <TextField
+            {/* <TextField
               fullWidth
               size="large"
               name="fixVersion"
@@ -340,7 +349,31 @@ const AllTickets = ({ setCurrentView }) => {
               value={selectedFixVersion}
               onChange={handleFixVersionChange}
               sx={{ mb: 1.5 }}
-            />
+            /> */}
+            <FormControl fullWidth>
+                    <InputLabel required={true} id="fixVersion">
+                          Fix version
+                        </InputLabel>
+                      <Select
+                        fullWidth
+                        size="large"
+                        name="fixVersion"
+                        type="text"
+                        label="Fix Version"
+                        variant="outlined"
+                        value={handfixverions}
+                        onChange={(e)=>handleFixVersionChange(e)}
+                        sx={{ mb: 1.5 }}
+                      >
+                        {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id}>
+                                {d.fix_version}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
           </Grid>
           <Grid item lg={2} md={2} sm={12} xs={12}>
             <TextField

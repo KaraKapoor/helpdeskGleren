@@ -19,7 +19,7 @@ import "./ticketsList.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { Strings } from "config/strings";
-import { myTickets } from "app/services/ticketService";
+import { getFixVersionByProject, myTickets } from "app/services/ticketService";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -81,6 +81,9 @@ const MyTickets = ({ setCurrentView }) => {
     const [projects, setProjects] = useState([]);
     const [assignees, setAssignee] = useState([]);
     const [reviewedBy, setReviewedBy] = useState([]);
+    const [fixverions, setFixverions] = useState([]);
+    const [handfixverions, sethandFixverions] = useState([]);
+
     const navigate = useNavigate();
 
     const handleChangePage = (_, newPage) => {
@@ -198,7 +201,13 @@ const MyTickets = ({ setCurrentView }) => {
             }
         })
     }, [])
-
+    useEffect(()=>{
+            if(selectedProject){
+                getFixVersionByProject({project_id:selectedProject}).then((data)=>{
+                  setFixverions(data?.data)
+                })
+              }
+      },[selectedProject])
     return (
         <Box width="100%" overflow="auto">
             <form className="p-2" >
@@ -267,10 +276,39 @@ const MyTickets = ({ setCurrentView }) => {
                         </FormControl>
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
+                    <FormControl fullWidth>
+                    <InputLabel required={true} id="fixVersion">
+                          Fix version
+                        </InputLabel>
+
+                      <Select
+                        fullWidth
+                        size="large"
+                        name="fixVersion"
+                        type="text"
+                        label="Fix Version"
+                        variant="outlined"
+                        value={selectedFixVersion}
+                        onChange={(e)=>handleFixVersionChange(e)}
+                        sx={{ mb: 1.5 }}
+                      >
+                        {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id}>
+                                {d.fix_version}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      </Grid>
+                    {/* <Grid item lg={2} md={2} sm={12} xs={12}>
                         <TextField fullWidth size="large" name="fixVersion" type="text" label="Fix Version"
                             variant="outlined" value={selectedFixVersion}
                             onChange={handleFixVersionChange} sx={{ mb: 1.5 }} />
-                    </Grid>
+
+                            
+                    // </Grid> */}
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                         <TextField fullWidth size="large" name="dueDate" type="date" label="Due Date"
                             variant="outlined" value={selectedDueDate}

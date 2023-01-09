@@ -288,13 +288,12 @@ const ViewTicket = ({ onClose }) => {
     });
   };
   useEffect(()=>{
-    if(selectedProject?.id){
-      const queryParams=`?project_id=${selectedProject?.id}`
-      getFixVersionByProject(queryParams).then((data)=>{
+    if(selectedProject){
+      getFixVersionByProject({project_id:selectedProject.id}).then((data)=>{
         setFixverions(data?.data)
       })
     }
-  },[selectedProject?.id])
+  },[selectedProject])
   return (
     <>
       {!loading && (
@@ -610,7 +609,7 @@ const ViewTicket = ({ onClose }) => {
                           );
                         }}
                       >
-                        {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
+                        {fixverions?.filter(data=> data.is_active)?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.fix_version}
