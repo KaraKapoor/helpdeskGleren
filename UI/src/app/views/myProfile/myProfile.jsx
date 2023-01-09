@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import {
   Box,
   Divider,
@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import { getMasterDropdownData, reportBug } from "app/services/adminService";
 import { Formik } from "formik";
-import { useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -32,6 +31,7 @@ import { fileUpload } from "app/services/ticketService";
 
 import useAuth from "app/hooks/useAuth";
 import { Link, useSearchParams } from "react-router-dom";
+import CircularProgress from "../../components/MatxLoading";
 const MyProfile = ({ onClose, editData }) => {
   const [valid, setValid] = React.useState(false);
   const [initialValues, setInitialValues] = React.useState(editData);
@@ -39,6 +39,7 @@ const MyProfile = ({ onClose, editData }) => {
   const [image_data , setImageData]=useState(null)
   const [departments, setDepartments] = React.useState();
   const [selectedDepartment, setSelectedDepartment] = React.useState();
+  const [fileLoading, setfileLoading] = React.useState(false);
   const navigate = useNavigate();
   const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
   const [users, setUsers] = useState({ avatar: "", raw: "" });
@@ -120,12 +121,13 @@ const MyProfile = ({ onClose, editData }) => {
         setSelectedDepartment(editData?.department);
   }
 });
-  }, []);
+  }, [users]);
 
   const handleDepartmentChange = (event) => {
 setSelectedDepartment(event.target.value);
   };
   const onChangeFile = (event) => {
+    setfileLoading(true);
     if (!event?.target?.files[0]) {
         return null;
     }
@@ -133,6 +135,29 @@ setSelectedDepartment(event.target.value);
     data.append("file", event?.target?.files[0]);
     fileUpload(data).then((resp) => {
       setImageData(resp?.data);
+      setfileLoading(false); Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: Strings.PROFILE_IMAGE_UPDATED_SUCCESSFULLY,
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
+      });
+      const reqBody={
+        photouploadId:resp.data.id,
+        id:resp.data.uploaded_by
+      }
+      updateUserProfile(reqBody).then((data)=>{
+        if(data){
+          getProfilePic()
+      .then((data) => {
+        setUsers({...users,avatar:data?.data});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+        }
+      });
     })
 }
   return (
@@ -288,7 +313,10 @@ setSelectedDepartment(event.target.value);
                     value=""
                     InputLabelProps={{ shrink: true }}
                   />
-                  
+                  {fileLoading && 
+                      <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
+                      <CircularProgress />                                          
+                      </div>  }
                   <label htmlFor="upload-button">
                     {users.avatar ? (
                       <img
