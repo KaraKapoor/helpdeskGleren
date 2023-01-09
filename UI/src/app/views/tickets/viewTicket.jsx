@@ -490,7 +490,7 @@ const ViewTicket = ({ onClose }) => {
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
                               >
-                                {assignees?.map((d, i) => {
+                                {assignees?.filter(data=>data.is_active).map((d, i) => {
                                   return (
                                     <MenuItem key={i} value={d.id}>
                                       {d.first_name} {d.last_name}

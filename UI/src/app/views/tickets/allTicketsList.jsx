@@ -284,7 +284,7 @@ const AllTickets = ({ setCurrentView }) => {
                 onChange={handleStatusChange}
                 defaultValue={selectedStatus}
               >
-                {status?.map((d, i) => {
+                {status?.filter(data=>data.is_active).map((d, i) => {
                   return (
                     <MenuItem key={i} value={d.id}>
                       {d.name}
@@ -306,7 +306,7 @@ const AllTickets = ({ setCurrentView }) => {
                 onChange={handleProjectChange}
                 defaultValue={selectedProject}
               >
-                {projects?.map((d, i) => {
+                {projects?.filter(data=>data.is_active).map((d, i) => {
                   return (
                     <MenuItem key={i} value={d.id}>
                       {d.name}
@@ -328,7 +328,7 @@ const AllTickets = ({ setCurrentView }) => {
                 onChange={handleAssigneeChange}
                 defaultValue={selectedAssignee}
               >
-                {assignees?.map((d, i) => {
+                {assignees?.filter(data=>data.is_active).map((d, i) => {
                   return (
                     <MenuItem key={i} value={d.id}>
                       {d.first_name} {d.last_name}
@@ -416,7 +416,7 @@ const AllTickets = ({ setCurrentView }) => {
                 onChange={handleReviewedBy}
                 defaultValue={selectedReviewedBy}
               >
-                {reviewedBy?.map((d, i) => {
+                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
                   return (
                     <MenuItem key={i} value={d.id}>
                       {d.first_name} {d.last_name}
@@ -437,7 +437,7 @@ const AllTickets = ({ setCurrentView }) => {
                 label="Tested By"
                 onChange={handleTestedBy}
               >
-                {reviewedBy?.map((d, i) => {
+                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
                   return (
                     <MenuItem key={i} value={d.id}>
                       {d.first_name} {d.last_name}
@@ -458,7 +458,7 @@ const AllTickets = ({ setCurrentView }) => {
                 label="Resolved By"
                 onChange={handleResolvedBy}
               >
-                {reviewedBy?.map((d, i) => {
+                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
                   return (
                     <MenuItem key={i} value={d.id}>
                       {d.first_name} {d.last_name}
@@ -479,7 +479,7 @@ const AllTickets = ({ setCurrentView }) => {
                 label="Reported By"
                 onChange={handleReportedBy}
               >
-                {reviewedBy?.map((d, i) => {
+                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
                   return (
                     <MenuItem key={i} value={d.id}>
                       {d.first_name} {d.last_name}
