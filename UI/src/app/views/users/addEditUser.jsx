@@ -249,7 +249,7 @@ const validationSchema = Yup.object().shape({
                           defaultValue={selectedDepartment}
                         >
 							{
-								 departments?.filter(department=>department.is_active)?.map((d, i) =>{
+								 departments?.filter(department=>department.is_active || department.id === selectedDepartment)?.map((d, i) =>{
 									return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
 								})
 							}
