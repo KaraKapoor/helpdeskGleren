@@ -216,7 +216,7 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           defaultValue={selectedL1}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
@@ -235,7 +235,7 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           defaultValue={selectedL2}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
@@ -254,7 +254,7 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           defaultValue={selectedL3}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
@@ -273,7 +273,7 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           defaultValue={selectedL4}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
@@ -292,7 +292,7 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           defaultValue={selectedL5}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
@@ -311,7 +311,7 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           defaultValue={selectedL6}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }

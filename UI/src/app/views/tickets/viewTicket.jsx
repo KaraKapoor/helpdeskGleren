@@ -288,13 +288,12 @@ const ViewTicket = ({ onClose }) => {
     });
   };
   useEffect(()=>{
-    if(selectedProject?.id){
-      const queryParams=`?project_id=${selectedProject?.id}`
-      getFixVersionByProject(queryParams).then((data)=>{
+    if(selectedProject){
+      getFixVersionByProject({project_id:selectedProject.id}).then((data)=>{
         setFixverions(data?.data)
       })
     }
-  },[selectedProject?.id])
+  },[selectedProject])
   return (
     <>
       {!loading && (
@@ -491,7 +490,7 @@ const ViewTicket = ({ onClose }) => {
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
                               >
-                                {assignees?.map((d, i) => {
+                                {assignees?.filter(data=>data.is_active).map((d, i) => {
                                   return (
                                     <MenuItem key={i} value={d.id}>
                                       {d.first_name} {d.last_name}
@@ -537,7 +536,7 @@ const ViewTicket = ({ onClose }) => {
                                 onChange={handleStatusChange}
                                 defaultValue={selectedStatus}
                               >
-                                {status?.map((d, i) => {
+                                {status?.filter(data=>data.is_active).map((d, i) => {
                                   return (
                                     <MenuItem key={i} value={d.id}>
                                       {d.name}

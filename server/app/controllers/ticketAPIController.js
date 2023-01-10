@@ -370,9 +370,16 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
+            const fix_version_name=  await db.fix_version.findOne({where:  [{ id: input.fixVersion }]  }); 
+            if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(fix_version_name) == null) {
+                return res.status(200).send({
+                    error: errorConstants.FIX_VERSION__ID_ERROR,
+                    status: false
+                });
+            }
             type = 'fixVersion';
             updateObj.fix_version_id = input.fixVersion;
-            changedValue = input.fixVersion;
+            changedValue = fix_version_name.fix_version;
             break;
         case 'dueDate':
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.dueDate) == null) {

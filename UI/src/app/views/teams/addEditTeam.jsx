@@ -239,7 +239,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                           defaultValue={selectedUsers}
                         >
                           {
-                            users?.map((d, i) => {
+                            users?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
@@ -260,7 +260,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                           defaultValue={selectedLeads}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
@@ -281,7 +281,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                           defaultValue={selectedAgents}
                         >
                           {
-                            agents?.map((d, i) => {
+                            agents?.filter(data=>data.is_active).map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                             })
                           }
