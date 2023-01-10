@@ -239,7 +239,7 @@ const MyTickets = ({ setCurrentView }) => {
                                 defaultValue={selectedProject}
                             >
                                 {
-                                    projects?.map((d, i) => {
+                                    projects?.filter((data)=>data.is_active).map((d, i) => {
                                         return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
                                     })
                                 }

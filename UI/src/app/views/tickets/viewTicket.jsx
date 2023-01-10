@@ -610,7 +610,7 @@ const ViewTicket = ({ onClose }) => {
                           );
                         }}
                       >
-                        {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
+                        {fixverions?.filter(data=> data.is_active || data.id == values.fixVersion)?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.fix_version}
