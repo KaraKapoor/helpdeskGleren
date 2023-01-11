@@ -152,7 +152,7 @@ exports.masterDropdownData = async (tenantId, currentUserId) => {
     response["departments"] = departmentData;
     const usersData = await user.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { role: { [Op.in]: ['admin', 'agent', 'teamLead'] } }] } });
     response["agents"] = usersData;
-    const projectsData = await project.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { is_active: true }] } });
+    const projectsData = await project.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }] } });
     response["projects"] = projectsData;
 
     let currenUserProjectsQuery = queries.GET_LOGGED_IN_USER_PROJECTS;

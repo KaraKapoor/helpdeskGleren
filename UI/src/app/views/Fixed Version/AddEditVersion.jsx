@@ -34,7 +34,6 @@ editDetails?.is_active ? editDetails.is_active : true
   const [Project, setProject] = React.useState();
   const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
   const navigate = useNavigate();
-
   const HeaderTitle = styled.div`
     display: flex;
     align-items: center;
@@ -204,10 +203,7 @@ editDetails?.is_active ? editDetails.is_active : true
                         onChange={(w) => handleDepartment(w)}
                         defaultValue={Project}
                       >
-                        {ProjectValue?.filter(
-                          (d, i) => d.is_active === true
-                        ).map((d, i) => {
-                          console.log(ProjectValue,"hshshs")
+                        {ProjectValue.filter(data => data.is_active || data.id === Project).map((d, i) => {
                           return (
                             <MenuItem key={i} value={d.id}>
                               {d.name}
