@@ -106,9 +106,10 @@ const validationSchema = Yup.object().shape({
     showConfirmButton: false,
     width: 400,
     })
-    return navigate('/users');
+    setTimeout(()=>{
+      return window.location.href='/users';
+    },2000)
     }
-
     })
   }
   const initialValues = {

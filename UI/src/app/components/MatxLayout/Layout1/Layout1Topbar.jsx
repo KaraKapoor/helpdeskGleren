@@ -52,16 +52,25 @@ const TopbarContainer = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("xs")]: {
     paddingLeft: 14,
     paddingRight: 16,
-  },
+  },  
 }));
 
-const UserMenu = styled(Box)(() => ({
+const UserMenu = styled(Box)(({theme}) => ({
   display: "flex",
   alignItems: "center",
   cursor: "pointer",
   borderRadius: 24,
   padding: 4,
-  "& span": { margin: "0 8px" , width:"150px" },
+  "& span": { 
+    margin: "0 8px",
+    [theme.breakpoints.down("sm")]: {
+      width:"auto",
+      maxWidth:"150px",
+      whiteSpace : 'nowrap',
+      overflow: "hidden",
+      textOverflow: "ellipsis"
+    },
+  },
 }));
 
 const Profile = styled("Box")(({ theme }) => ({
