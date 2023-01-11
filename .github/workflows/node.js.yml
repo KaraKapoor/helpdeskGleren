@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+        working-directory: [./UI]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -24,4 +25,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm i
+      working-directory: ./UI
     - run: npm run build
+      working-directory: ./UI
