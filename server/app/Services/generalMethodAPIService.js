@@ -58,3 +58,11 @@ exports.getEmailSubjectPrefix = async () => {
     }
     return prefix;
 }
+
+exports.convertDateToUTC = async(date)=>{
+    var newDate = moment(new Date(date));
+    newDate = newDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+    newDate = newDate.utc();
+    return newDate;
+
+}

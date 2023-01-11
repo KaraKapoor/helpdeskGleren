@@ -408,7 +408,7 @@ useEffect(()=>{
                         fullWidth
                         size="large"
                         name="dueDate"
-                        type="datetime-local"
+                        type="date"
                         label="Due Date"
                         variant="outlined"
                         onBlur={handleBlur}
@@ -419,9 +419,9 @@ useEffect(()=>{
                         InputLabelProps={{
                           shrink: true,
                       }}
-                        inputProps={{
-                          min: new Date().toISOString().slice(0, 16),
-                        }}
+                        // inputProps={{
+                        //   min: new Date().toISOString().slice(0, 16),
+                        // }}
                        
                       />
                       
