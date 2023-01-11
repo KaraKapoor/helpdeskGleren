@@ -14,6 +14,12 @@ import { getAllVersion } from "app/services/adminService";
   const FixVersionTable = styled(Table)(() => ({
     marginTop: '20px',
     whiteSpace: 'pre',
+    "thead":{
+        backgroundColor:"rgb(34, 42, 69)"
+      },
+      "thead > tr":{
+        backgroundColor:"rgb(34, 42, 69)"
+      },
     '& small': {
         height: 15,
         width: 50,
