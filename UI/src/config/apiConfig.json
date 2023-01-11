@@ -1,6 +1,6 @@
 {
     "general": {
-        "baseUrl": "http://localhost:8080/"
+        "baseUrl": "/"
     },
     "user": {
         "login": "api/public/login",
