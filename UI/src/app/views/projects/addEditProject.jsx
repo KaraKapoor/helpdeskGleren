@@ -43,7 +43,7 @@ const AddEditProject = ({ onClose, editDetails }) => {
 
     const validationSchema = Yup.object().shape({
         projectName: Yup.string()
-          .max(20, 'Project Name can not be more than 20 characters long'),
+          .max(50, 'Project Name can not be more than 50 characters long'),
       });
 
     const onSubmit = (values) => {
