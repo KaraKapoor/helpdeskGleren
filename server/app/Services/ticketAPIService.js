@@ -96,6 +96,9 @@ exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment) => {
 exports.createTicket = async (departmentId, projectId, assigneeId, category, statusId, priority, fixVersion, issueDetails, issueSummary, dueDate, storyPoints, loggedInId,
     tenantId, files) => {
     let response = null;
+    if(generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(dueDate)!== null){
+        var utcDueDate = await generalMethodAPIService.convertDateToUTC(dueDate);
+    }
     const obj = {
         created_by: loggedInId,
         department_id: departmentId,
@@ -107,7 +110,7 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
         fix_version_id: fixVersion,
         issue_details: issueDetails,
         issue_summary: issueSummary,
-        due_dt: dueDate,
+        due_dt: utcDueDate,
         level1SlaDue: dueDate,
         story_points: storyPoints,
         tenant_id: tenantId,

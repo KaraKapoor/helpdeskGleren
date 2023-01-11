@@ -39,6 +39,12 @@ const StyledTable = styled(Table)(() => ({
 const MyTicketsTable = styled(Table)(() => ({
   marginTop: "20px",
   whiteSpace: "pre",
+  "thead":{
+    backgroundColor:"rgb(34, 42, 69)"
+  },
+  "thead > tr":{
+    backgroundColor:"rgb(34, 42, 69)"
+  },
   "& small": {
     height: 15,
     width: 50,
@@ -132,9 +138,7 @@ const AllTickets = ({ setCurrentView }) => {
       queryParam = queryParam + `&fixVersion=${handfixverions}`;
     }
     if (selectedDueDate) {
-      let date = new Date(selectedDueDate + " 00:00:00");
-      date = date.toISOString();
-      queryParam = queryParam + `&dueDate=${date}`;
+      queryParam = queryParam + `&dueDate=${selectedDueDate}`;
     }
     if (selectedOverdue != null && selectedOverdue !== undefined) {
       queryParam = queryParam + `&overdue=${selectedOverdue}`;

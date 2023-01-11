@@ -22,7 +22,7 @@ import NotificationBar from "../../NotificationBar/NotificationBar";
 import ShoppingCart from "../../ShoppingCart";
 import { fileUpload } from "app/services/ticketService";
 import Swal from "sweetalert2";
-import { getProfilePic, updateUserProfile } from "app/services/userService";
+import { getLoggedInUserDetails, getProfilePic, updateUserProfile} from "app/services/userService";
 import axios from "axios";
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -61,7 +61,35 @@ const UserMenu = styled(Box)(() => ({
   cursor: "pointer",
   borderRadius: 24,
   padding: 4,
-  "& span": { margin: "0 8px" },
+  "& span": { margin: "0 8px" , width:"150px" },
+}));
+
+const Profile = styled("Box")(({ theme }) => ({
+  borderRadius: "50px",
+  color: "#ffff",
+  background: "#838392",
+  width: "50px",
+  height: "50px",
+  lineHeight: 3,
+  textAlign: "center",
+  [theme.breakpoints.down("sm")]: {
+    width: 50,
+    height: 50,
+    lineHeight: 3,
+    textAlign: "center",
+  },
+  [theme.breakpoints.down("xs")]: {
+    width: 50,
+    height: 50,
+    lineHeight: 3,
+    textAlign: "center",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: 50,
+    height: 50,
+    lineHeight: 3,
+    textAlign: "center",
+  },
 }));
 
 const StyledItem = styled(MenuItem)(({ theme }) => ({
@@ -88,13 +116,13 @@ const Layout1Topbar = () => {
   const { logout, user } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [users, setUsers] = useState({ avatar: "", raw: "" });
-
+  const [UserDetails,SetUserDetails] = useState();
   let [searchParams] = useSearchParams();
-  const searchdata=searchParams.get('updated')
+  const searchdata = searchParams.get("updated");
   useEffect(() => {
     getProfilePic()
       .then((data) => {
-        setUsers({...users,avatar:data?.data});
+        setUsers({...users,avatar:data?.data });
       })
       .catch((err) => {
         console.log(err);
@@ -125,14 +153,20 @@ const Layout1Topbar = () => {
     width: "260px",
     height: "40px",
   }));
+useEffect(()=>{
+  getLoggedInUserDetails().then((response)=>{
+    SetUserDetails(response?.data)
+  })
+},[])
+const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt(0);
 
   return (
     <TopbarRoot>
       <TopbarContainer>
         <Box display="flex">
-          <StyledIconButton onClick={handleSidebarToggle}>
+          {/* <StyledIconButton onClick={handleSidebarToggle}>
             <Icon>menu</Icon>
-          </StyledIconButton>
+          </StyledIconButton> */}
           <IconBox>
             <StyledIconButton>
               <Link to="/create-ticket">
@@ -178,25 +212,26 @@ const Layout1Topbar = () => {
                     Hi,
                     &nbsp;
                     <strong>
-                      {user.firstName} {user.lastName}
+                      {UserDetails?.first_name} {UserDetails?.last_name}
                     </strong>
                   </Span>
                 </Hidden>
-                <div>
+                <Profile>
                   <label htmlFor="upload-button">
-                    {users.avatar ? (
+                  {intials}
+                  {/* {users.avatar ? (
                       <img
-                        src={users.avatar}
-                        alt="dummy"
+                        src={users?.avatar ? users?.avatar : intials}
+                        // alt="dummy"
                         width="40"
                         height="40"
                         style={{ borderRadius: "50%" }}
-                      />
+                      /> 
                     ) : (
                       <>
-                        <Avatar src={user.avatar} sx={{ cursor: "pointer" }} />
+                        <Avatar src={user?.avatar ? user?.avatar : intials} sx={{ cursor: "pointer" }} />
                       </>
-                    )}
+                    )} */}
                   </label>
                   {/* <input
                     type="file"
@@ -204,8 +239,7 @@ const Layout1Topbar = () => {
                     style={{ display: "none" }}
                     onChange={handleChange}
                   /> */}
-                </div>
-
+                </Profile>
               </UserMenu>
             }
           >

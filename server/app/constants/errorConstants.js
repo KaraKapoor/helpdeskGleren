@@ -50,6 +50,8 @@ module.exports = {
     FILES_ERROR: "Files is mandatory",
     FIX_VERSION_ERROR: "Fix Version is mandatory",
     FIX_VERSION__ID_ERROR: "ID does not exist or Invalid ID",
+    PROJECTID_ERROR_OCCURRED: "Project_id is mandatory",
+    FIX_VERSION_SAME_ERROR: "Fix Version with same name already exist",
     DUE_DATE_ERROR:"Due Date is mandatory",
     STORY_POINT_ERROR:"Story Point is mandatory",
     RESOLVED_BY_ERROR:"Resolved By is mandatory",

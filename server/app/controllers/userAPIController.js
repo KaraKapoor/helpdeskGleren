@@ -142,13 +142,6 @@ exports.createUpdateUser = async (req, res) => {
                 status: false
             });
         }
-        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.mobile) == null) {
-
-            return res.status(200).send({
-                error: errorConstants.MOBILE_MANDATORY_ERROR,
-                status: false
-            });
-        }
         if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.designation) == null) {
 
             return res.status(200).send({

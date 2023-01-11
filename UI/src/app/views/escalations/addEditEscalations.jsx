@@ -9,6 +9,8 @@ import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Strings } from 'config/strings'
 import { createEscalationMatrix, getMasterDropdownData } from 'app/services/adminService';
+import ClearIcon from "@mui/icons-material/Clear";
+import IconButton from "@mui/material/IconButton";
 
 const AddEditEscalation = ({ onClose, editDetails }) => {
   const [valid, setValid] = React.useState(false)
@@ -72,6 +74,26 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
       }
     })
   }, [])
+
+  const handleClearClick = () => {
+    setSelectedL2();
+  };
+
+  const handleClearClickforL3=()=>{
+    setSelectedL3();
+  }
+
+ const handleClearClickforL4=()=>{
+  setSelectedL4();
+ }
+
+ const handleClearClickForL5=()=>{
+  setSelectedL5();
+ }
+
+ const handleClearClickForL6=()=>{
+  setSelectedL6();
+ }
 
   const onSubmit = (values) => {
     const reqBody = {
@@ -196,7 +218,7 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           defaultValue={selectedDepartment}
                         >
                           {
-                             departments?.filter(department=>department.is_active)?.map((d, i) => {
+                             departments?.filter(department=>department.is_active || department.id === selectedDepartment)?.map((d, i) => {
                               return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
                             })
                           }
@@ -233,6 +255,8 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           label="Level-2"
                           onChange={handleL2Change}
                           defaultValue={selectedL2}
+                          sx={{"& .MuiSelect-iconOutlined": {display: selectedL2? 'none': ''}, "&.Mui-focused .MuiIconButton-root": {color: 'primary.main'}}}
+                          endAdornment={<IconButton sx={{display: selectedL2? "": "none"}} onClick={handleClearClick}><ClearIcon/></IconButton>}
                         >
                           {
                             agents?.filter(data=>data.is_active).map((d, i) => {
@@ -252,6 +276,8 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           label="Level-3"
                           onChange={handleL3Change}
                           defaultValue={selectedL3}
+                          sx={{"& .MuiSelect-iconOutlined": {display: selectedL3? 'none': ''}, "&.Mui-focused .MuiIconButton-root": {color: 'primary.main'}}}
+                          endAdornment={<IconButton sx={{display: selectedL3? "": "none"}} onClick={handleClearClickforL3}><ClearIcon/></IconButton>}
                         >
                           {
                             agents?.filter(data=>data.is_active).map((d, i) => {
@@ -271,6 +297,8 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           label="Level-4"
                           onChange={handleL4Change}
                           defaultValue={selectedL4}
+                          sx={{"& .MuiSelect-iconOutlined": {display: selectedL4? 'none': ''}, "&.Mui-focused .MuiIconButton-root": {color: 'primary.main'}}}
+                          endAdornment={<IconButton sx={{display: selectedL4? "": "none"}} onClick={handleClearClickforL4}><ClearIcon/></IconButton>}
                         >
                           {
                             agents?.filter(data=>data.is_active).map((d, i) => {
@@ -290,6 +318,8 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           label="Level-5"
                           onChange={handleL5Change}
                           defaultValue={selectedL5}
+                          sx={{"& .MuiSelect-iconOutlined": {display: selectedL5? 'none': ''}, "&.Mui-focused .MuiIconButton-root": {color: 'primary.main'}}}
+                          endAdornment={<IconButton sx={{display: selectedL5? "": "none"}} onClick={handleClearClickForL5}><ClearIcon/></IconButton>}
                         >
                           {
                             agents?.filter(data=>data.is_active).map((d, i) => {
@@ -309,6 +339,8 @@ const AddEditEscalation = ({ onClose, editDetails }) => {
                           label="Level-6"
                           onChange={handleL6Change}
                           defaultValue={selectedL6}
+                          sx={{"& .MuiSelect-iconOutlined": {display: selectedL6? 'none': ''}, "&.Mui-focused .MuiIconButton-root": {color: 'primary.main'}}}
+                          endAdornment={<IconButton sx={{display: selectedL6? "": "none"}} onClick={handleClearClickForL6}><ClearIcon/></IconButton>}
                         >
                           {
                             agents?.filter(data=>data.is_active).map((d, i) => {

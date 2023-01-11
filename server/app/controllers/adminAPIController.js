@@ -585,7 +585,7 @@ exports.getTeamById = async (req, res) => {
         });
     }
 }
-exports.createFixVersion = async (req,res)=>{
+exports.createFixVersion = async (req, res) => {
     const input = req.body
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenant_id = userDetails.tenant_id;
@@ -596,9 +596,40 @@ exports.createFixVersion = async (req,res)=>{
             status: false
         });
     }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixversion) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.FIX_VERSION_ERROR,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.project_id) == null) {
+
+        return res.status(200).send({
+            error: errorConstants.PROJECTID_ERROR_OCCURRED,
+            status: false
+        });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
+        isNew = true;
+    }
     try {
-        const response = await fixversionAPIService.CreateFixVersion(input.fixversion,input.is_active,tenant_id,input.project_id,input.id);
-        return res.status(200).send({ status: true, data: response });
+        const response = await fixversionAPIService.getFixVersionByName(input.fixversion, tenant_id);
+        if (isNew && response?.fix_version) {
+            return res.status(200).send({
+                error: errorConstants.FIX_VERSION_SAME_ERROR,
+                status: false
+            });
+        } else if (!isNew && input?.fixversion === response?.fix_version && response.id != input.id) {
+            return res.status(200).send({
+                error: errorConstants.FIX_VERSION_SAME_ERROR,
+                status: false
+            });
+        } else {
+            const response = await fixversionAPIService.CreateFixVersion(input.fixversion, input.is_active, tenant_id, input.project_id, input.id);
+            return res.status(200).send({ status: true, data: response });
+        }
+
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
