@@ -104,7 +104,7 @@ const AllTickets = ({ setCurrentView }) => {
 
   useEffect(() => {
     fetchMyTickets();
-  }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy, selectedReportedBy
+  }, [page, selectedStatus, selectedProject, selectedAssignee, handfixverions, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy, selectedReportedBy
   ]);
   useEffect(()=>{
    
@@ -128,8 +128,8 @@ const AllTickets = ({ setCurrentView }) => {
     if (selectedAssignee.length > 0) {
       queryParam = queryParam + `&assigneeId=${selectedAssignee.toString()}`;
     }
-    if (selectedFixVersion) {
-      queryParam = queryParam + `&fixVersion=${selectedFixVersion}`;
+    if (handfixverions) {
+      queryParam = queryParam + `&fixVersion=${handfixverions}`;
     }
     if (selectedDueDate) {
       let date = new Date(selectedDueDate + " 00:00:00");
