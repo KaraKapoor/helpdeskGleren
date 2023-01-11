@@ -334,7 +334,7 @@ const ViewTicket = ({ onClose }) => {
                             required={true}
                             name="issueDetails"
                             type="text"
-                            label="Issue Summary"
+                            label="Issue Name"
                             variant="outlined"
                             onBlur={(e) => {
                               updateTicketDetails(
