@@ -164,9 +164,9 @@ const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt
     <TopbarRoot>
       <TopbarContainer>
         <Box display="flex">
-          <StyledIconButton onClick={handleSidebarToggle}>
+          {/* <StyledIconButton onClick={handleSidebarToggle}>
             <Icon>menu</Icon>
-          </StyledIconButton>
+          </StyledIconButton> */}
           <IconBox>
             <StyledIconButton>
               <Link to="/create-ticket">
