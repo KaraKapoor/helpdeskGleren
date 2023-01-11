@@ -10,6 +10,7 @@ module.exports = {
     TENANT_NAME_MANDATORY_ERROR: "Tenant name is mandatory",
     OTP_MANDATORY_ERROR: "OTP is mandatory",
     TENANT_ID_ERROR: "Tenant Id is mandatory",
+    PROJECT_ALREADY_ERROR: "Fix version is already created for this project",
     SOME_ERROR_OCCURRED: "Some error occurred while performing the operation",
     INCORRECT_USERNAME_PASSWORD: "Incorrect Email Address/Password",
     USER_ALREADY_EXISTS: "User with same email already exist",
