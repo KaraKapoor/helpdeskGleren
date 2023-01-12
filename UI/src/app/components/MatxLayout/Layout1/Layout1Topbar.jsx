@@ -76,11 +76,13 @@ const UserMenu = styled(Box)(({theme}) => ({
 const Profile = styled("Box")(({ theme }) => ({
   borderRadius: "50px",
   color: "#ffff",
-  background: "#838392",
+  background: "#212943",
   width: "50px",
   height: "50px",
   lineHeight: 3,
   textAlign: "center",
+  fontWeight: '700',
+  textTransform:'uppercase',
   [theme.breakpoints.down("sm")]: {
     width: 50,
     height: 50,
@@ -226,8 +228,8 @@ const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt
                   </Span>
                 </Hidden>
                 <Profile>
-                  <label htmlFor="upload-button">
-                  {users.avatar ? (
+                  <label htmlFor="upload-button"> {intials}
+                  {/* {users.avatar ? (
                       <img
                         src={users?.avatar}
                         alt="avtar"
@@ -239,7 +241,7 @@ const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt
                       <>
                         {intials}
                       </>
-                    )}
+                    )} */}
                   </label>
                 </Profile>
               </UserMenu>

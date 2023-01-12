@@ -589,13 +589,13 @@ exports.createFixVersion = async (req, res) => {
     const input = req.body
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenant_id = userDetails.tenant_id;
-    const fix_data= await fixversionAPIService.getFixVersionByProjectSingle(input.project_id,tenant_id)
-    if (await fix_data !=null) {
-        return res.status(200).send({
-            error: errorConstants.PROJECT_ALREADY_ERROR,
-            status: false
-        });
-    }
+    // const fix_data= await fixversionAPIService.getFixVersionByProjectSingle(input.project_id,tenant_id)
+    // if (await fix_data !=null) {
+    //     return res.status(200).send({
+    //         error: errorConstants.PROJECT_ALREADY_ERROR,
+    //         status: false
+    //     });
+    // }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixversion) == null) {
 
         return res.status(200).send({
@@ -629,7 +629,6 @@ exports.createFixVersion = async (req, res) => {
             const response = await fixversionAPIService.CreateFixVersion(input.fixversion, input.is_active, tenant_id, input.project_id, input.id);
             return res.status(200).send({ status: true, data: response });
         }
-
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
