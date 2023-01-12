@@ -9,6 +9,7 @@ import routes from './routes';
 
 const App = () => {
   const content = useRoutes(routes);
+  console.log("TEST-01");
 
   return (
     <Provider store={Store}>
