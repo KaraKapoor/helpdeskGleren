@@ -161,6 +161,9 @@ const AllTickets = ({ setCurrentView }) => {
       });
       setData(response?.pagingData);
       setTotalRecords(response.totalItems);
+      if (totalRecords !== response.totalItems) {
+        setPage(0);
+      }
     });
   };
   const handleSearchChange = (event) => {
