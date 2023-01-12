@@ -584,7 +584,7 @@ exports.getTeamById = async (req, res) => {
             status: false
         });
     }
-}
+} 
 exports.createFixVersion = async (req, res) => {
     const input = req.body
     const userDetails = await userAPIService.getUserById(req.user.user_id);
