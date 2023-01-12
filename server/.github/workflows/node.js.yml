@@ -21,8 +21,7 @@ jobs:
         cache-dependency-path: server/package-lock.json
     - run: npm i
       working-directory: ./server
-      with: 
-           script: |
-            sudo pm2 stop helpdesk_dev
+    - run: sudo pm2 stop helpdesk_dev  
+      working-directory: ./server
     # - run: npm run build
     #   working-directory: ./server
