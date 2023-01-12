@@ -227,27 +227,20 @@ const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt
                 </Hidden>
                 <Profile>
                   <label htmlFor="upload-button">
-                  {intials}
-                  {/* {users.avatar ? (
+                  {users.avatar ? (
                       <img
-                        src={users?.avatar ? users?.avatar : intials}
-                        // alt="dummy"
+                        src={users?.avatar}
+                        alt="avtar"
                         width="40"
                         height="40"
                         style={{ borderRadius: "50%" }}
                       /> 
                     ) : (
                       <>
-                        <Avatar src={user?.avatar ? user?.avatar : intials} sx={{ cursor: "pointer" }} />
+                        {intials}
                       </>
-                    )} */}
+                    )}
                   </label>
-                  {/* <input
-                    type="file"
-                    id="upload-button"
-                    style={{ display: "none" }}
-                    onChange={handleChange}
-                  /> */}
                 </Profile>
               </UserMenu>
             }
