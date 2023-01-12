@@ -18,8 +18,8 @@ jobs:
       with:
         node-version: 14
         cache: 'npm'
-        cache-dependency-path: UI/package-lock.json
+        cache-dependency-path: server/package-lock.json
     - run: npm i
-      working-directory: ./UI
-    - run: npm run build
-      working-directory: ./UI
+      working-directory: ./server
+    # - run: npm run build
+    #   working-directory: ./server
