@@ -228,8 +228,8 @@ const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt
                   </Span>
                 </Hidden>
                 <Profile>
-                  <label htmlFor="upload-button"> {intials}
-                  {/* {users.avatar ? (
+                  <label htmlFor="upload-button"> 
+                  {users.avatar ? (
                       <img
                         src={users?.avatar}
                         alt="avtar"
@@ -241,7 +241,7 @@ const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt
                       <>
                         {intials}
                       </>
-                    )} */}
+                    )}
                   </label>
                 </Profile>
               </UserMenu>
