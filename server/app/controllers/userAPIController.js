@@ -97,7 +97,6 @@ exports.getUserById = async (req, res) => {
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
-
         return res.status(200).send({
             error: errorConstants.ID_ERROR,
             status: false
@@ -106,7 +105,16 @@ exports.getUserById = async (req, res) => {
 
     try {
         const response = await userAPIService.getUserByIdWithTenant(input.id, tenantId);
-        return res.status(200).send({ status: true, data: response });
+        let result;
+        if (response) {
+            result = { status: true, data: response }
+        } else {
+            result = {
+            status: false,
+            message: "User with this ID does not exist or Invalid ID"
+            }
+        }
+        return res.status(200).send(result);
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
