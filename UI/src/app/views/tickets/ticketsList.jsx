@@ -229,7 +229,7 @@ const MyTickets = ({ setCurrentView }) => {
                                 defaultValue={selectedStatus}
                             >
                                 {
-                                    status?.map((d, i) => {
+                                    status?.filter((data)=>data.is_active).map((d, i) => {
                                         return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
                                     })
                                 }
@@ -269,7 +269,7 @@ const MyTickets = ({ setCurrentView }) => {
                                 defaultValue={selectedAssignee}
                             >
                                 {
-                                    assignees?.map((d, i) => {
+                                    assignees?.filter((data)=>data.is_active).map((d, i) => {
                                         return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                                     })
                                 }
@@ -343,7 +343,7 @@ const MyTickets = ({ setCurrentView }) => {
                                 defaultValue={selectedReviewedBy}
                             >
                                 {
-                                    reviewedBy?.map((d, i) => {
+                                    reviewedBy?.filter((data)=>data.is_active).map((d, i) => {
                                         return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                                     })
                                 }
@@ -362,7 +362,7 @@ const MyTickets = ({ setCurrentView }) => {
                                 onChange={handleTestedBy}
                             >
                                 {
-                                    reviewedBy?.map((d, i) => {
+                                    reviewedBy?.filter((data)=>data.is_active).map((d, i) => {
                                         return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                                     })
                                 }
@@ -381,7 +381,7 @@ const MyTickets = ({ setCurrentView }) => {
                                 onChange={handleResolvedBy}
                             >
                                 {
-                                    reviewedBy?.map((d, i) => {
+                                    reviewedBy?.filter((data)=>data.is_active).map((d, i) => {
                                         return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
                                     })
                                 }
