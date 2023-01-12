@@ -173,7 +173,12 @@ const ViewTicket = ({ onClose }) => {
         });
       } else {
         setCategory(resp?.data?.ticketCategory);
-        setAssignee(resp?.data?.agents);
+        // setAssignee(resp?.data?.agents);
+
+        let agents = resp?.data?.agents;
+        let users = resp?.data?.users;
+        let combinedArray = agents.concat(users);
+        setAssignee(combinedArray);
         
         setPriority(resp?.data?.ticketPriorites);
       }
