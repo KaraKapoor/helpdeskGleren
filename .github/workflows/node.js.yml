@@ -19,12 +19,12 @@ jobs:
         node-version: 14
         cache: 'npm'
         cache-dependency-path: server/package-lock.json
-    - run: npm i
-      working-directory: ./UI
+    # - run: npm i
+    #   working-directory: ./UI
     - run: npm run build
       working-directory: ./UI  
-    - run: npm i
-      working-directory: ./server
+    # - run: npm i
+    #   working-directory: ./server
     - run: sudo pm2 stop helpdesk_dev  
       working-directory: ./server  
     - run: sudo pm2 start helpdesk_dev  
