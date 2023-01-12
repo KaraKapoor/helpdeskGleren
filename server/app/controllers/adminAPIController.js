@@ -610,6 +610,7 @@ exports.createFixVersion = async (req, res) => {
             status: false
         });
     }
+    let isNew=false;
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
         isNew = true;
     }
