@@ -76,11 +76,13 @@ const UserMenu = styled(Box)(({theme}) => ({
 const Profile = styled("Box")(({ theme }) => ({
   borderRadius: "50px",
   color: "#ffff",
-  background: "#838392",
+  background: "#212943",
   width: "50px",
   height: "50px",
   lineHeight: 3,
   textAlign: "center",
+  fontWeight: '700',
+  textTransform:'uppercase',
   [theme.breakpoints.down("sm")]: {
     width: 50,
     height: 50,
@@ -226,28 +228,21 @@ const intials =UserDetails?.first_name.charAt(0) + UserDetails?.last_name.charAt
                   </Span>
                 </Hidden>
                 <Profile>
-                  <label htmlFor="upload-button">
-                  {intials}
+                  <label htmlFor="upload-button"> {intials}
                   {/* {users.avatar ? (
                       <img
-                        src={users?.avatar ? users?.avatar : intials}
-                        // alt="dummy"
+                        src={users?.avatar}
+                        alt="avtar"
                         width="40"
                         height="40"
                         style={{ borderRadius: "50%" }}
                       /> 
                     ) : (
                       <>
-                        <Avatar src={user?.avatar ? user?.avatar : intials} sx={{ cursor: "pointer" }} />
+                        {intials}
                       </>
                     )} */}
                   </label>
-                  {/* <input
-                    type="file"
-                    id="upload-button"
-                    style={{ display: "none" }}
-                    onChange={handleChange}
-                  /> */}
                 </Profile>
               </UserMenu>
             }
