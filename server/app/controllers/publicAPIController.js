@@ -13,7 +13,13 @@ exports.sendOTPEmail = async (req, res) => {
             status: false
         });
     }
-
+    const regex_pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!regex_pattern.test(input?.email)) {
+        return res.status(200).send({
+            status: false,
+            message: errorConstants.INVALID_EMAIL_ID
+        }); 
+    }
     try {
         await publicAPIService.sendOTPEmail(input.email);
         return res.status(200).send({
