@@ -1,1 +1,0 @@
-sudo pm2 stop helpdesk_dev
