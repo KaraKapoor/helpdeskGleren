@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
         },
         issue_summary:{
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT('medium'),
         },
         due_dt:{
             type: Sequelize.DATE,
