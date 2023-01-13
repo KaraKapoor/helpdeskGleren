@@ -15,10 +15,8 @@ exports.sendOTPEmail = async (req, res) => {
     }
 
     try {
-        await publicAPIService.sendOTPEmail(input.email);
-        return res.status(200).send({
-            status: true
-        })
+        const response =  await publicAPIService.sendOTPEmail(input.email , input.tenant_name);
+        return res.status(200).send(response);
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({

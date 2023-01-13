@@ -123,6 +123,7 @@ const JwtRegister = () => {
       if (showSendEmailBtn) {
         const formData = {
           email: values.email,
+          tenant_name: values.workplace,
         };
         sendOTPEmail(formData).then((data) => {
           if (data.status === false) {
@@ -133,8 +134,12 @@ const JwtRegister = () => {
               showCloseButton: true,
               showConfirmButton: false,
               width: 400,
-            });
-          } else {
+            }).then(function() {
+              navigate("/session/signin");
+          });
+          }
+          
+           else {
             Swal.fire({
               icon: "success",
               title: "Success",
@@ -172,43 +177,76 @@ const JwtRegister = () => {
               showConfirmButton: false,
               width: 400,
             });
+            const formData = {
+              email: values.email,
+              tenantName: values.workplace,
+              password: values.password,
+              firstName: values.firstName,
+              lastName: values.lastName,
+            };
+            registerTenant(formData).then((data) => {
+              if (data.status === false) {
+                 Swal.fire({
+                  icon: "error",
+                  title: "Error",
+                  text: data.error,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  width: 400,
+                });
+              } else {
+                Swal.fire({
+                  icon: "success",
+                  title: "Success",
+                  text: "Account Created Successfully",
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  width: 400,
+                });
+              }
+              navigate("/session/signin");
+            });
             setShowVerifyOTPBtn(false);
             setShowRegisterBtn(true);
             return null;
           }
         });
-      } else if (showRegisterBtn) {
-        const formData = {
-          email: values.email,
-          tenantName: values.workplace,
-          password: values.password,
-          firstName: values.firstName,
-          lastName: values.lastName,
-        };
-        registerTenant(formData).then((data) => {
-          if (data.status === false) {
-             Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: data.error,
-              showCloseButton: true,
-              showConfirmButton: false,
-              width: 400,
-            });
-          } else {
-            Swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Account Created Successfully",
-              showCloseButton: true,
-              showConfirmButton: false,
-              width: 400,
-            });
-          }
-          navigate("/session/signin");
-        });
-        return null;
       }
+
+      // not removing this add as it maybe needed in future //
+      
+      // } else if (showRegisterBtn) {
+      //   const formData = {
+      //     email: values.email,
+      //     tenantName: values.workplace,
+      //     password: values.password,
+      //     firstName: values.firstName,
+      //     lastName: values.lastName,
+      //   };
+      //   registerTenant(formData).then((data) => {
+      //     if (data.status === false) {
+      //        Swal.fire({
+      //         icon: "error",
+      //         title: "Error",
+      //         text: data.error,
+      //         showCloseButton: true,
+      //         showConfirmButton: false,
+      //         width: 400,
+      //       });
+      //     } else {
+      //       Swal.fire({
+      //         icon: "success",
+      //         title: "Success",
+      //         text: "Account Created Successfully",
+      //         showCloseButton: true,
+      //         showConfirmButton: false,
+      //         width: 400,
+      //       });
+      //     }
+      //     navigate("/session/signin");
+      //   });
+      //   return null;
+      // }
       setLoading(false);
     } catch (e) {
       console.log(e);
