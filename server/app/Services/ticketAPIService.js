@@ -125,7 +125,7 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     //<End>Insert Entry in ticket history
 
     //<Start>Insert entry into ticketFiles table
-    if (generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(files) !== null) {
+    if (files && generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(files) !== null) {
         for (let i of files) {
             await fileAPIService.saveTicketFiles(createdTicket.id, i.id, tenantId);
         }
