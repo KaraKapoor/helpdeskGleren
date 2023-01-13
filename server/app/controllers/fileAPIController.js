@@ -85,6 +85,7 @@ exports.deleteFile = async (req, res) => {
     const s3Config = this.get_S3_Config();
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const fileData = await userAPIService.getUploaderById(input.uploadId)
     const tenantId = userDetails.tenant_id;
     let keyName = input.keyName;
     await deleteFile(keyName);
@@ -103,14 +104,19 @@ exports.deleteFile = async (req, res) => {
         };
 
         await s3Config.deleteObject(params, function (error, data) {
-
             if (error) {
                 res.status(200).send({ success: false, error: error })
-            } else {
-                res.send({ success: true, data: data });
             }
-        })
+            else if(fileData == null){
+                res.send({ success: true, message: errorConstants.FILE_DELETED_ERROR });
+            }
+            else {
+                res.send({ success: true, message: errorConstants.FILE_DELETED });
+            }
+        }
+        )
     }
+
 }
 exports.downloadFile = async (req, res) => {
     const input = req.body;

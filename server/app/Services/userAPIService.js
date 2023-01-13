@@ -88,6 +88,9 @@ exports.createUpdateUser = async (email, firstName, lastName, mobile, designatio
 exports.getUserById = async (id) => {
     return user.findOne(({ where: { id: id } }));
 }
+exports.getUploaderById = async (id) => {
+    return uploads.findOne(({ where: { id: id } }));
+}
 exports.updateUser = async (id, updateObj, tenantid) => {
     await user.update(updateObj, { where: { [Op.and]: [{ id: id }, { tenant_id: tenantid }] } });
     return this.getUserById(id);

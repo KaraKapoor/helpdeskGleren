@@ -12,7 +12,7 @@ module.exports = (app) => {
     var multipleUpload = multer({ storage: storage }).array('file');
     var upload = multer({ storage: storage }).single('file');
     router.post("/uploadFile", auth, upload, file.uploadFile);
-    router.post("/deleteFile", auth, file.deleteFile);
+    router.delete("/deleteFile", auth, file.deleteFile);
     router.post("/downloadFile", auth, file.downloadFile);
     app.use("/api/file", router);
 };

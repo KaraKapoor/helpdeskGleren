@@ -59,5 +59,7 @@ module.exports = {
     TESTED_BY_ERROR:"Tested By is mandatory",
     TICKET_ID_ERROR: "Ticket Id is mandatory",
     HTML_COMMENT_MANDATORY: "Html Comment is mandatory",
-    KEY_NAME_ERROR: "KeyName is mandatory"
+    KEY_NAME_ERROR: "KeyName is mandatory",
+    FILE_DELETED_ERROR: "File is not present / might be deleted",
+    FILE_DELETED: "File is deleted"
 };
