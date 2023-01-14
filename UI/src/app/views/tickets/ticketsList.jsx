@@ -93,14 +93,13 @@ const MyTickets = ({ setCurrentView }) => {
     const refreshPage = () => {
         fetchMyTickets();
       };
-
     const newWindow = (id) => {
         window.open(`/view-ticket/${id}`)     
     }
 
     useEffect(() => {
         fetchMyTickets()
-    }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
+    }, [page, selectedStatus, selectedProject, selectedAssignee, selectedFixVersion,handfixverions, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy])
 
     const fetchMyTickets = (search) => {
         let queryParam = `?page=${page}&size=${rowsPerPage}`
@@ -122,6 +121,9 @@ const MyTickets = ({ setCurrentView }) => {
         if (selectedDueDate) {
             queryParam = queryParam + `&dueDate=${selectedDueDate}`
         }
+        if (handfixverions) {
+            queryParam = queryParam + `&fixVersion=${handfixverions}`;
+          }
         if (selectedOverdue != null && selectedOverdue !== undefined) {
             queryParam = queryParam + `&overdue=${selectedOverdue}`
         }
@@ -162,12 +164,12 @@ const MyTickets = ({ setCurrentView }) => {
     const handleAssigneeChange = (event) => {
         setSelectedAssignee(event.target.value);
     }
-    const handleFixVersionChange = (event) => {
-        setSelectedFixVersion(event.target.value);
-    }
     const handleDueDateChange = (event) => {
         setSelectedDueDate(event.target.value);
     }
+    const handleFixVersionChange = (event) => {
+        sethandFixverions(event.target.value);
+      };
     const onChangeOverdue = (event) => {
         setSelectedOverdue(event.target.value);
     }
@@ -287,9 +289,10 @@ const MyTickets = ({ setCurrentView }) => {
                         size="large"
                         name="fixVersion"
                         type="text"
+                        multiple
                         label="Fix Version"
                         variant="outlined"
-                        value={selectedFixVersion}
+                        value={handfixverions}
                         onChange={(e)=>handleFixVersionChange(e)}
                         sx={{ mb: 1.5 }}
                       >

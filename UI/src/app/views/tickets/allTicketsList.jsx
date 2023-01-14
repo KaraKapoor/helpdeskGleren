@@ -366,6 +366,7 @@ const AllTickets = ({ setCurrentView }) => {
                         size="large"
                         name="fixVersion"
                         type="text"
+                        multiple
                         label="Fix Version"
                         variant="outlined"
                         value={handfixverions}

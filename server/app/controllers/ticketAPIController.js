@@ -118,7 +118,7 @@ exports.getMyTickets = async (req, res) => {
         conditionArray.push({ status_id: { [Op.in]: generalMethodService.csvToArray(input.statusId) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixVersion) !== null) {
-        conditionArray.push({ fix_version_id: input.fixVersion });
+        conditionArray.push({ fix_version_id:{ [Op.in]: generalMethodService.csvToArray(  input.fixVersion )}});
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.dueDate) !== null) {
         conditionArray.push({ due_dt: input.dueDate });
@@ -182,7 +182,7 @@ exports.getAllTickets = async (req, res) => {
         conditionArray.push({ status_id: { [Op.in]: generalMethodService.csvToArray(input.statusId) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixVersion) !== null) {
-        conditionArray.push({ fix_version_id: input.fixVersion });
+        conditionArray.push({ fix_version_id: { [Op.in]: generalMethodService.csvToArray(input.fixVersion ) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.dueDate) !== null) {
         conditionArray.push({ due_dt: input.dueDate });
