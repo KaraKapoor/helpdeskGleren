@@ -280,7 +280,7 @@ const MyTickets = ({ setCurrentView }) => {
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
                     <FormControl fullWidth>
-                    <InputLabel required={true} id="fixVersion">
+                    <InputLabel  id="fixVersion">
                           Fix version
                         </InputLabel>
 

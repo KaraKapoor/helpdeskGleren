@@ -358,7 +358,7 @@ const AllTickets = ({ setCurrentView }) => {
               sx={{ mb: 1.5 }}
             /> */}
             <FormControl fullWidth>
-                    <InputLabel required={true} id="fixVersion">
+                    <InputLabel  id="fixVersion">
                           Fix version
                         </InputLabel>
                       <Select
