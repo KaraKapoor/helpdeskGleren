@@ -22,7 +22,10 @@ exports.sendOTPEmail = async (req, res) => {
     }
     try {
         const response =  await publicAPIService.sendOTPEmail(input.email , input.tenant_name);
-        return res.status(200).send(response);
+        return res.status(200).send({data : response,
+             message:"OTP SENT SUCCESSFULLY",
+            status:true
+        });
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
@@ -52,9 +55,12 @@ exports.verifyOTP = async (req, res) => {
 
     try {
         const response = await publicAPIService.verifyOTP(input.email, input.otp);
-        return res.status(200).send(response);
+        return res.status(200).send({    data : response,
+     status : true
+        });
     } catch (exception) {
         console.log(exception);
+      
         return res.status(200).send({
             error: errorConstants.SOME_ERROR_OCCURRED,
             status: false
