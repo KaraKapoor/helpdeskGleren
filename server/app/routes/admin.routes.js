@@ -27,4 +27,8 @@ module.exports = (app) => {
     router.post("/fixversion/getById",adminController.getVersionById);
     router.post("/fixversion/getByProject",adminController.getVersionByProject);
     app.use("/api/admin", auth, router);
+    router.post("/holiday/create", adminController.createHolidays);
+    router.post("/holiday/getByName", adminController.getHolidaysByName);
+    router.post("/holiday/getById", adminController.getHolidaysById);
+    router.get("/holiday/getAllHolidays", adminController.getAllHolidays);
 };
