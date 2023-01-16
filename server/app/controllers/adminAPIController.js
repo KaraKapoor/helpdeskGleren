@@ -228,6 +228,159 @@ exports.getAllStatus = async (req, res) => {
         });
     }
 }
+
+exports.createHolidays = async (req, res) => {
+    console.log("creating holidaY");
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    let isNew = false;
+    if (
+      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(
+        input.holidayName
+      )) == null
+    ) {
+      return res.status(200).send({
+        error: errorConstants.HOLIDAY_NAME_ERROR,
+        status: false,
+      });
+    }
+    if (
+      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id)) ==
+      null
+    ) {
+      isNew = true;
+    }
+    try {
+      const response = await adminAPIService.getHolidaysByName(
+        input.holidayName,
+        tenantId
+      );
+      if (isNew && response?.holiday_name) {
+        return res.status(200).send({
+          error: errorConstants.HOLIDAY_SAME_NAME_ERROR,
+          status: false,
+        });
+      } else if (
+        !isNew &&
+        input?.holidayName === response?.holiday_name &&
+        response.id != input.id
+      ) {
+        return res.status(200).send({
+          error: errorConstants.HOLIDAY_SAME_NAME_ERROR,
+          status: false,
+        });
+      } else {
+        const resp = await adminAPIService.createHolidays(
+          input.holidayName,
+          input.holidayDate,
+          tenantId
+        );
+        return res.status(200).send(resp);
+      }
+    } catch (exception) {
+      console.log(exception);
+      return res.status(200).send({
+        error: errorConstants.SOME_ERROR_OCCURRED,
+        status: false,
+      });
+    }
+  };
+  exports.getHolidaysById = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    if (
+      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id)) ==
+      null
+    ) {
+      return res.status(200).send({
+        error: errorConstants.ID_ERROR,
+        status: false,
+      });
+    }
+  
+    try {
+      const response = await adminAPIService.getHolidaysById(input.id, tenantId);
+      return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+      console.log(exception);
+      return res.status(200).send({
+        error: errorConstants.SOME_ERROR_OCCURRED,
+        status: false,
+      });
+    }
+  };
+  
+  exports.getHolidaysByName = async (req, res) => {
+    const input = req.body;
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    if (
+      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id)) ==
+      null
+    ) {
+      return res.status(200).send({
+        error: errorConstants.ID_ERROR,
+        status: false,
+      });
+    }
+  
+    try {
+      const response = await adminAPIService.getHolidaysByName(
+        input.holidayName,
+        tenantId
+      );
+      return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+      console.log(exception);
+      return res.status(200).send({
+        error: errorConstants.SOME_ERROR_OCCURRED,
+        status: false,
+      });
+    }
+  };
+  
+  exports.getAllHolidays = async (req, res) => {
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    const input = req.query;
+    const { page, size } = req.query;
+    if (
+      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(
+        input.page
+      )) == null
+    ) {
+      return res.status(200).send({
+        error: errorConstants.PAGE_NO_ERROR,
+        status: false,
+      });
+    }
+    if (
+      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(
+        input.size
+      )) == null
+    ) {
+      return res.status(200).send({
+        error: errorConstants.PAGE_SIZE_ERROR,
+        status: false,
+      });
+    }
+    try {
+      const response = await adminAPIService.getAllHolidaysWithPagination(
+        page,
+        size,
+        tenantId
+      );
+      return res.status(200).send({ status: true, data: response });
+    } catch (exception) {
+      console.log(exception);
+      return res.status(200).send({
+        error: errorConstants.SOME_ERROR_OCCURRED,
+        status: false,
+      });
+    }
+  };
 exports.bugReportEmail = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);

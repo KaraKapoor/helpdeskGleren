@@ -61,4 +61,6 @@ module.exports = {
     HTML_COMMENT_MANDATORY: "Html Comment is mandatory",
     KEY_NAME_ERROR: "KeyName is mandatory",
     INVALID_EMAIL_ID: "Invalid email id",
+    HOLIDAY_NAME_ERROR: " Holiday Name is mandatory",
+    HOLIDAY_SAME_NAME_ERROR: "Holiday with same name already exist",
 };

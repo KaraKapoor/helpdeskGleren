@@ -19,6 +19,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.coreSetting = require("./corSetting.model.js")(sequelize, Sequelize);
+db.holidays = require("./holidays.model.js")(sequelize, Sequelize);
 db.emailVerify = require("./emailVerify.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.tenant = require("./tenant.model.js")(sequelize, Sequelize);
@@ -37,6 +38,9 @@ db.fix_version = require("./fixversion.model.js")(sequelize, Sequelize)
 
 db.user.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
+});
+db.holidays.belongsTo(db.tenant, {
+  foreignKey: "tenant_id", //1:1
 });
 db.project.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
