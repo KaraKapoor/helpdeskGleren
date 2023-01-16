@@ -347,13 +347,8 @@ exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ti
 
 }
 exports.getTicketHistory = async (userDetails, tenantId, ticketId) => {
-    let response = null
     const ticketHistoryData = await ticketHistory.findAll({ where: { [Op.and]: [{ tenant_id: tenantId }, { ticket_id: ticketId }] } });
-    response = {
-        status: true,
-        data: ticketHistoryData
-    }
-    return response;
+    return ticketHistoryData
 }
 exports.getTicketComments = async (userDetails, tenantId, ticketId) => {
     let response = null
