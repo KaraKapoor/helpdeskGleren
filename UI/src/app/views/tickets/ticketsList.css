@@ -67,4 +67,10 @@
     text-overflow: ellipsis;
     width: 100px;
     margin-top: 0px;
-};
+}
+
+
+.close-icon {
+    display: flex;
+    justify-content: space-between;
+}

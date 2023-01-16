@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect ,useState} from "react";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -26,6 +26,7 @@ import { Strings } from "config/strings";
 import { authRoles } from "app/auth/authRoles";
 import { getMasterDropdownData,getStatusByDepartment } from "app/services/adminService";
 import {
+  allTickets,
   createTicket,
   deleteFile,
   fileUpload,
@@ -52,6 +53,10 @@ const CreateTicket = ({ onClose }) => {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [fixverions, setFixverions] = React.useState([]);
   const [fileLoading, setfileLoading] = React.useState(false);
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [linkedData, setLinkedData] = useState([])
+  const [linktickets, setlinkedticket] = React.useState([])
   const navigate = useNavigate();
 
   const HeaderTitle = styled.div`
@@ -72,6 +77,19 @@ const CreateTicket = ({ onClose }) => {
     font-size: 13px;
   `;
 
+useEffect(() => {
+  fetchMyTickets();
+}, [page]);
+const fetchMyTickets = (search) => {
+  let queryParam = `?page=${page}&size=${rowsPerPage}`;
+  allTickets(queryParam).then((response) => {
+    response?.pagingData?.map((data, i) => {
+      Object.assign(data, { sno: rowsPerPage * page + i + 1 });
+    });
+    setLinkedData(response?.pagingData);
+  });
+};
+
   const validationSchema = Yup.object().shape({
     storyPoints: Yup.number()
       .max(20, 'Story Points can not be more than 20 numbers long'),
@@ -90,10 +108,8 @@ const CreateTicket = ({ onClose }) => {
       dueDate: values.dueDate,
       storyPoints: values.storyPoints,
       files: selectedFiles,
+      linktickets: linktickets,
     };
-
-
-    
     createTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
         return Swal.fire({
@@ -169,6 +185,9 @@ const CreateTicket = ({ onClose }) => {
   };
   const handlePriorityChange = (event) => {
     setSelectedPriority(event.target.value);
+  };
+  const handleLinkTicketChanges = (event) => {
+    setlinkedticket(event.target.value);
   };
   const onChangeFile = (event) => {
     setfileLoading(true);
@@ -446,6 +465,66 @@ useEffect(()=>{
                       }}
                       />
                     </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <FormControl fullWidth>
+                    <InputLabel required={true} id="fixVersion">
+                          Linked ticket
+                        </InputLabel>
+                      <Select
+                        fullWidth
+                        multiple
+                        size="large"
+                        name="linktickets"
+                        type="text"
+                        label="Linked ticket"
+                        variant="outlined"
+                        value={linktickets}
+                        onChange={(e)=>handleLinkTicketChanges(e)}
+                        sx={{ mb: 1.5 }}
+                      >
+                        {linkedData?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id}>
+                                {d.id}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                     
+                    </Grid>
+                    {/* <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <Autocomplete
+                        freeSolo
+                        id="free-solo-2-demo"
+                        disableClearable
+                        // onChange={handleTicketChange}
+                        options={AllTickets?.map((option) => option.id)}
+                        getOptionLabel={(option) => option.id}
+                        renderInput={(params) => (
+                          <Select
+                          fullWidth
+                          size="large"
+                          // name="fixVersion"
+                          type="nimber"
+                          variant="outlined"
+                          onBlur={handleBlur}
+                          value={values.fixVersion}
+                          onChange={handleChange}
+                          sx={{ mb: 1.5 }}
+                          {...params}
+                            label="Linked Tickets"
+                            InputProps={{
+                              ...params.InputProps,
+                              type: 'search',
+                            }}
+                        >
+                        
+                          </Select>
+                         
+                        )}
+                      />
+                    </Grid> */}
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                       <TextField
                         fullWidth

@@ -20,7 +20,10 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { getMasterDropdownData, getStatusByDepartment } from "app/services/adminService";
+import {
+ getMasterDropdownData,
+ getStatusByDepartment
+} from "app/services/adminService";
 import {
   deleteFile,
   downloadFile,
@@ -51,9 +54,10 @@ const ViewTicket = ({ onClose }) => {
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [fixverions, setFixverions] = React.useState([]);
-
+ const [linktickets, setLinkedTickets]= React.useState([])
   const [fileLoading, setfileLoading] = React.useState(false);
   const navigate = useNavigate();
+  var host = window.location.protocol + "//" + window.location.host;
 
   const HeaderTitle = styled.div`
     display: flex;
@@ -133,6 +137,9 @@ const ViewTicket = ({ onClose }) => {
       case "reviewedBy":
         reqBody.reviewedBy = value;
         break;
+      case "linktickets":
+        reqBody.linktickets = value;
+        break;
     }
     updateTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
@@ -179,7 +186,6 @@ const ViewTicket = ({ onClose }) => {
         let users = resp?.data?.users;
         let combinedArray = agents.concat(users);
         setAssignee(combinedArray);
-        
         setPriority(resp?.data?.ticketPriorites);
       }
     });
@@ -213,6 +219,7 @@ const ViewTicket = ({ onClose }) => {
         setSelectedDepartment(resp.data.department.name);
         console.log(resp.data);
         await getStatusByDepId(resp.data.department_id);
+        setLinkedTickets(resp.data.linktickets)
         setSelectedProject(resp.data.project);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);
@@ -299,6 +306,14 @@ const ViewTicket = ({ onClose }) => {
       })
     }
   },[selectedProject])
+
+  const deleteLinkTicket=(index)=>{
+   linktickets.splice(index,1)
+    updateTicketDetails(
+      linktickets,
+      "linktickets"
+    );
+  }
   return (
     <>
       {!loading && (
@@ -390,10 +405,13 @@ const ViewTicket = ({ onClose }) => {
                           />
                           <Card sx={{ px: 3, py: 2, mb: 3 }}>
                             <InputLabel>Attachments</InputLabel>
-                            {fileLoading && 
-                            <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
-                            <CircularProgress ></CircularProgress>                                          
-                           </div>  }                          
+                            {fileLoading && (
+                            <div style={{position: "fixed",backgroundColor: "#00000075",width: "100%",top: "0",left: "0",zIndex: "999",height: "100vh",
+}}
+>
+                            <CircularProgress></CircularProgress>
+                              </div>
+                          )}
                             {editData.ticketFiles?.map((f, index) => {
                               return (
                                 <Fragment>
@@ -433,6 +451,33 @@ const ViewTicket = ({ onClose }) => {
                                 </Fragment>
                               );
                             })}
+                          </Card>
+                          <Card sx={{ px: 3, py: 2, mb: 3 }}>
+                            <InputLabel>Linked Ticket</InputLabel>
+
+                            {linktickets?.map((data,index)=>{
+                              return (<div className="close-icon">
+                              <a href={`${host}/view-ticket/${data}`}>
+                                {host}/view-ticket/{data}
+                              </a>
+                              <Icon className="icon" onClick={()=>deleteLinkTicket(index)}>close</Icon>
+                            </div>)
+                            })}
+                            {fileLoading && (
+                              <div
+                                style={{
+                                  position: "fixed",
+                                  backgroundColor: "#00000075",
+                                  width: "100%",
+                                  top: "0",
+                                  left: "0",
+                                  zIndex: "999",
+                                  height: "100vh",
+                                }}
+                              >
+                                <CircularProgress></CircularProgress>
+                              </div>
+                            )}
                           </Card>
                           <Card sx={{ px: 3, py: 2, mb: 3 }}>
                             <CustomTabs ticketId={editData.id}></CustomTabs>
@@ -591,7 +636,7 @@ const ViewTicket = ({ onClose }) => {
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
                             /> */}
-                             <FormControl   fullWidth
+                            <FormControl   fullWidth
                               size="small"
                               className="mt-2">
                     <InputLabel required={true} id="fixVersion">
@@ -629,7 +674,7 @@ const ViewTicket = ({ onClose }) => {
                               className="mt-2"
                               name="dueDate"
                               type="date"
-                               label="Due Date"
+                              label="Due Date"
                               variant="outlined"
                               onBlur={(e) => {
                                 updateTicketDetails(e.target.value, "dueDate");
@@ -638,9 +683,7 @@ const ViewTicket = ({ onClose }) => {
                               value={values.dueDate  || '' }
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
-                               InputLabelProps={{ shrink: true }}  
-
-                            />
+                              InputLabelProps={{ shrink: true }}                         />
                             <TextField
                               fullWidth
                               size="small"

@@ -5,7 +5,7 @@ const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
-const { project, user, status } = require("../models");
+const { project, user, status, ticket } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const emailAPIService = require("../Services/emailAPIService");
@@ -74,7 +74,7 @@ exports.createTicket = async (req, res) => {
         });
     }
     try {
-        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files);
+        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files , input.linktickets);
         return res.status(200).send(resp);
     } catch (exception) {
         console.log(exception);
@@ -444,6 +444,11 @@ exports.updateTicket = async (req, res) => {
             const testedBy = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.testedBy }] } });
             updateObj.tested_by = input.testedBy;
             changedValue = testedBy.first_name + ' ' + testedBy.last_name;
+            break;
+        case 'linktickets':
+            type = 'linktickets';
+            updateObj.linktickets = input.linktickets;
+            changedValue = input.linktickets;
             break;
     }
 
