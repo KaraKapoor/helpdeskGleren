@@ -43,11 +43,8 @@ exports.updateUser = async (req, res) => {
         if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) !== null) {
             updateObj.department_id = input.departmentId;
         }
-        if(await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.photouploadId) !== null){
-            updateObj.photo_id = input.photouploadId;
-        }
-
-
+        // Removed the null check here since deleting the profile picture we are setting upload to null
+        updateObj.photo_id = input.photouploadId;
 
         const response = await userAPIService.updateUser(input.id, updateObj, userDetails.tenant_id)
         return res.status(200).send({
