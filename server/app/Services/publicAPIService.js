@@ -12,7 +12,16 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
 
-exports.sendOTPEmail = async (email) => {
+exports.sendOTPEmail = async (email,tenant_name) => {
+    const exisitingTenant = await tenantAPIService.findTenantByName(tenant_name);
+    if (exisitingTenant && exisitingTenant.name && tenant_name) {
+        response = {
+            status: false,
+            error: errorConstants.TENANT_SAME_NAME_ERROR
+        }
+
+        return response;
+    }
     let otpTemplate = emailTemplates.EMAIL_OTP_TEMPLATE;
     const otp = await emailVerifyService.generateEmailOTP(email);
     otpTemplate = otpTemplate.replace('{otp}', otp);
