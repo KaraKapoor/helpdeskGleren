@@ -14,6 +14,8 @@ import { LoadingButton } from '@mui/lab';
 import { Fragment } from 'react';
 import {Select, MenuItem, InputLabel } from '@mui/material';
 import {  getMasterDropdownData } from 'app/services/adminService';
+import ReactHtmlParser from 'react-html-parser'; 
+
 
 
 function TabPanel(props) {
@@ -217,7 +219,9 @@ export default function CustomTabs({ ticketId }) {
                                                     </p>
                                                 </div>
                                                 <div className="triangleInnerContent">
-                                                    <p>{f.plain_text}</p>
+                                                    <p style={{ wordBreak: "break-word", paddingRight: "10px" }}>
+                                                        {ReactHtmlParser(f.html_text)}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </Grid>
