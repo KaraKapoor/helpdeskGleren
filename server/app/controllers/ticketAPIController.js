@@ -205,6 +205,10 @@ exports.getAllTickets = async (req, res) => {
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reportedBy) !== null) {
         conditionArray.push({ created_by: { [Op.in]: generalMethodService.csvToArray(input.reportedBy) } });
     }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.linkTicket) !== null) {
+        
+        conditionArray.push({ [Op.or]: [{ issue_details: { [Op.like]:`%${input.linkTicket}%`} }, { id: { [Op.like]:`%${input.linkTicket}%`} }] });
+    }
     conditionArray.push({ tenant_id: tenantId });
     try {
         const resp = await ticketAPIService.getAllTickets(conditionArray, tenantId, limit, offset, input.page, searchParam);

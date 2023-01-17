@@ -74,3 +74,6 @@
     display: flex;
     justify-content: space-between;
 }
+.css-13cymwt-control{
+    min-height: 53px !important;
+}
