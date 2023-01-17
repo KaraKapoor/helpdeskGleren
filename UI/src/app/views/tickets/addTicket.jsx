@@ -294,7 +294,7 @@ useEffect(()=>{
                           onChange={handleAssigneeChange}
                           defaultValue={selectedAssignee}
                         >
-                          {assignees?.filter(assignee=>assignee.is_active)?.map((d, i) => {
+                          {assignees?.filter(assignee=>assignee.is_active|| assignee.id === selectedAssignee)?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id}>
                                 {d.first_name} {d.last_name}
