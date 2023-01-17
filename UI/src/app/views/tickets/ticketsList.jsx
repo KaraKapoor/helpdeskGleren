@@ -83,6 +83,7 @@ const MyTickets = ({ setCurrentView }) => {
     const [reviewedBy, setReviewedBy] = useState([]);
     const [fixverions, setFixverions] = useState([]);
     const [handfixverions, sethandFixverions] = useState([]);
+    const [searchData , setsearchdata] = useState('');
 
     const navigate = useNavigate();
 
@@ -91,7 +92,11 @@ const MyTickets = ({ setCurrentView }) => {
     };
 
     const refreshPage = () => {
+       if(searchData){
+        fetchMyTickets(searchData);
+       }else{
         fetchMyTickets();
+       }
       };
     const newWindow = (id) => {
         window.open(`/view-ticket/${id}`)     
@@ -104,7 +109,7 @@ const MyTickets = ({ setCurrentView }) => {
     const fetchMyTickets = (search) => {
         let queryParam = `?page=${page}&size=${rowsPerPage}`
         if (search !== undefined) {
-            queryParam = queryParam + `&searchParam=${search}`
+            queryParam = queryParam + `&searchParam=${search ? search : searchData}`
         }
         if (selectedStatus.length > 0) {
             queryParam = queryParam + `&statusId=${selectedStatus.toString()}`
@@ -148,6 +153,7 @@ const MyTickets = ({ setCurrentView }) => {
         })
     }
     const handleSearchChange = (event) => {
+        setsearchdata(event.target.value)
         if (event?.target?.value) {
             fetchMyTickets(event.target.value);
         } else {
