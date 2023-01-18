@@ -74,7 +74,7 @@ exports.createTicket = async (req, res) => {
         });
     }
     try {
-        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files , input.linktickets);
+        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files , input.linked_tickets);
         return res.status(200).send(resp);
     } catch (exception) {
         console.log(exception);
@@ -241,7 +241,7 @@ exports.getTicketById = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-
+    const parentData=await ticket.findAll({where:{linked_tickets:[input.id]}})
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
 
         return res.status(200).send({
@@ -252,7 +252,7 @@ exports.getTicketById = async (req, res) => {
 
     try {
         const resp = await ticketAPIService.getTicketById(userDetails.id, tenantId, input.id);
-        return res.status(200).send({ status: true, data: resp });
+        return res.status(200).send({ status: true, data: resp , parentlinkticket:parentData });
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
@@ -449,9 +449,9 @@ exports.updateTicket = async (req, res) => {
             updateObj.tested_by = input.testedBy;
             changedValue = testedBy.first_name + ' ' + testedBy.last_name;
             break;
-        case 'linktickets':
-            type = 'linktickets';
-            updateObj.linktickets = input.linktickets;
+        case 'linked_tickets':
+            type = 'linked_tickets';
+            updateObj.linked_tickets = input.linktickets;
             changedValue = input.linktickets;
             break;
     }
@@ -556,4 +556,5 @@ exports.getTicketComments = async (req, res) => {
             status: false
         });
     }
+
 }

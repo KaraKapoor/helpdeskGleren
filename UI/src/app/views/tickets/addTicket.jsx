@@ -96,7 +96,7 @@ const CreateTicket = ({ onClose }) => {
       dueDate: values.dueDate,
       storyPoints: values.storyPoints,
       files: selectedFiles,
-      linktickets: selectedValue.map((data) => data.id),
+      linked_tickets: selectedValue.map((data) => data.id),
     };
     createTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
@@ -482,38 +482,6 @@ const promiseOptions = (inputValue) =>
                       </FormControl>
                      
                     </Grid>
-                    {/* <Grid item lg={6} md={6} sm={12} xs={12}>
-                    <Autocomplete
-                        freeSolo
-                        id="free-solo-2-demo"
-                        disableClearable
-                        // onChange={handleTicketChange}
-                        options={AllTickets?.map((option) => option.id)}
-                        getOptionLabel={(option) => option.id}
-                        renderInput={(params) => (
-                          <Select
-                          fullWidth
-                          size="large"
-                          // name="fixVersion"
-                          type="nimber"
-                          variant="outlined"
-                          onBlur={handleBlur}
-                          value={values.fixVersion}
-                          onChange={handleChange}
-                          sx={{ mb: 1.5 }}
-                          {...params}
-                            label="Linked Tickets"
-                            InputProps={{
-                              ...params.InputProps,
-                              type: 'search',
-                            }}
-                        >
-                        
-                          </Select>
-                         
-                        )}
-                      />
-                    </Grid> */}
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                       <TextField
                         fullWidth

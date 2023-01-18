@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect,useState } from "react";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -34,6 +34,7 @@ import {
 } from "app/services/ticketService";
 import CustomTabs from "./customTabs";
 import CircularProgress from "../../components/MatxLoading";
+import AsyncSelect from "react-select/async";
 
 const ViewTicket = ({ onClose }) => {
   const [assignees, setAssignee] = React.useState([]);
@@ -54,8 +55,13 @@ const ViewTicket = ({ onClose }) => {
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [fixverions, setFixverions] = React.useState([]);
- const [linktickets, setLinkedTickets]= React.useState([])
+  const [linktickets, setLinkedTickets]= React.useState([])
+  const [selectedValue, setSelectedValue] = useState(null);
+  const [EditLinkedTickets,setEditLinkTickets] = useState(false)
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [fileLoading, setfileLoading] = React.useState(false);
+  const [parentticket , setparentticket]=React.useState([])
   const navigate = useNavigate();
   var host = window.location.protocol + "//" + window.location.host;
 
@@ -72,6 +78,12 @@ const ViewTicket = ({ onClose }) => {
     padding: 1rem 1rem 0 1rem;
     gap: 1rem;
   `;
+  const LinkedHeadFlex = styled.div`
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:5px 0px;
+`
   const ContentBox = styled("div")(({ theme }) => ({
     margin: "30px",
     [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -137,8 +149,8 @@ const ViewTicket = ({ onClose }) => {
       case "reviewedBy":
         reqBody.reviewedBy = value;
         break;
-      case "linktickets":
-        reqBody.linktickets = value;
+      case "linked_tickets":
+        reqBody.linked_tickets = value?.map((data) => data?.id);;
         break;
     }
     updateTicket(reqBody).then((resp) => {
@@ -216,10 +228,11 @@ const ViewTicket = ({ onClose }) => {
         setSelectedReporter(
           resp.data.createdBy.first_name + " " + resp.data.createdBy.last_name
         );
+
         setSelectedDepartment(resp.data.department.name);
-        console.log(resp.data);
         await getStatusByDepId(resp.data.department_id);
-        setLinkedTickets(resp.data.linktickets)
+        setLinkedTickets(resp.data.linked_tickets)
+        setparentticket(resp.parentlinkticket )
         setSelectedProject(resp.data.project);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);
@@ -308,12 +321,13 @@ const ViewTicket = ({ onClose }) => {
   },[selectedProject])
 
   const deleteLinkTicket=(index)=>{
-   linktickets.splice(index,1)
+   linktickets?.splice(index,1)
     updateTicketDetails(
       linktickets,
-      "linktickets"
+      "linked_tickets"
     );
   }
+
   return (
     <>
       {!loading && (
@@ -453,8 +467,9 @@ const ViewTicket = ({ onClose }) => {
                             })}
                           </Card>
                           <Card sx={{ px: 3, py: 2, mb: 3 }}>
+                            <LinkedHeadFlex>
                             <InputLabel>Linked Ticket</InputLabel>
-
+                            </LinkedHeadFlex>
                             {linktickets?.map((data,index)=>{
                               return (<div className="close-icon">
                               <a href={`${host}/view-ticket/${data}`}>
@@ -463,6 +478,17 @@ const ViewTicket = ({ onClose }) => {
                               <Icon className="icon" onClick={()=>deleteLinkTicket(index)}>close</Icon>
                             </div>)
                             })}
+                            {parentticket?.length>0&&<div className="parentticket-list">
+                             <InputLabel>Parent Ticket</InputLabel>
+                             {parentticket?.map((data,index)=>{
+                               return (
+                                 <div className="close-icon">
+                              <a href={`${host}/view-ticket/${data?.id}`}>
+                                {host}/view-ticket/{data?.id}
+                              </a>
+                            </div>
+                             )})}
+                             </div>}
                             {fileLoading && (
                               <div
                                 style={{
@@ -618,24 +644,6 @@ const ViewTicket = ({ onClose }) => {
                                 })}
                               </Select>
                             </FormControl>
-                            {/* <TextField
-                              fullWidth
-                              size="small"
-                              className="mt-2"
-                              name="fixVersion"
-                              type="text"
-                              label="Fix Version"
-                              variant="outlined"
-                              onBlur={(e) => {
-                                updateTicketDetails(
-                                  e.target.value,
-                                  "fixVersion"
-                                );
-                              }}
-                              value={values.fixVersion}
-                              onChange={handleChange}
-                              sx={{ mb: 1.5 }}
-                            /> */}
                             <FormControl   fullWidth
                               size="small"
                               className="mt-2">
