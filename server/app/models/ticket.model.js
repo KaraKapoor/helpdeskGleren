@@ -92,7 +92,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER
         },
         story_points:{
-            type: Sequelize.INTEGER
+            type: Sequelize.FLOAT
         },
     });
 
