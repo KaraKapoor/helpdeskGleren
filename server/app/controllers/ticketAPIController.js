@@ -8,7 +8,6 @@ const ticketAPIService = require("../Services/ticketAPIService");
 const { project, user, status } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
-const ticketHistory = db.ticketHistory;
 const emailAPIService = require("../Services/emailAPIService");
 const emailTemplates = require("../emailTemplates/emailTemplate");
 const moment = require("moment");
