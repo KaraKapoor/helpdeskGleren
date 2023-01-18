@@ -94,6 +94,7 @@ const AllTickets = ({ setCurrentView }) => {
     const [reviewedBy, setReviewedBy] = useState([]);
     const [fixverions, setFixverions] = useState([]);
     const [handfixverions, sethandFixverions] = useState([]);
+    const [searchData , setsearchdata] = useState('');
     const navigate = useNavigate()
 
   const handleChangePage = (_, newPage) => {
@@ -101,7 +102,11 @@ const AllTickets = ({ setCurrentView }) => {
   };
 
   const refreshPage = () => {
-    fetchMyTickets();
+    if(searchData){
+    fetchMyTickets(searchData);
+    }else{
+      fetchMyTickets()
+    }
   };
 
   const newWindow = (id) => {
@@ -113,7 +118,7 @@ const AllTickets = ({ setCurrentView }) => {
   }, [page, selectedStatus, selectedProject, selectedAssignee, handfixverions, selectedDueDate, selectedOverdue, selectedReviewedBy, selectedResolvedBy, selectedTestedBy, selectedReportedBy
   ]);
   useEffect(()=>{
-   
+  
       if(selectedProject){
           getFixVersionByProject({project_id:selectedProject}).then((data)=>{
             setFixverions(data?.data)
@@ -123,7 +128,7 @@ const AllTickets = ({ setCurrentView }) => {
   const fetchMyTickets = (search) => {
     let queryParam = `?page=${page}&size=${rowsPerPage}`;
     if (search !== undefined) {
-      queryParam = queryParam + `&searchParam=${search}`;
+      queryParam = queryParam + `&searchParam=${search?search:searchData}`;
     }
     if (selectedStatus.length > 0) {
       queryParam = queryParam + `&statusId=${selectedStatus.toString()}`;
@@ -167,9 +172,11 @@ const AllTickets = ({ setCurrentView }) => {
     });
   };
   const handleSearchChange = (event) => {
+    setsearchdata(event?.target?.value);
     if (event?.target?.value) {
       fetchMyTickets(event.target.value);
-    } else {
+    }
+ else {
       fetchMyTickets();
     }
   };
