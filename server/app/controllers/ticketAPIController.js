@@ -241,9 +241,8 @@ exports.getTicketById = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-    const parentData=await ticket.findAll({where:{linked_tickets:[input.id]}})
+    const parentData=await ticket.findAll({where:{linked_tickets:[parseInt(input.id)]}})
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
-
         return res.status(200).send({
             error: errorConstants.ID_ERROR,
             status: false
