@@ -94,7 +94,7 @@ exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment) => {
     return response;
 }
 exports.createTicket = async (departmentId, projectId, assigneeId, category, statusId, priority, fixVersion, issueDetails, issueSummary, dueDate, storyPoints, loggedInId,
-    tenantId, files) => {
+    tenantId, files,linked_tickets) => {
     let response = null;
     if(generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(dueDate)!== null){
         var utcDueDate = await generalMethodAPIService.convertDateToUTC(dueDate);
@@ -114,8 +114,8 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
         level1SlaDue: dueDate,
         story_points: storyPoints,
         tenant_id: tenantId,
+        linked_tickets:linked_tickets
     }
-
     const createdTicket = await ticket.create(obj);
     const userDetails = await user.findOne({ where: { id: loggedInId } });
     const assigneeDetails = await user.findOne({where: {id: assigneeId}});
@@ -304,6 +304,8 @@ exports.getTicketById = async (userId, tenantId, ticketId) => {
         ]
     })
     response.ticketFiles = ticketFilesList;
+    const tickets = response.linked_tickets
+    response.linked_tickets = tickets? tickets.split(","):null
 
     return response;
 }

@@ -94,7 +94,16 @@ module.exports = (sequelize, Sequelize) => {
         story_points:{
             type: Sequelize.INTEGER
         },
+        linked_tickets:{
+            type: Sequelize.STRING,
+        get() {
+            const data = this.getDataValue('linked_tickets')
+            return data? data.split(','): null
+        },
+        set(link) {
+            return this.setDataValue('linked_tickets', link?.join(","));
+        }
+        }
     });
-
     return Ticket;
 };

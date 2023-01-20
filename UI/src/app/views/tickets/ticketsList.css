@@ -67,4 +67,16 @@
     text-overflow: ellipsis;
     width: 100px;
     margin-top: 0px;
-};
+}
+
+
+.close-icon {
+    display: flex;
+    justify-content: space-between;
+}
+.css-13cymwt-control{
+    min-height: 53px !important;
+}
+.parentticket-list{
+    margin-top: 14px;
+}

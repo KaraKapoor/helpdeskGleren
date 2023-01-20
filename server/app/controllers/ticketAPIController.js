@@ -5,7 +5,7 @@ const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
-const { project, user, status } = require("../models");
+const { project, user, status, ticket } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const emailAPIService = require("../Services/emailAPIService");
@@ -74,7 +74,7 @@ exports.createTicket = async (req, res) => {
         });
     }
     try {
-        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files);
+        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files , input.linked_tickets);
         return res.status(200).send(resp);
     } catch (exception) {
         console.log(exception);
@@ -205,6 +205,10 @@ exports.getAllTickets = async (req, res) => {
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reportedBy) !== null) {
         conditionArray.push({ created_by: { [Op.in]: generalMethodService.csvToArray(input.reportedBy) } });
     }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.linkTicket) !== null) {
+        
+        conditionArray.push({ [Op.or]: [{ issue_details: { [Op.like]:`%${input.linkTicket}%`} }, { id: { [Op.like]:`%${input.linkTicket}%`} }] });
+    }
     conditionArray.push({ tenant_id: tenantId });
     try {
         const resp = await ticketAPIService.getAllTickets(conditionArray, tenantId, limit, offset, input.page, searchParam);
@@ -237,9 +241,8 @@ exports.getTicketById = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-
+    const parentData=await ticket.findAll({where:{linked_tickets:[parseInt(input.id)]}})
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
-
         return res.status(200).send({
             error: errorConstants.ID_ERROR,
             status: false
@@ -248,7 +251,7 @@ exports.getTicketById = async (req, res) => {
 
     try {
         const resp = await ticketAPIService.getTicketById(userDetails.id, tenantId, input.id);
-        return res.status(200).send({ status: true, data: resp });
+        return res.status(200).send({ status: true, data: resp , parentlinkticket:parentData });
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
@@ -445,6 +448,11 @@ exports.updateTicket = async (req, res) => {
             updateObj.tested_by = input.testedBy;
             changedValue = testedBy.first_name + ' ' + testedBy.last_name;
             break;
+        case 'linked_tickets':
+            type = 'linked_tickets';
+            updateObj.linked_tickets = input.linktickets;
+            changedValue = input.linktickets;
+            break;
     }
 
     try {
@@ -547,4 +555,5 @@ exports.getTicketComments = async (req, res) => {
             status: false
         });
     }
+
 }
