@@ -128,7 +128,7 @@ const AllTickets = ({ setCurrentView }) => {
   const fetchMyTickets = (search) => {
     let queryParam = `?page=${page}&size=${rowsPerPage}`;
     if (search !== undefined) {
-      queryParam = queryParam + `&issueDetails=${search?search:searchData}`;
+      queryParam = queryParam + `&searchParam=${search?search:searchData}`;
     }
     if (selectedStatus.length > 0) {
       queryParam = queryParam + `&statusId=${selectedStatus.toString()}`;

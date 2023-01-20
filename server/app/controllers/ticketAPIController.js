@@ -169,9 +169,6 @@ exports.getAllTickets = async (req, res) => {
     const { limit, offset } = await generalMethodService.getPagination(input.page, input.size);
     let conditionArray = [];
 
-    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.issueDetails) !== null) {
-        conditionArray.push({ [Op.or]: [{ issue_details: { [Op.like]: `%${input.issueDetails}%` } }, { id: { [Op.like]: `%${input.issueDetails}%` } }] });
-    }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.startDate) !== null && await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.endDate) !== null) {
         conditionArray.push({ createdAt: { [Op.between]: [`${input.startDate}`, `${input.endDate}`] } });
     }
