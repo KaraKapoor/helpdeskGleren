@@ -453,7 +453,7 @@ const promiseOptions = (inputValue) =>
                         variant="outlined"
                         onBlur={handleBlur}
                         value={values.storyPoints}
-                        inputProps={{ min: 1 }}
+                        inputProps={{ min: "0", step: "0.1" }}
                         onChange={handleChange}
                         error={Boolean(errors.storyPoints && touched.storyPoints)} 
                         helperText={touched.storyPoints && errors.storyPoints}
