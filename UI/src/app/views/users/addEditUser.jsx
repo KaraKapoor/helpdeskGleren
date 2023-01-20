@@ -41,6 +41,15 @@ gap: 1rem;
 color: red;
 font-size: 13px;
 `
+const ISactiveError = styled.div`
+  width:15px;
+  height:15px;
+  border:5px solid red;
+  background-color:transparent;
+  color:white;
+  border-radius:50%;
+  text-align:center;
+`
 let phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
 const validationSchema = Yup.object().shape({
   designation: Yup.string()
@@ -241,10 +250,11 @@ const validationSchema = Yup.object().shape({
                           label="Department"
                           onChange={handleDepartmentChange}
                           defaultValue={selectedDepartment}
+                          className="isactiveDivStyle"
                         >
 							{
 								 departments?.filter(department=>department.is_active || department.id === selectedDepartment)?.map((d, i) =>{
-									return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+									return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
 								})
 							}
                         </Select>
