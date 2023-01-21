@@ -51,7 +51,7 @@ editDetails?.is_active ? editDetails.is_active : true
   width:15px;
   height:15px;
   border:5px solid red;
-  background-color:transparent;
+  background-color:red;
   color:white;
   border-radius:50%;
   text-align:center;

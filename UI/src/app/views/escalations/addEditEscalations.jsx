@@ -48,7 +48,7 @@ const ISactiveError = styled.div`
   width:15px;
   height:15px;
   border:5px solid red;
-  background-color:transparent;
+  background-color:red;
   color:white;
   border-radius:50%;
   text-align:center;
