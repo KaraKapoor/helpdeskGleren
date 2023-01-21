@@ -124,6 +124,7 @@ exports.createStatus = async (req, res) => {
     }
     try {
         const response = await adminAPIService.getStatusByName(input.statusName, tenantId);
+        const responseDepartment = await adminAPIService.getDepartmentById(input.departmentId,tenantId)
         if (isNew && response?.name) {
             return res.status(200).send({
                 error: errorConstants.STATUS_NAME_SAME_ERROR,
@@ -134,7 +135,13 @@ exports.createStatus = async (req, res) => {
                 error: errorConstants.STATUS_NAME_SAME_ERROR,
                 status: false
             });
-        } else {
+        } else if(responseDepartment.id === input.id || !responseDepartment.is_active){
+            return res.status(200).send({
+                error: errorConstants.DEPARTMENT_NAME_INACTIVE,
+                status: false
+            });
+        }  
+        else {
             const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId, input.statusType, input.departmentId);
             return res.status(200).send(resp);
         }
@@ -540,6 +547,7 @@ exports.createEscalationMatrix = async (req, res) => {
     }
     try {
         const response = await adminAPIService.getEscalationByDepartmentId(input.departmentId, tenantId);
+        const responseDepartment = await adminAPIService.getDepartmentById(input.departmentId,tenantId)
         if (isNew && response?.department_id) {
             return res.status(200).send({
                 error: errorConstants.SAME_ESCALATION_ERROR,
@@ -551,6 +559,12 @@ exports.createEscalationMatrix = async (req, res) => {
                 status: false
             });
         }
+        else if(responseDepartment.id === input.id || !responseDepartment.is_active){
+            return res.status(200).send({
+                error: errorConstants.DEPARTMENT_NAME_INACTIVE,
+                status: false
+            });
+        } 
         else {
             const resp = await adminAPIService.createEscalations(input.departmentId, input.l1Id, input.l2Id, input.l3Id, input.l4Id, input.l5Id, input.l6Id, input.id, input.is_active, tenantId);
             return res.status(200).send(resp);
@@ -695,12 +709,27 @@ exports.createTeam = async (req, res) => {
     }
     try {
         const response = await adminAPIService.getTeamByName(input.teamName, tenantId);
+        const responseProject = await adminAPIService.getProjectById(input.projectId,tenantId)
+        const responseDepartment = await adminAPIService.getDepartmentById(input.departmentId,tenantId)
         if (isNew && response?.name) {
             return res.status(200).send({
                 error: errorConstants.TEAM_NAME_SAME_ERROR,
                 status: false
             });
-        } else if (!isNew && input?.teamName === response?.name && response.id != input.id) {
+
+        }else if(responseProject.id === input.id || !responseProject.is_active){
+            return res.status(200).send({
+                error: errorConstants.PROJECT_NAME_INACTIVE,
+                status: false
+            });
+        } 
+        else if(responseDepartment.id === input.id || !responseDepartment.is_active){
+            return res.status(200).send({
+                error: errorConstants.DEPARTMENT_NAME_INACTIVE,
+                status: false
+            });
+        } 
+        else if (!isNew && input?.teamName === response?.name && response.id != input.id) {
             return res.status(200).send({
                 error: errorConstants.TEAM_NAME_SAME_ERROR,
                 status: false
@@ -774,12 +803,20 @@ exports.createFixVersion = async (req, res) => {
     }
     try {
         const response = await fixversionAPIService.getFixVersionByName(input.fixversion, tenant_id);
+        const responseProject = await adminAPIService.getProjectById(input.project_id,tenant_id)
+
         if (isNew && response?.fix_version) {
             return res.status(200).send({
                 error: errorConstants.FIX_VERSION_SAME_ERROR,
                 status: false
             });
-        } else if (!isNew && input?.fixversion === response?.fix_version && response.id != input.id) {
+        }else if(responseProject?.id === input?.projectId || !responseProject.is_active){
+            return res.status(200).send({
+                error: errorConstants.PROJECT_NAME_INACTIVE,
+                status: false
+            });
+        }
+         else if (!isNew && input?.fixversion === response?.fix_version && response.id != input.id) {
             return res.status(200).send({
                 error: errorConstants.FIX_VERSION_SAME_ERROR,
                 status: false

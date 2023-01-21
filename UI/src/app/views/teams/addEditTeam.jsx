@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2'
 import moment from 'moment'
@@ -126,6 +126,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
     setSelectedDepartment(event.target.value);
   }
   const handleProjectChange = (event) => {
+    
     setSelectedProject(event.target.value);
   }
   const handleUserChange= (event)=>{
@@ -199,8 +200,8 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                           defaultValue={selectedDepartment}
                         >
                           {
-                            departments?.filter(department=>department.is_active||department.id===selectedDepartment)?.map((d, i) => {
-                              return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                            departments?.filter(department=>department.is_active||department.id === selectedDepartment)?.map((d, i) => {
+                              return <MenuItem key={i} value={d.id} >{d.name}</MenuItem>
                             })
                           }
                         </Select>
