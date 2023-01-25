@@ -170,7 +170,8 @@ db.fix_version.belongsTo(db.project, {
     foreignKey: "project_id", //1:1,
     onDelete: 'CASCADE',
 });
-db.user.belongsTo(db.uploads, {
-    foreignKey: "photo_id", //1:1,
-});
+//not removing this as it might be needed in future
+// db.user.belongsTo(db.uploads, {
+//     foreignKey: "photo_id", //1:1,
+// });
 module.exports = db;

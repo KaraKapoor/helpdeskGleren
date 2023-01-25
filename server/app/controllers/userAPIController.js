@@ -1,12 +1,22 @@
 const errorConstants = require("../constants/errorConstants");
 const userAPIService = require("../Services/userAPIService");
 const generalMethodService = require("../Services/generalMethodAPIService");
+const { uploads } = require('../models');
 
 
 exports.getLoggedInUserDetails = async (req, res) => {
     const input = req.body;
-    const userDetails = await userAPIService.getUserById(req.user.user_id);
-
+    var userDetails = await userAPIService.getUserById(req.user.user_id);
+    const photoDetails = userDetails.photo_id;
+    const uploadDetails = await uploads.findOne({where:{id:userDetails.photo_id}});
+    if(photoDetails && uploadDetails.dataValues.key !== null ){
+    userDetails = {
+           
+                ...userDetails.dataValues,
+                key:uploadDetails.dataValues.key
+            
+          };
+    }
     try {
         return res.status(200).send({
             status: true,
@@ -196,9 +206,6 @@ exports.createUpdateUser = async (req, res) => {
 exports.getProfileURL = async (req, res) =>{
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
-
-
-   
     try {
         const resp = await userAPIService.getProfileURL(userDetails, userDetails.tenant_id);
         return res.status(200).send({ status: true, data: resp });

@@ -84,7 +84,7 @@ const MyProfile = ({ onClose, editData }) => {
       mobile: values.mobile,
       id: values.id,
       departmentId: selectedDepartment,
-      photouploadId:isDelete?image_data:image_data?.id
+      photouploadId:image_data?.id ? image_data.id:null
     };
     updateUserProfile(reqBody).then((resp) => {
       if (resp?.status === false) {
@@ -110,12 +110,11 @@ const MyProfile = ({ onClose, editData }) => {
       }
     });
   };
-  const deletethisFile =()=>{
-    setImageData(null);
-    setisDelete(true)
+  const deletethisFile =async()=>{
+    const response =  await getLoggedInUserDetails();   
     const obj = {
-      uploadId: image_data?.id,
-      keyName: image_data?.key,
+      uploadId: response?.data?.id,
+      keyName: response?.data?.key,
     };
     deleteFile(obj).then((r) =>{
       console.log(image_data,r,"after delete");
@@ -156,8 +155,6 @@ setSelectedDepartment(event.target.value);
     setfileName(get(event,"target.files[0].name"))
     fileUpload(data).then((resp) => {
       setImageData(resp?.data);
-      const responseData = resp?.data;
-      setFileResponse({responseData});
       setfileLoading(false); Swal.fire({
         icon: "success",
         title: "Success",
