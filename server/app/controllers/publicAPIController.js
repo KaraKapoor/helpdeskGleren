@@ -1,3 +1,4 @@
+const apiConstants = require("../constants/apiConstants");
 const errorConstants = require("../constants/errorConstants");
 const coreSettingsService = require("../Services/coreSettingAPIService");
 const generalMethodService = require("../Services/generalMethodAPIService");
@@ -23,8 +24,8 @@ exports.sendOTPEmail = async (req, res) => {
     try {
         const response =  await publicAPIService.sendOTPEmail(input.email , input.tenant_name);
         return res.status(200).send({data : response,
-             message:"OTP SENT SUCCESSFULLY",
-            status:true
+            status:true,
+            message : apiConstants.OTP_SENT_SUCCESSFULLY
         });
     } catch (exception) {
         console.log(exception);
