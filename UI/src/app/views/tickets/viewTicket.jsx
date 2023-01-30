@@ -575,7 +575,7 @@ text-align:center;
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
                               >
-                                {assignees?.filter(data=>data.is_active || data.id === selectedAssignee).map((d, i) => {
+                                {assignees?.filter(data=>data.is_active|| data.id === selectedAssignee).map((d, i) => {
                                   return (
                                     <MenuItem key={i} value={d.id} className="isactive-error">
                                       {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
