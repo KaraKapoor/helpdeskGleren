@@ -22,6 +22,8 @@ jobs:
       #   working-directory: ./UI
       - run: |
             ls
+            cd ..
+            ls
            # cd /
             #cd home
             #ls
