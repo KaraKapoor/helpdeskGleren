@@ -38,6 +38,8 @@ module.exports = {
     SAME_ESCALATION_ERROR: "Escalation Details for same department already exist.",
     TEAM_NAME_ERROR: "Team Name is mandatory",
     TEAM_NAME_SAME_ERROR: "Team with same name already exist",
+    PROJECT_NAME_INACTIVE : "Project Name is Inactive",
+    DEPARTMENT_NAME_INACTIVE : "Department Name is Inactive",
     USERS_EMPTY_ARRAY_ERROR: "Users cannot be null",
     LEADS_EMPTY_ARRAY_ERROR: "Leads cannot be null",
     AGENT_EMPTY_ARRAY_ERROR: "Agents cannot be null",

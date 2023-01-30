@@ -1,6 +1,7 @@
 const errorConstants = require("../constants/errorConstants");
 const userAPIService = require("../Services/userAPIService");
 const generalMethodService = require("../Services/generalMethodAPIService");
+const adminAPIService = require("../Services/adminAPIService")
 
 
 exports.getLoggedInUserDetails = async (req, res) => {
@@ -173,6 +174,7 @@ exports.createUpdateUser = async (req, res) => {
         }
 
         const response = await userAPIService.getByEmail(input.email, tenantId);
+        const responseDepartment = await adminAPIService.getDepartmentById(input.departmentId,tenantId)
         if (isNew && response?.email) {
             return res.status(200).send({
                 error: errorConstants.USER_ALREADY_EXISTS,
@@ -183,7 +185,13 @@ exports.createUpdateUser = async (req, res) => {
                 error: errorConstants.USER_ALREADY_EXISTS,
                 status: false
             });
-        } else {
+        }else if(responseDepartment.id === input.id || !responseDepartment.is_active ){
+            return res.status(200).send({
+                error: errorConstants.DEPARTMENT_NAME_INACTIVE,
+                status: false
+            });
+        } 
+        else {
             const resp = await userAPIService.createUpdateUser(input.email, input.firstName, input.lastName, input.mobile, input.designation, input.role, input.active, input.id, tenantId,input.departmentId);
             return res.status(200).send(resp);
         }
