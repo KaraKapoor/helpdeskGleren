@@ -47,6 +47,15 @@ editDetails?.is_active ? editDetails.is_active : true
     padding: 1rem 1rem 0 1rem;
     gap: 1rem;
   `;
+  const ISactiveError = styled.div`
+  width:15px;
+  height:15px;
+  border:5px solid red;
+  background-color:red;
+  color:white;
+  border-radius:50%;
+  text-align:center;
+`
   useEffect(() => {
     if (editDetails) {
       {
@@ -202,11 +211,12 @@ editDetails?.is_active ? editDetails.is_active : true
                         label="Project Name"
                         onChange={(w) => handleDepartment(w)}
                         defaultValue={Project}
+                        className="isactiveDivStyle"
                       >
                         {ProjectValue.filter(data => data.is_active || data.id === Project).map((d, i) => {
                           return (
-                            <MenuItem key={i} value={d.id}>
-                              {d.name}
+                            <MenuItem key={i} value={d.id}  className="isactive-error">
+                              {d.name} {d.is_active === false ? <ISactiveError />: ""}
                             </MenuItem>
                           );
                         })}

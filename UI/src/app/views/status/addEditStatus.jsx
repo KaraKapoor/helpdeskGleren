@@ -38,6 +38,15 @@ const AddEditStatus = ({ onClose, editDetails }) => {
     color: red;
     font-size: 13px;
 `
+const ISactiveError = styled.div`
+  width:15px;
+  height:15px;
+  border:5px solid red;
+  background-color:red;
+  color:white;
+  border-radius:50%;
+  text-align:center;
+`
 
     React.useEffect(() => {
         if (editDetails) {
@@ -206,10 +215,11 @@ const AddEditStatus = ({ onClose, editDetails }) => {
                                                 label="department"
                                                 onChange={handleDepartment}
                                                 defaultValue={department}
+                                                className="isactiveDivStyle"
                                             >
                                                 {
-                                                    departmentvalue?.filter((d,i) => (d.is_active === true)).map((d, i) => {
-                                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                                                    departmentvalue?.filter((d,i) => (d.is_active === true || d.id === department )).map((d, i) => {
+                                                        return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                                                     })
                                                 }
                                             </Select>
