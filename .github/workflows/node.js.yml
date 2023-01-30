@@ -16,10 +16,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: npm install
-        working-directory: ./UI
-      - run: npm run build
-        working-directory: ./UI
+      # - run: npm install
+      #   working-directory: ./UI
+      # - run: npm run build
+      #   working-directory: ./UI
       - run: cp [./actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build] [./devHelpdeskGleren/helpdeskGleren/UI/build] 
 
   
