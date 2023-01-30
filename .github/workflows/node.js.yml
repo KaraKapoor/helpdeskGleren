@@ -23,6 +23,8 @@ jobs:
       - run: |
             cd /
             ls
+            cd home
+            ls
       #- run: cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/UI/
 
   
