@@ -28,7 +28,7 @@ import { getAllVersion } from "app/services/adminService";
             '0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)',
     },
     '& td': {
-        borderBottom: 'none',
+        borderBottom: "1px solid rgba(224, 224, 224, 1)",
     },
     '& td:first-of-type': {
         paddingLeft: '16px !important',
