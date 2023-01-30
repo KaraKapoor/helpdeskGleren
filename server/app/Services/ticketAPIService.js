@@ -186,7 +186,7 @@ exports.getAllTickets = async (conditionArray, tenantId, limit, offset, page, se
                 break;
             }
         }
-        conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { tenant_id: tenantId }, projectIdCondition] }
+        conditions = { [Op.and]: [{ [Op.or]: [{ issue_details: { [Op.like]: `%${searchParam}%` } }, { id: { [Op.like]: `%${searchParam}%` } }] }, { tenant_id: tenantId }, projectIdCondition] }
     }
     const resp = await ticket.findAndCountAll({
         order:[ ['createdAt', 'DESC'] ],
