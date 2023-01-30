@@ -21,7 +21,9 @@ jobs:
       # - run: npm run build
       #   working-directory: ./UI
       - run: |
+            ls
             cd /
-      - run: cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/UI/
+            ls
+      #- run: cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/UI/
 
   
