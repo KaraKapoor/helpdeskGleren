@@ -96,7 +96,7 @@ const CreateTicket = ({ onClose }) => {
       dueDate: values.dueDate,
       storyPoints: values.storyPoints,
       files: selectedFiles,
-      linked_tickets: selectedValue.map((data) => data.id),
+      linked_tickets: selectedValue?selectedValue.map((data) => data.id):"",
     };
     createTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
