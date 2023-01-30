@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import React, { useEffect,useState } from "react";
+import React, { useEffect,useRef,useState } from "react";
 import {
   Box,
   Divider,
@@ -27,11 +27,12 @@ import {
   updateUserProfile,
 } from "app/services/userService";
 import { Strings } from "config/strings";
-import { fileUpload } from "app/services/ticketService";
+import { deleteFile, fileUpload } from "app/services/ticketService";
 
 import useAuth from "app/hooks/useAuth";
 import { Link, useSearchParams } from "react-router-dom";
 import CircularProgress from "../../components/MatxLoading";
+import { get } from "lodash";
 const MyProfile = ({ onClose, editData }) => {
   const [valid, setValid] = React.useState(false);
   const [initialValues, setInitialValues] = React.useState(editData);
@@ -43,18 +44,14 @@ const MyProfile = ({ onClose, editData }) => {
   const navigate = useNavigate();
   const handleClose = (event) => !!onClose && onClose(event) && setValid(false);
   const [users, setUsers] = useState({ avatar: "", raw: "" });
+  const [isDelete, setisDelete] = useState(false);
+  console.log(users,"usersusers")
+  const [filename , setfileName] = useState("")
   const { logout, user } = useAuth();
+  const uploadInputRef = useRef(null)
+  const [fileresponse , setFileResponse]= useState({});
   let [searchParams] = useSearchParams();
   const searchdata=searchParams.get('updated')
-  useEffect(() => {
-    getProfilePic()
-      .then((data) => {
-        setUsers({...users,avatar:data?.data});
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [searchdata]);
 
   const HeaderTitle = styled.div`
     display: flex;
@@ -69,6 +66,15 @@ const MyProfile = ({ onClose, editData }) => {
     padding: 1rem 1rem 0 1rem;
     gap: 1rem;
   `;
+  useEffect(() => {
+    getProfilePic()
+      .then((data) => {
+        setUsers({...users,avatar:data?.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const onSubmit = (values) => {
     const reqBody = {
@@ -78,7 +84,7 @@ const MyProfile = ({ onClose, editData }) => {
       mobile: values.mobile,
       id: values.id,
       departmentId: selectedDepartment,
-      photouploadId:image_data?.id
+      photouploadId:image_data?.id ? image_data.id:null
     };
     updateUserProfile(reqBody).then((resp) => {
       if (resp?.status === false) {
@@ -100,10 +106,23 @@ const MyProfile = ({ onClose, editData }) => {
           showConfirmButton: false,
           width: 400,
         });
-        return window.location.href="/dashboard/default?updated=true";
+         return window.location.href="/dashboard/default?updated=true";
       }
     });
   };
+  const deletethisFile =async()=>{
+    const response =  await getLoggedInUserDetails();   
+    const obj = {
+      uploadId: response?.data?.id,
+      keyName: response?.data?.key,
+    };
+    deleteFile(obj).then((r) =>{
+      console.log(image_data,r,"after delete");
+      setfileName("");
+      setUsers({...users,avatar:""});
+      setImageData(null);
+    });
+  }
   useEffect(() => {
     getMasterDropdownData().then((resp) => {
       if (resp?.status === false) {
@@ -133,6 +152,7 @@ setSelectedDepartment(event.target.value);
     }
     let data = new FormData();
     data.append("file", event?.target?.files[0]);
+    setfileName(get(event,"target.files[0].name"))
     fileUpload(data).then((resp) => {
       setImageData(resp?.data);
       setfileLoading(false); Swal.fire({
@@ -143,6 +163,7 @@ setSelectedDepartment(event.target.value);
         showConfirmButton: false,
         width: 400,
       });
+      
       const reqBody={
         photouploadId:resp.data.id,
         id:resp.data.uploaded_by
@@ -300,7 +321,7 @@ setSelectedDepartment(event.target.value);
                     </Grid>
                   </Grid>
 
-                  <TextField
+                  {/* <TextField
                     fullWidth
                     label="Profile Image"
                     size="large"
@@ -312,7 +333,29 @@ setSelectedDepartment(event.target.value);
                     sx={{ mb: 1.5 }}
                     value=""
                     InputLabelProps={{ shrink: true }}
-                  />
+                  /> */}
+                  <div>
+                  <label>Profile Image</label>
+                   <input
+                      ref={uploadInputRef}
+                      style={{ display: "none" }}
+                      onChange={onChangeFile}
+                      type="file"
+                    />
+                    <Button
+                      onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
+                      style ={{ cursor:'pointer', marginLeft:'30px', backgroundColor:'white', padding:'8px  20px', border: 'none', width:'25%', color:'blue',textAlign:'left',fontSize:'16px' }}
+                    >
+                     { filename || 'Click to Upload'}
+                     </Button>
+                     
+                     <Button onClick={deletethisFile} style ={{ backgroundColor:'white',  width:'25%', color:'blue', border: 'none' }}
+                       disabled={users.avatar? false:true}>
+                     <Icon className="icon deleteIcon">delete</Icon>
+                     </Button>
+
+                     </div>
+
                   {fileLoading && 
                       <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
                       <CircularProgress />                                          
