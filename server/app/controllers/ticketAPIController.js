@@ -469,6 +469,7 @@ exports.updateTicket = async (req, res) => {
 exports.getTicketHistory = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const ticketData = await userAPIService.getTicketById(input.id);
     const tenantId = userDetails.tenant_id;
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
 
@@ -477,6 +478,13 @@ exports.getTicketHistory = async (req, res) => {
             status: false
         });
     }
+    if (ticketData == null) {
+        return res.status(200).send({
+            error: errorConstants.TICKET__ID_ERROR,
+            status: false
+        });
+    }
+
     try {
         const resp = await ticketAPIService.getTicketHistory(userDetails, tenantId, input.id);
         return res.status(200).send({ status: true, data: resp });
