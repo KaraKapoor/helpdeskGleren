@@ -23,6 +23,8 @@ jobs:
       - run: |
             ls
             cd ..
+            cd ..
+            cd ..
             ls
            # cd /
             #cd home
