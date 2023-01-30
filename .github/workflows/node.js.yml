@@ -23,7 +23,9 @@ jobs:
       - run: |
             ls
             cd ~
-            pwd                
+            pwd 
+            cd ..
+            ls               
            # cd /
             #cd home
             #ls
