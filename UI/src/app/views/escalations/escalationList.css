@@ -2,3 +2,13 @@
     float: right;
     margin-bottom:10px ;
 }
+.isactive-error{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.isactiveDivStyle > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}   
