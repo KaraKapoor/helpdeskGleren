@@ -69,4 +69,7 @@ module.exports = {
     INVALID_EMAIL_ID: "Invalid email id",
     HOLIDAY_NAME_ERROR: " Holiday Name is mandatory",
     HOLIDAY_SAME_NAME_ERROR: "Holiday with same name already exist",
+    USER_DOES_NOT_EXIST_ERROR: "User does not Exist",
+    EMAIL_ALREADY_VERIFIED_ERROR: "Email already verified",
+    INVALID_OTP_ERROR: "Invalid OTP"
 };
