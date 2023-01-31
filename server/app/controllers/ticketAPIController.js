@@ -3,7 +3,7 @@ const coreSettingsService = require("../Services/coreSettingAPIService");
 const generalMethodService = require("../Services/generalMethodAPIService");
 const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
-const adminAPIService = require("../Services/adminAPIService");
+const fixversionAPIService = require("../Services/fixversionAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
 const { project, user, status, ticket } = require("../models");
 const db = require("../models");
@@ -317,6 +317,7 @@ exports.updateTicket = async (req, res) => {
             changedValue = input.files;
             break;
         case 'assignee':
+            const assignee = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.assignee }] } });
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.assignee) == null) {
 
                 return res.status(200).send({
@@ -324,8 +325,13 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
+            else if(assignee.id === input.assignee || !assignee.is_active){
+                return res.status(200).send({
+                    error: errorConstants.ASSIGNEE_INACTIVE,
+                    status: false
+                });
+              }
             type = 'assignee';
-            const assignee = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.assignee }] } });
             updateObj.assignee_id = input.assignee;
             changedValue = assignee.first_name + ' ' + assignee.last_name;
             break;
@@ -342,6 +348,7 @@ exports.updateTicket = async (req, res) => {
             changedValue = input.category;
             break;
         case 'status':
+            const statusDetails = await status.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.status }] } });
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.status) == null) {
 
                 return res.status(200).send({
@@ -349,8 +356,13 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
+            else if(statusDetails.id === input.status || !statusDetails.is_active){
+                return res.status(200).send({
+                    error: errorConstants.STATUS_NAME_INACTIVE,
+                    status: false
+                });
+            }
             type = 'status';
-            const statusDetails = await status.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.status }] } });
             updateObj.status_id = input.status;
             changedValue = statusDetails.name;
             break;
@@ -374,10 +386,16 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
-            const fix_version_name=  await db.fix_version.findOne({where:  [{ id: input.fixVersion }]  }); 
+            const fix_version_name =  await db?.fix_version?.findOne({where:  [{ id: input?.fixVersion }]  }); 
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(fix_version_name) == null) {
                 return res.status(200).send({
                     error: errorConstants.FIX_VERSION__ID_ERROR,
+                    status: false
+                });
+            }
+            else if(fix_version_name.id === input?.fixVersion || !fix_version_name.is_active){
+                return res.status(200).send({
+                    error: errorConstants.FIX_VERSION_INACTIVE,
                     status: false
                 });
             }
