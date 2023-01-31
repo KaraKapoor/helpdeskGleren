@@ -24,7 +24,7 @@ exports.createTicket = async (req, res) => {
     const responseUserId =  await userAPIService.getUserById(input.assigneeId,tenantId)
     const responsVersion = await fixversionAPIService?.getFixVersionById(input?.fixVersion,tenantId) 
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) == null) {
-        if(responseDepartment.id === input.departmentId || !responseDepartment.is_active){
+        if(!responseDepartment.is_active){
             return res.status(200).send({
                 error: errorConstants.DEPARTMENT_NAME_INACTIVE,
                 status: false
@@ -37,7 +37,7 @@ exports.createTicket = async (req, res) => {
        
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.projectId) == null) {
-        if(responseProject.id === input.projectId || !responseProject.is_active){
+        if(!responseProject.is_active){
             return res.status(200).send({
                 error: errorConstants.PROJECT_NAME_INACTIVE,
                 status: false
@@ -49,7 +49,7 @@ exports.createTicket = async (req, res) => {
         });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.assigneeId) == null) {
-        if(responseUserId.id === input.assigneeId || !responseUserId.is_active){
+        if(!responseUserId.is_active){
             return res.status(200).send({
                 error: errorConstants.ASSIGNEE_INACTIVE,
                 status: false
@@ -68,7 +68,7 @@ exports.createTicket = async (req, res) => {
         });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.statusId) == null) {
-        if(responseStatus.id === input.statusId || !responseStatus.is_active){
+        if( !responseStatus.is_active){
             return res.status(200).send({
                 error: errorConstants.STATUS_NAME_INACTIVE,
                 status: false
@@ -79,7 +79,7 @@ exports.createTicket = async (req, res) => {
             status: false
         });
     }
-    if(responsVersion.id === input.fixVersion || !responsVersion.is_active ){
+    if(!responsVersion.is_active ){
         return res.status(200).send({
             error: errorConstants.FIX_VERSION_INACTIVE,
             status: false
