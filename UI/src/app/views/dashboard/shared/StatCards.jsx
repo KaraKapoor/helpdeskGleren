@@ -1,6 +1,7 @@
 import { Box, Card, Grid, Icon, IconButton, styled, Tooltip } from '@mui/material';
 import { Small } from 'app/components/Typography';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -29,14 +30,32 @@ const Heading = styled('h6')(({ theme }) => ({
 }));
 
 const StatCards = ({ data }) => {
+   
   const cardList = [
-    { name: `Assigned Tickets`, value: data?.assignedTicketsCount, icon: 'assignment' },
-    { name: `Blocker/Critical Tickets Assigned`, value: data?.assignedBlockerTicketCount, icon: 'block' },
-    { name: `Tickets Resolved By Me`, value: data?.resolvedTicketCount, icon: 'work' },
-    { name: `Tickets Reviewed By Me`, value: data?.reviewedTicketCount, icon: 'rate_review' },
-    { name: `Tickets Tested By Me`, value: data?.testedTicketCount, icon: 'bug_report' },
-    { name: `Tickets Created By Me`, value: data?.totalTicketCreatedCount, icon: 'create' },
+    { name: `Assigned Tickets`,cardname:"assignTicket", value: data?.assignedTicketsCount, icon: 'assignment' },
+    { name: `Blocker/Critical Tickets Assigned`,cardname:"blocker/CriticalTicket", value: data?.assignedBlockerTicketCount, icon: 'block' },
+    { name: `Tickets Resolved By Me`,cardname:"ticketResolvedByMe", value: data?.resolvedTicketCount, icon: 'work' },
+    { name: `Tickets Reviewed By Me`,cardname:"ticketReviewByMe", value: data?.reviewedTicketCount, icon: 'rate_review' },
+    { name: `Tickets Tested By Me`,cardname:"ticketTestedByMe", value: data?.testedTicketCount, icon: 'bug_report' },
+    { name: `Tickets Created By Me`, cardname:"ticketCreatedByMe",value: data?.totalTicketCreatedCount, icon: 'create' },
   ];
+
+  const navigate = useNavigate();
+  const NavigateTo = (_name) => {
+    let user = JSON.parse(localStorage.getItem('user'))
+    console.log(user)
+    const queryparams=`?name=${_name}/${user.userId}`
+    console.log(queryparams)
+    navigate(`/all-tickets`+queryparams)
+    switch(cardList){
+      case 'Assigned Tickets':
+        return (
+          console.log('hi'),
+          navigate(`/all-tickets`)
+        )
+    }
+    
+  }
 
   return (
     <Grid container spacing={3} sx={{ mb: '24px' }}>
@@ -51,13 +70,16 @@ const StatCards = ({ data }) => {
               </Box>
             </ContentBox>
 
-            <Link to='/all-tickets'>
+            {/* <Link to='/all-tickets'>
               <Tooltip title="View Details" placement="top">
                 <IconButton>
                   <Icon>arrow_right_alt</Icon>
                 </IconButton>
               </Tooltip>
-            </Link>
+            </Link> */}
+            <IconButton onClick={()=>NavigateTo(item?.cardname)}>
+                  <Icon>arrow_right_alt</Icon>
+                </IconButton>
 
           </StyledCard>
         </Grid>

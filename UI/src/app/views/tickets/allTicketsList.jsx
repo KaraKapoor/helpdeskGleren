@@ -24,7 +24,7 @@ import { allTickets, getFixVersionByProject } from "app/services/ticketService";
 import "./allTicketList.css";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useSearchParams,useParams} from "react-router-dom";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const StyledTable = styled(Table)(() => ({
@@ -80,6 +80,7 @@ const AllTickets = ({ setCurrentView }) => {
     const [selectedProject, setSelectedProject] = useState([]);
     // const [departmentchanges, setDepartmentChanges] = useState([]);
     const [selectedAssignee, setSelectedAssignee] = useState([]);
+    const [newselectedAssignee, setNewSelectedAssignee] = useState([]);
     const [selectedReviewedBy, setSelectedReviewedBy] = useState([]);
     const [selectedTestedBy, setSelectedTestedBy] = useState([]);
     const [selectedResolvedBy, setSelectedResolvedBy] = useState([]);
@@ -96,7 +97,10 @@ const AllTickets = ({ setCurrentView }) => {
     const [handfixverions, sethandFixverions] = useState([]);
     const [searchData , setsearchdata] = useState('');
     const navigate = useNavigate()
-
+    let [searchParams] = useSearchParams();
+    const searchdata = searchParams.get("name");
+    const params_name=searchdata.split("/")[0]
+console.log(searchdata.split("/")[0],"searchParamssearchParams")
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
   };
@@ -249,7 +253,13 @@ const AllTickets = ({ setCurrentView }) => {
       }
     });
   }, []);
-
+  let user = JSON.parse(localStorage.getItem('user'))
+  console.log(user)
+useEffect(()=>{
+  if(params_name=="assignTicket"){
+    setNewSelectedAssignee("hello")
+  }
+},[params_name=="assignTicket"])
   return (
     <Box width="100%" overflow="auto">
       <form className="p-2">
@@ -333,6 +343,7 @@ const AllTickets = ({ setCurrentView }) => {
           <Grid item lg={2} md={2} sm={12} xs={12}>
             <FormControl fullWidth>
               <InputLabel id="assignee">Assignee</InputLabel>
+              {console.log(selectedAssignee)}
               <Select
                 labelId="assignee"
                 id="assignee"
@@ -340,7 +351,7 @@ const AllTickets = ({ setCurrentView }) => {
                 value={selectedAssignee}
                 label="Assignee"
                 onChange={handleAssigneeChange}
-                defaultValue={selectedAssignee}
+                defaultValue={newselectedAssignee}
               >
                 {assignees?.filter(data=>data.is_active || data.id === selectedAssignee).map((d, i) => {
                   return (
