@@ -9,6 +9,29 @@ export const reportBug=(formData)=>{
         data: formData,
     })
 }
+export const createHolidays=(formData)=>{
+    {console.log("called")};
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.holiday.create,
+        data : formData,
+    })
+}
+export const getHolidayById=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.holiday.getById,
+        data: formData,
+    })
+}
+
+export const getAllHolidays=(page,size)=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.holiday.getAllHolidays +`?page=${page}&size=${size}`
+    })
+}
+ 
 export const createStatus=(formData)=>{
     return appRequest({
         method: RequestMethod.POST,
