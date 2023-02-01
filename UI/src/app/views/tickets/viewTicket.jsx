@@ -158,7 +158,7 @@ text-align:center;
         reqBody.reviewedBy = value;
         break;
       case "linked_tickets":
-        reqBody.linked_tickets = value?.map((data) => data?.id);;
+        reqBody.linked_tickets = value?.map((data) => data);;
         break;
     }
     updateTicket(reqBody).then((resp) => {
@@ -239,7 +239,7 @@ text-align:center;
 
         setSelectedDepartment(resp.data.department.name);
         await getStatusByDepId(resp.data.department_id);
-        setLinkedTickets(resp.data.linked_tickets)
+         setLinkedTickets(resp.data.linked_tickets)
         setparentticket(resp.parentlinkticket )
         setSelectedProject(resp.data.project);
         setSelectedAssignee(resp.data.assignee_id);
@@ -335,7 +335,6 @@ text-align:center;
       "linked_tickets"
     );
   }
-
   return (
     <>
       {!loading && (

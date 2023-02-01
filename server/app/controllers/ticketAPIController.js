@@ -501,8 +501,8 @@ exports.updateTicket = async (req, res) => {
             break;
         case 'linked_tickets':
             type = 'linked_tickets';
-            updateObj.linked_tickets = input.linktickets;
-            changedValue = input.linktickets;
+            updateObj.linked_tickets = input.linked_tickets;
+            changedValue = input.linked_tickets;
             break;
     }
 
