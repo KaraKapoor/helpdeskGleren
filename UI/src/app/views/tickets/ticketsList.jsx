@@ -62,7 +62,17 @@ const MyTicketsTable = styled(Table)(() => ({
         width: "55px !important",
       }
 }))
-
+const ISactiveError = styled('div')(()=>({
+  
+    width:"15px",
+    height:"15px",
+    border:"5px solid red",
+    backgroundColor:"red",
+    color:"white",
+    borderRadius:"50%",
+    textAlign:"center"
+    
+  }))
 const MyTickets = ({ setCurrentView }) => {
     const [data, setData] = useState([])
     const [page, setPage] = useState(0)
@@ -235,10 +245,11 @@ const MyTickets = ({ setCurrentView }) => {
                                 label="Status"
                                 onChange={handleStatusChange}
                                 defaultValue={selectedStatus}
+                                className="isactiveDivStyle"
                             >
                                 {
-                                    status?.filter((data)=>data.is_active).map((d, i) => {
-                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                                    status?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                                     })
                                 }
                             </Select>
@@ -255,10 +266,11 @@ const MyTickets = ({ setCurrentView }) => {
                                 label="Project"
                                 onChange={handleProjectChange}
                                 defaultValue={selectedProject}
+                                className="isactiveDivStyle"
                             >
                                 {
-                                    projects?.filter((data)=>data.is_active).map((d, i) => {
-                                        return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                                    projects?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                                     })
                                 }
                             </Select>
@@ -275,10 +287,11 @@ const MyTickets = ({ setCurrentView }) => {
                                 label="Assignee"
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
+                                className="isactiveDivStyle"
                             >
                                 {
-                                    assignees?.filter((data)=>data.is_active).map((d, i) => {
-                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    assignees?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                                     })
                                 }
                             </Select>
@@ -301,11 +314,12 @@ const MyTickets = ({ setCurrentView }) => {
                         value={handfixverions}
                         onChange={(e)=>handleFixVersionChange(e)}
                         sx={{ mb: 1.5 }}
+                        className="isactiveDivStyle"
                       >
-                        {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
+                        {fixverions?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.fix_version}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.fix_version} {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}
