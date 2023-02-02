@@ -32,29 +32,45 @@ const Heading = styled('h6')(({ theme }) => ({
 const StatCards = ({ data }) => {
    
   const cardList = [
-    { name: `Assigned Tickets`,cardname:"assignTicket", value: data?.assignedTicketsCount, icon: 'assignment' },
-    { name: `Blocker/Critical Tickets Assigned`,cardname:"blocker/CriticalTicket", value: data?.assignedBlockerTicketCount, icon: 'block' },
-    { name: `Tickets Resolved By Me`,cardname:"ticketResolvedByMe", value: data?.resolvedTicketCount, icon: 'work' },
-    { name: `Tickets Reviewed By Me`,cardname:"ticketReviewByMe", value: data?.reviewedTicketCount, icon: 'rate_review' },
-    { name: `Tickets Tested By Me`,cardname:"ticketTestedByMe", value: data?.testedTicketCount, icon: 'bug_report' },
-    { name: `Tickets Created By Me`, cardname:"ticketCreatedByMe",value: data?.totalTicketCreatedCount, icon: 'create' },
+    { name: `Assigned Tickets`, cardname: "assignTicket", value: data?.assignedTicketsCount, icon: 'assignment' },
+    { name: `Blocker/Critical Tickets Assigned`, cardname: "blocker/CriticalTicket", value: data?.assignedBlockerTicketCount, icon: 'block' },
+    { name: `Tickets Resolved By Me`, cardname: "ticketResolvedByMe", value: data?.resolvedTicketCount, icon: 'work' },
+    { name: `Tickets Reviewed By Me`, cardname: "ticketReviewedByMe", value: data?.reviewedTicketCount, icon: 'rate_review' },
+    { name: `Tickets Tested By Me`, cardname: "ticketTestedByMe", value: data?.testedTicketCount, icon: 'bug_report' },
+    { name: `Tickets Created By Me`, cardname: "ticketCreatedByMe", value: data?.totalTicketCreatedCount, icon: 'create' },
   ];
 
   const navigate = useNavigate();
-  const NavigateTo = (_name) => {
+  const NavigateTo = (card_name) => {
     let user = JSON.parse(localStorage.getItem('user'))
-    console.log(user)
-    const queryparams=`?name=${_name}/${user.userId}`
-    console.log(queryparams)
-    navigate(`/all-tickets`+queryparams)
-    switch(cardList){
-      case 'Assigned Tickets':
+    const queryparams = `?name=${card_name}/${user.userId}`
+
+    switch (card_name) {
+      case 'assignTicket':
         return (
-          console.log('hi'),
-          navigate(`/all-tickets`)
+          navigate(`/all-tickets` + queryparams)
         )
-    }
-    
+      case 'ticketResolvedByMe':
+        return (
+          navigate(`/all-tickets` + queryparams)
+        )
+      case 'ticketTestedByMe':
+        return (
+          navigate(`/all-tickets` + queryparams)
+        )
+      case 'blocker/CriticalTicket':
+        return (
+          navigate(`/all-tickets` + queryparams)
+        )
+      case 'ticketReviewedByMe':
+        return (
+          navigate(`/all-tickets` + queryparams)
+        )
+      case 'ticketCreatedByMe':
+        return (
+          navigate(`/all-tickets` + queryparams)
+        )
+    }    
   }
 
   return (
@@ -69,18 +85,11 @@ const StatCards = ({ data }) => {
                 <Heading>{item.value}</Heading>
               </Box>
             </ContentBox>
-
-            {/* <Link to='/all-tickets'>
-              <Tooltip title="View Details" placement="top">
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
-              </Tooltip>
-            </Link> */}
-            <IconButton onClick={()=>NavigateTo(item?.cardname)}>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
-
+            <Tooltip title="View Details" placement="top">
+              <IconButton onClick={() => NavigateTo(item?.cardname)}>
+                <Icon>arrow_right_alt</Icon>
+              </IconButton>
+            </Tooltip>
           </StyledCard>
         </Grid>
       ))}

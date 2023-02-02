@@ -80,7 +80,6 @@ const AllTickets = ({ setCurrentView }) => {
     const [selectedProject, setSelectedProject] = useState([]);
     // const [departmentchanges, setDepartmentChanges] = useState([]);
     const [selectedAssignee, setSelectedAssignee] = useState([]);
-    const [newselectedAssignee, setNewSelectedAssignee] = useState([]);
     const [selectedReviewedBy, setSelectedReviewedBy] = useState([]);
     const [selectedTestedBy, setSelectedTestedBy] = useState([]);
     const [selectedResolvedBy, setSelectedResolvedBy] = useState([]);
@@ -97,10 +96,10 @@ const AllTickets = ({ setCurrentView }) => {
     const [handfixverions, sethandFixverions] = useState([]);
     const [searchData , setsearchdata] = useState('');
     const navigate = useNavigate()
-    let [searchParams] = useSearchParams();
-    const searchdata = searchParams.get("name");
-    const params_name=searchdata.split("/")[0]
-console.log(searchdata.split("/")[0],"searchParamssearchParams")
+  let [searchParams] = useSearchParams();
+  const searchdata = searchParams.get("name");
+  const params_name = searchdata.split("/")[0]
+  
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
   };
@@ -201,6 +200,11 @@ console.log(searchdata.split("/")[0],"searchParamssearchParams")
         width: 400,
       });
     }
+    setSelectedAssignee(event.target.value);
+    setSelectedResolvedBy(event.target.value);
+    setSelectedReviewedBy(event.target.value);
+    setSelectedTestedBy(event.target.value);
+    setSelectedReportedBy(event.target.value)
     setSelectedProject(event.target.value);
   };
   const handleAssigneeChange = (event) => {
@@ -250,16 +254,26 @@ console.log(searchdata.split("/")[0],"searchParamssearchParams")
         if (resp?.data?.currentUserProjects.length > 0) {
           setSelectedProject([resp?.data?.currentUserProjects[0].id]);
         }
+        let user = JSON.parse(localStorage.getItem('user'))
+        if (params_name == "assignTicket") {
+          setSelectedAssignee([user.userId])
+        }
+        if (params_name == "ticketResolvedByMe") {
+          setSelectedResolvedBy([user.userId])
+        }
+        if (params_name == "ticketReviewedByMe") {
+          setSelectedReviewedBy([user.userId])
+        }
+        if (params_name == "ticketTestedByMe") {
+          setSelectedTestedBy([user.userId])
+        }
+        if (params_name == "ticketCreatedByMe") {
+          setSelectedReportedBy([user.userId])
+        }
       }
     });
   }, []);
-  let user = JSON.parse(localStorage.getItem('user'))
-  console.log(user)
-useEffect(()=>{
-  if(params_name=="assignTicket"){
-    setNewSelectedAssignee("hello")
-  }
-},[params_name=="assignTicket"])
+
   return (
     <Box width="100%" overflow="auto">
       <form className="p-2">
@@ -351,7 +365,7 @@ useEffect(()=>{
                 value={selectedAssignee}
                 label="Assignee"
                 onChange={handleAssigneeChange}
-                defaultValue={newselectedAssignee}
+                defaultValue={selectedAssignee}
               >
                 {assignees?.filter(data=>data.is_active || data.id === selectedAssignee).map((d, i) => {
                   return (
