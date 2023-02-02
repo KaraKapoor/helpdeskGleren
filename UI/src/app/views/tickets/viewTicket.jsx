@@ -574,7 +574,7 @@ text-align:center;
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
                               >
-                                {assignees?.filter(data=>data.is_active|| data.id === selectedAssignee).map((d, i) => {
+                                {assignees?.map((d, i) => {
                                   return (
                                     <MenuItem key={i} value={d.id} className="isactive-error">
                                       {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
@@ -621,7 +621,7 @@ text-align:center;
                                 onChange={handleStatusChange}
                                 defaultValue={selectedStatus}
                               >
-                                {status?.filter(data=>data.is_active || data.id === selectedStatus).map((d, i) => {
+                                {status?.map((d, i) => {
                                   return (
                                     <MenuItem key={i} value={d.id} className="isactive-error">
                                       {d.name} {!d.is_active ? <ISactiveError />: ""}
@@ -677,7 +677,7 @@ text-align:center;
                           );
                         }}
                       >
-                        {fixverions?.filter(data=> data.is_active || data.id == values.fixVersion)?.map((d, i) => {
+                        {fixverions?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id} className="isactive-error">
                                 {d.fix_version} {!d.is_active ? <ISactiveError />: ""}
@@ -735,11 +735,12 @@ text-align:center;
                                 label="Resolved By"
                                 onChange={handleResolvedByChange}
                                 defaultValue={selectedResolvedBy}
+                                className="isactiveDivStyle"
                               >
                                 {assignees?.map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}
@@ -760,11 +761,12 @@ text-align:center;
                                 label="Reviewed By"
                                 onChange={handleReviewedByChange}
                                 defaultValue={selectedReviewedBy}
+                                className="isactiveDivStyle"
                               >
                                 {assignees?.map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}
@@ -783,11 +785,12 @@ text-align:center;
                                 label="Tested By"
                                 onChange={handleTestedByChange}
                                 defaultValue={selectedTestedBy}
+                                className="isactiveDivStyle"
                               >
                                 {assignees?.map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}

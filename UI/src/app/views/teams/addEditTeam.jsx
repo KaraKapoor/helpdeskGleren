@@ -210,8 +210,8 @@ const ISactiveError = styled.div`
                           className="isactiveDivStyle"
                         >
                           {
-                            departments?.filter(department=>department.is_active||department.id===selectedDepartment)?.map((d, i) => {
-                              return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
+                            departments?.map((d, i) => {
+                              return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                             })
                           }
                         </Select>
@@ -231,7 +231,7 @@ const ISactiveError = styled.div`
                           className="isactiveDivStyle"
                         >
                           {
-                            projects?.filter(data => data.is_active || data.id === selectedProject).map((d, i) => {
+                            projects?.map((d, i) => {
                               return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                             })
                           }
@@ -249,10 +249,11 @@ const ISactiveError = styled.div`
                           label="Users"
                           onChange={handleUserChange}
                           defaultValue={selectedUsers}
+                          className="isactiveDivStyle"
                         >
                           {
-                            users?.filter(data=>data.is_active).map((d, i) => {
-                              return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                            users?.map((d, i) => {
+                              return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                             })
                           }
                         </Select>
@@ -270,10 +271,11 @@ const ISactiveError = styled.div`
                           label="Team Lead"
                           onChange={handleLeadChange}
                           defaultValue={selectedLeads}
+                          className="isactiveDivStyle"
                         >
                           {
-                            agents?.filter(data=>data.is_active).map((d, i) => {
-                              return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                            agents?.map((d, i) => {
+                              return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                             })
                           }
                         </Select>
@@ -291,10 +293,11 @@ const ISactiveError = styled.div`
                           label="Agents"
                           onChange={handleAgentsChange}
                           defaultValue={selectedAgents}
+                          className="isactiveDivStyle"
                         >
                           {
-                            agents?.filter(data=>data.is_active).map((d, i) => {
-                              return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                            agents?.map((d, i) => {
+                              return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                             })
                           }
                         </Select>

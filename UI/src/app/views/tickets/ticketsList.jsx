@@ -294,7 +294,7 @@ const MyTickets = ({ setCurrentView }) => {
                                         return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                                     })
                                 }
-                            </Select>
+                            </Select>   
                         </FormControl>
                     </Grid>
                     <Grid item lg={2} md={2} sm={12} xs={12}>
@@ -364,10 +364,11 @@ const MyTickets = ({ setCurrentView }) => {
                                 label="Reviewed By"
                                 onChange={handleReviewedBy}
                                 defaultValue={selectedReviewedBy}
+                                className="isactiveDivStyle"
                             >
                                 {
-                                    reviewedBy?.filter((data)=>data.is_active).map((d, i) => {
-                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    reviewedBy?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                                     })
                                 }
                             </Select>
@@ -383,10 +384,11 @@ const MyTickets = ({ setCurrentView }) => {
                                 value={selectedTestedBy}
                                 label="Tested By"
                                 onChange={handleTestedBy}
+                                className="isactiveDivStyle"
                             >
                                 {
-                                    reviewedBy?.filter((data)=>data.is_active).map((d, i) => {
-                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    reviewedBy?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                                     })
                                 }
                             </Select>
@@ -402,10 +404,11 @@ const MyTickets = ({ setCurrentView }) => {
                                 value={selectedResolvedBy}
                                 label="Resolved By"
                                 onChange={handleResolvedBy}
+                                className="isactiveDivStyle"
                             >
                                 {
-                                    reviewedBy?.filter((data)=>data.is_active).map((d, i) => {
-                                        return <MenuItem key={i} value={d.id}>{d.first_name} {d.last_name}</MenuItem>
+                                    reviewedBy?.map((d, i) => {
+                                        return <MenuItem key={i} value={d.id} className="isactive-error">{d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}</MenuItem>
                                     })
                                 }
                             </Select>

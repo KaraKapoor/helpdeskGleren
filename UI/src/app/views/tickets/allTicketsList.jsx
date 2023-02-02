@@ -397,7 +397,7 @@ const AllTickets = ({ setCurrentView }) => {
                         sx={{ mb: 1.5 }}
                         className="isactiveDivStyle"
                       >
-                        {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
+                        {fixverions?.map((d, i) => {
                             return (
                               <MenuItem key={i} value={d.id} className="isactive-error">
                                 {d.fix_version} {!d.is_active ? <ISactiveError />: ""}
@@ -447,11 +447,12 @@ const AllTickets = ({ setCurrentView }) => {
                 label="Reviewed By"
                 onChange={handleReviewedBy}
                 defaultValue={selectedReviewedBy}
+                className="isactiveDivStyle"
               >
-                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
+                {reviewedBy?.map((d, i) => {
                   return (
-                    <MenuItem key={i} value={d.id}>
-                      {d.first_name} {d.last_name}
+                    <MenuItem key={i} value={d.id} className="isactive-error">
+                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                     </MenuItem>
                   );
                 })}
@@ -468,11 +469,12 @@ const AllTickets = ({ setCurrentView }) => {
                 value={selectedTestedBy}
                 label="Tested By"
                 onChange={handleTestedBy}
+                className="isactiveDivStyle"
               >
-                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
+                {reviewedBy?.map((d, i) => {
                   return (
-                    <MenuItem key={i} value={d.id}>
-                      {d.first_name} {d.last_name}
+                    <MenuItem key={i} value={d.id} className="isactive-error">
+                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                     </MenuItem>
                   );
                 })}
@@ -489,11 +491,12 @@ const AllTickets = ({ setCurrentView }) => {
                 value={selectedResolvedBy}
                 label="Resolved By"
                 onChange={handleResolvedBy}
+                className="isactiveDivStyle"
               >
-                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
+                {reviewedBy?.map((d, i) => {
                   return (
-                    <MenuItem key={i} value={d.id}>
-                      {d.first_name} {d.last_name}
+                    <MenuItem key={i} value={d.id} className="isactive-error">
+                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                     </MenuItem>
                   );
                 })}
@@ -510,11 +513,12 @@ const AllTickets = ({ setCurrentView }) => {
                 value={selectedReportedBy}
                 label="Reported By"
                 onChange={handleReportedBy}
+                className="isactiveDivStyle"
               >
-                {reviewedBy?.filter(data=>data.is_active).map((d, i) => {
+                {reviewedBy?.map((d, i) => {
                   return (
-                    <MenuItem key={i} value={d.id}>
-                      {d.first_name} {d.last_name}
+                    <MenuItem key={i} value={d.id} className="isactive-error">
+                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                     </MenuItem>
                   );
                 })}

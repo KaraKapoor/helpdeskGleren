@@ -253,7 +253,7 @@ const validationSchema = Yup.object().shape({
                           className="isactiveDivStyle"
                         >
 							{
-								 departments?.filter(department=>department.is_active || department.id === selectedDepartment)?.map((d, i) =>{
+								 departments?.map((d, i) =>{
 									return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
 								})
 							}
