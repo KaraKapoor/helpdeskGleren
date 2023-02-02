@@ -74,7 +74,7 @@ exports.createTicket = async (req, res) => {
         });
     }
     try {
-        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files , input.linked_tickets);
+        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files, input.linked_tickets);
         return res.status(200).send(resp);
     } catch (exception) {
         console.log(exception);
@@ -118,7 +118,7 @@ exports.getMyTickets = async (req, res) => {
         conditionArray.push({ status_id: { [Op.in]: generalMethodService.csvToArray(input.statusId) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixVersion) !== null) {
-        conditionArray.push({ fix_version_id:{ [Op.in]: generalMethodService.csvToArray(  input.fixVersion )}});
+        conditionArray.push({ fix_version_id: { [Op.in]: generalMethodService.csvToArray(input.fixVersion) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.dueDate) !== null) {
         conditionArray.push({ due_dt: input.dueDate });
@@ -182,7 +182,7 @@ exports.getAllTickets = async (req, res) => {
         conditionArray.push({ status_id: { [Op.in]: generalMethodService.csvToArray(input.statusId) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixVersion) !== null) {
-        conditionArray.push({ fix_version_id: { [Op.in]: generalMethodService.csvToArray(input.fixVersion ) } });
+        conditionArray.push({ fix_version_id: { [Op.in]: generalMethodService.csvToArray(input.fixVersion) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.dueDate) !== null) {
         conditionArray.push({ due_dt: input.dueDate });
@@ -206,8 +206,12 @@ exports.getAllTickets = async (req, res) => {
         conditionArray.push({ created_by: { [Op.in]: generalMethodService.csvToArray(input.reportedBy) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.linkTicket) !== null) {
-        
-        conditionArray.push({ [Op.or]: [{ issue_details: { [Op.like]:`%${input.linkTicket}%`} }, { id: { [Op.like]:`%${input.linkTicket}%`} }] });
+
+        conditionArray.push({ [Op.or]: [{ issue_details: { [Op.like]: `%${input.linkTicket}%` } }, { id: { [Op.like]: `%${input.linkTicket}%` } }] });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lable_id) !== null) {
+
+        conditionArray.push({ [Op.or]: [{ lable_id: { [Op.like]: `%${input.lable_id}%` } } ] });
     }
     conditionArray.push({ tenant_id: tenantId });
     try {
@@ -241,7 +245,7 @@ exports.getTicketById = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-    const parentData=await ticket.findAll({where:{linked_tickets:[parseInt(input.id)]}})
+    const parentData = await ticket.findAll({ where: { linked_tickets: [parseInt(input.id)] } })
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
         return res.status(200).send({
             error: errorConstants.ID_ERROR,
@@ -251,7 +255,7 @@ exports.getTicketById = async (req, res) => {
 
     try {
         const resp = await ticketAPIService.getTicketById(userDetails.id, tenantId, input.id);
-        return res.status(200).send({ status: true, data: resp , parentlinkticket:parentData });
+        return res.status(200).send({ status: true, data: resp, parentlinkticket: parentData });
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
@@ -374,7 +378,7 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
-            const fix_version_name=  await db.fix_version.findOne({where:  [{ id: input.fixVersion }]  }); 
+            const fix_version_name = await db.fix_version.findOne({ where: [{ id: input.fixVersion }] });
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(fix_version_name) == null) {
                 return res.status(200).send({
                     error: errorConstants.FIX_VERSION__ID_ERROR,
@@ -453,6 +457,11 @@ exports.updateTicket = async (req, res) => {
             updateObj.linked_tickets = input.linktickets;
             changedValue = input.linktickets;
             break;
+        case 'lable_id':
+            type = 'lable_id';
+            updateObj.lable_id = input.lable_id;
+            changedValue = input.lable_id;
+            break;
     }
 
     try {
@@ -509,12 +518,12 @@ exports.saveTicketComments = async (req, res) => {
     }
 
     try {
-        const resp = await ticketAPIService.saveComments(userDetails, tenantId, input.ticketId, input.htmlComments,input.emailIds);
-        if(await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.emailIds) !== null){
+        const resp = await ticketAPIService.saveComments(userDetails, tenantId, input.ticketId, input.htmlComments, input.emailIds);
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.emailIds) !== null) {
             const emailIds = input.emailIds;
-            emailIds.map(async id=>{
+            emailIds.map(async id => {
                 let mentionedInTicketTemplate = emailTemplates.MENTIONED_IN_TICKET_TEMPLATE;
-              //  mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{username}', userDetails.first_name);
+                //  mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{username}', userDetails.first_name);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace(/{ticketNumber}/g, input.ticketId);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{url}', process.env.BASE_URL);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{view_ticket}', VIEW_TICKET);
@@ -556,4 +565,30 @@ exports.getTicketComments = async (req, res) => {
         });
     }
 
+}
+
+exports.getTicketLable = async (req, res) => {
+    const input = req.query;
+
+    const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const tenantId = userDetails.tenant_id;
+    const { limit, offset } = await generalMethodService.getPagination(input.page, input.size);
+    let conditionArray = [];
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lable_id) !== null) {
+
+        conditionArray.push({ [Op.or]: [{ lable_id: { [Op.like]: `%${input.lable_id}%` } } ] });
+    }
+    const searchParam = await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.searchParam);
+
+    try {
+        const resp = await ticketAPIService.getTicketLable(conditionArray, tenantId, limit, offset, input.page, searchParam);
+        // const resp = await ticketAPIService.getTicketLable(userDetails, tenantId);
+        return res.status(200).send({ status: true, data: resp });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
 }

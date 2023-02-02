@@ -3,106 +3,106 @@ module.exports = (sequelize, Sequelize) => {
         created_by: {
             type: Sequelize.INTEGER,
         },
-        department_id:{
+        department_id: {
             type: Sequelize.INTEGER,
         },
-        project_id:{
+        project_id: {
             type: Sequelize.INTEGER,
         },
-        assignee_id:{
+        assignee_id: {
             type: Sequelize.INTEGER,
         },
-        category:{
+        category: {
             type: Sequelize.STRING,
         },
-        status_id:{
+        status_id: {
             type: Sequelize.INTEGER,
         },
-        priority:{
+        priority: {
             type: Sequelize.STRING,
         },
-        issue_details:{
+        issue_details: {
             type: Sequelize.STRING,
         },
-        issue_summary:{
+        issue_summary: {
             type: Sequelize.TEXT('medium'),
         },
-        due_dt:{
+        due_dt: {
             type: Sequelize.DATE,
         },
-        level1SlaDue:{
+        level1SlaDue: {
             type: Sequelize.DATE
         },
-        level2SlaDue:{
+        level2SlaDue: {
             type: Sequelize.DATE
         },
-        level3SlaDue:{
+        level3SlaDue: {
             type: Sequelize.DATE
         },
-        level4SlaDue:{
+        level4SlaDue: {
             type: Sequelize.DATE
         },
-        level5SlaDue:{
+        level5SlaDue: {
             type: Sequelize.DATE
         },
-        level6SlaDue:{
+        level6SlaDue: {
             type: Sequelize.DATE
         },
-        level1SlaTriggered:{
+        level1SlaTriggered: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         },
-        level2SlaTriggered:{
+        level2SlaTriggered: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         },
-        level3SlaTriggered:{
+        level3SlaTriggered: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         },
-        level4SlaTriggered:{
+        level4SlaTriggered: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         },
-        level5SlaTriggered:{
+        level5SlaTriggered: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         },
-        level6SlaTriggered:{
+        level6SlaTriggered: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         },
-        closed_dt:{
+        closed_dt: {
             type: Sequelize.DATE
         },
-        closed_by:{
+        closed_by: {
             type: Sequelize.INTEGER
         },
-        is_overdue:{
+        is_overdue: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
         },
-        reviewed_by:{
+        reviewed_by: {
             type: Sequelize.INTEGER
         },
-        tested_by:{
+        tested_by: {
             type: Sequelize.INTEGER
         },
-        resolved_by:{
+        resolved_by: {
             type: Sequelize.INTEGER
         },
-        story_points:{
+        story_points: {
             type: Sequelize.FLOAT
         },
-        linked_tickets:{
+        linked_tickets: {
             type: Sequelize.STRING,
-        get() {
-            const data = this.getDataValue('linked_tickets')
-            return data? data.split(','): null
-        },
-        set(link) {
-            return this.setDataValue('linked_tickets', link?.join(","));
-        }
+            get() {
+                const data = this.getDataValue('linked_tickets')
+                return data ? data.split(',') : null
+            },
+            set(link) {
+                return this.setDataValue('linked_tickets', link?.join(","));
+            }
         }
     });
     return Ticket;

@@ -91,3 +91,10 @@ export const getFixVersionByProject = (data) => {
         data:data
     })
 }
+
+export const getTicketLable = ( queryParams) => {
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.ticket.getTicketLable+ queryParams,
+    })
+}

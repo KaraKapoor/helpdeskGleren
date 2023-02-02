@@ -20,6 +20,7 @@ db.sequelize = sequelize;
 
 db.coreSetting = require("./corSetting.model.js")(sequelize, Sequelize);
 db.holidays = require("./holidays.model.js")(sequelize, Sequelize);
+db.lables = require("./lables.model")(sequelize, Sequelize);
 db.emailVerify = require("./emailVerify.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.tenant = require("./tenant.model.js")(sequelize, Sequelize);
@@ -40,7 +41,10 @@ db.user.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
 db.holidays.belongsTo(db.tenant, {
-  foreignKey: "tenant_id", //1:1
+    foreignKey: "tenant_id", //1:1
+});
+db.lables.belongsTo(db.tenant, {
+    foreignKey: "tenant_id", //1:1
 });
 db.project.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
@@ -146,6 +150,10 @@ db.ticketHistory.belongsTo(db.ticket, {
 });
 db.ticket.belongsTo(db.fix_version, {
     foreignKey: "fix_version_id", //1:1,
+    onDelete: 'CASCADE',
+});
+db.ticket.belongsTo(db.lables, {
+    foreignKey: "lable_id", //1:1,
     onDelete: 'CASCADE',
 });
 db.uploads.belongsTo(db.tenant, {
