@@ -357,7 +357,6 @@ const AllTickets = ({ setCurrentView }) => {
           <Grid item lg={2} md={2} sm={12} xs={12}>
             <FormControl fullWidth>
               <InputLabel id="assignee">Assignee</InputLabel>
-              {console.log(selectedAssignee)}
               <Select
                 labelId="assignee"
                 id="assignee"
