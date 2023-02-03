@@ -21,6 +21,7 @@ jobs:
       # - run: npm run build
       #   working-directory: ./UI
       - run: |
+            pwd
             cd /
             ls
             cd home
