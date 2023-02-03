@@ -29,6 +29,7 @@ jobs:
             ls
             cd ubuntu
             ls
+            pwd
       - run: cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/UI/
 
   
