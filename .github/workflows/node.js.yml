@@ -22,6 +22,7 @@ jobs:
       #   working-directory: ./UI
       - run: |
             pwd
+            hostname
             cd /
             ls
             cd home
