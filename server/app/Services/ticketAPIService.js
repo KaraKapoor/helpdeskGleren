@@ -313,7 +313,6 @@ exports.getTicketById = async (userId, tenantId, ticketId) => {
 exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ticketId, changedValue) => {
     let response = null;
     let updatedTicket = null;
-    console.log(updateObj, "updateObjupdateObj")
     if (type !== 'files') {
         updatedTicket = await ticket.update(updateObj, { where: { [Op.and]: [{ tenant_id: tenantId }, { id: ticketId }] } });
     } else {
@@ -401,11 +400,10 @@ exports.getTicketLable = async (conditionArray, tenantId, limit, offset, page, s
 
 }
 exports.CreateLable = async(lable,tenantId,ticketId) =>{
-
     const obj={
         lable : lable,
-        tenantId:tenantId
+        tenant_id:tenantId,
+        ticket_id:ticketId
     }
     await Lables.create(obj)
-    
 }   

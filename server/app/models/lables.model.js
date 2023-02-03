@@ -3,6 +3,11 @@ module.exports = (sequelize, Sequelize) => {
         lable: {
             type: Sequelize.STRING(255),
         },
+        tenant_id:{
+            type: Sequelize.INTEGER
+        },ticket_id:{
+            type: Sequelize.INTEGER
+        }
     });
 
     return Lables;
