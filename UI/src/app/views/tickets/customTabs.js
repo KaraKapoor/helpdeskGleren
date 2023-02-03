@@ -15,6 +15,7 @@ import { Fragment } from 'react';
 import {Select, MenuItem, InputLabel } from '@mui/material';
 import {  getMasterDropdownData } from 'app/services/adminService';
 import ReactHtmlParser from 'react-html-parser'; 
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -59,6 +60,7 @@ export default function CustomTabs({ ticketId }) {
     const [editorContent, setEditorContent] = React.useState(undefined);
     const [selectedRecipient, setSelectedRecipient] = React.useState([]);
     const [agents, setAgents] = React.useState();
+    const navigate = useNavigate();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -157,6 +159,7 @@ export default function CustomTabs({ ticketId }) {
                     showConfirmButton: false,
                     width: 400,
                 })
+                navigate('comments');
                 setEditorContent(undefined);
             }
 

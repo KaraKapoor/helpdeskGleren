@@ -11,7 +11,7 @@ const generalMethodService = require("../Services/generalMethodAPIService");
 const { v4: uuidv4 } = require('uuid');
 const errorConstants = require('../constants/errorConstants');
 const fileAPIService = require("./fileAPIService");
-const { uploads } = require('../models');
+const { uploads, ticket, emailVerify } = require('../models');
 exports.getByEmail = async (email) => {
     let response = null;
     response = await user.findOne({ where: { email: email } });
@@ -87,6 +87,15 @@ exports.createUpdateUser = async (email, firstName, lastName, mobile, designatio
 }
 exports.getUserById = async (id) => {
     return user.findOne(({ where: { id: id } }));
+}
+exports.getTicketById = async (id) => {
+    return ticket.findOne(({ where: { id: id } }));
+}
+exports.getUserByEmail = async (email) => {
+    return user.findOne(({ where: { email: email } }));
+}
+exports.getEmailVerifyByEmail = async (email) => {
+    return emailVerify.findOne(({ where: { email: email } }));
 }
 exports.updateUser = async (id, updateObj, tenantid) => {
     await user.update(updateObj, { where: { [Op.and]: [{ id: id }, { tenant_id: tenantid }] } });

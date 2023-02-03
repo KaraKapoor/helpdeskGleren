@@ -52,7 +52,7 @@ const MyTicketsTable = styled(Table)(() => ({
     boxShadow: "0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)",
   },
   "& td": {
-    borderBottom: "none",
+    borderBottom: "1px solid rgba(224, 224, 224, 1)",
   },
   "& td:first-of-type": {
     paddingLeft: "16px !important",
@@ -70,6 +70,18 @@ const MyTicketsTable = styled(Table)(() => ({
     width: "55px !important",
   }
 }));
+
+const ISactiveError = styled('div')(()=>({
+  
+  width:"15px",
+  height:"15px",
+  border:"5px solid red",
+  backgroundColor:"red",
+  color:"white",
+  borderRadius:"50%",
+  textAlign:"center"
+  
+}))
 
 const AllTickets = ({ setCurrentView }) => {
     const [data, setData] = useState([])
@@ -96,6 +108,7 @@ const AllTickets = ({ setCurrentView }) => {
     const [handfixverions, sethandFixverions] = useState([]);
     const [searchData , setsearchdata] = useState('');
     const navigate = useNavigate()
+
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
@@ -297,11 +310,12 @@ const AllTickets = ({ setCurrentView }) => {
                 label="Status"
                 onChange={handleStatusChange}
                 defaultValue={selectedStatus}
+                className="isactiveDivStyle"
               >
-                {status?.filter(data=>data.is_active).map((d, i) => {
+                {status?.map((d, i) => {
                   return (
-                    <MenuItem key={i} value={d.id}>
-                      {d.name}
+                    <MenuItem key={i} value={d.id} className="isactive-error">
+                      {d.name} {!d.is_active ? <ISactiveError />: ""}
                     </MenuItem>
                   );
                 })}
@@ -319,11 +333,12 @@ const AllTickets = ({ setCurrentView }) => {
                 label="Project"
                 onChange={handleProjectChange}
                 defaultValue={selectedProject}
+                className="isactiveDivStyle"
               >
-                {projects?.filter(data=>data.is_active).map((d, i) => {
+                {projects?.map((d, i) => {
                   return (
-                    <MenuItem key={i} value={d.id}>
-                      {d.name}
+                    <MenuItem key={i} value={d.id} className="isactive-error">
+                      {d.name} {!d.is_active ? <ISactiveError />: ""}
                     </MenuItem>
                   );
                 })}
@@ -341,11 +356,12 @@ const AllTickets = ({ setCurrentView }) => {
                 label="Assignee"
                 onChange={handleAssigneeChange}
                 defaultValue={selectedAssignee}
+                className="isactiveDivStyle"
               >
-                {assignees?.filter(data=>data.is_active || data.id === selectedAssignee).map((d, i) => {
+                {assignees?.map((d, i) => {
                   return (
-                    <MenuItem key={i} value={d.id}>
-                      {d.first_name} {d.last_name}
+                    <MenuItem key={i} value={d.id} className="isactive-error">
+                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                     </MenuItem>
                   );
                 })}
@@ -379,11 +395,12 @@ const AllTickets = ({ setCurrentView }) => {
                         value={handfixverions}
                         onChange={(e)=>handleFixVersionChange(e)}
                         sx={{ mb: 1.5 }}
+                        className="isactiveDivStyle"
                       >
                         {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.fix_version}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.fix_version} {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}

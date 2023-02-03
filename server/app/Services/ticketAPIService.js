@@ -162,7 +162,7 @@ exports.getMyTickets = async (conditionArray, userId, tenantId, limit, offset, p
     var conditions = { [Op.and]: conditionArray };
     if (searchParam !== null) {
 
-        conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { created_by: userId }, { tenant_id: tenantId }] }
+        conditions = { [Op.and]: [{ [Op.or]: [{ issue_details: { [Op.like]: `%${searchParam}%` } },{ id: { [Op.like]: `%${searchParam}%` } }] }, { created_by: userId }, { tenant_id: tenantId }] }
     }
     const resp = await ticket.findAndCountAll({
         order:[ ['createdAt', 'DESC'] ],
@@ -186,7 +186,7 @@ exports.getAllTickets = async (conditionArray, tenantId, limit, offset, page, se
                 break;
             }
         }
-        conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { tenant_id: tenantId }, projectIdCondition] }
+        conditions = { [Op.and]: [{ [Op.or]: [{ issue_details: { [Op.like]: `%${searchParam}%` } }, { id: { [Op.like]: `%${searchParam}%` } }] }, { tenant_id: tenantId }, projectIdCondition] }
     }
     const resp = await ticket.findAndCountAll({
         order:[ ['createdAt', 'DESC'] ],

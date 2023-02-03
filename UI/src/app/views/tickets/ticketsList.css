@@ -80,6 +80,13 @@
 .parentticket-list{
     margin-top: 14px;
 }
-.css-12a83d4-MultiValueRemove{
-    display: none;
+.isactive-error{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.isactiveDivStyle > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

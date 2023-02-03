@@ -83,7 +83,16 @@ const ViewTicket = ({ onClose }) => {
   justify-content:space-between;
   align-items:center;
   padding:5px 0px;
-  `
+`
+const ISactiveError = styled.div`
+width:15px;
+height:15px;
+border:5px solid red;
+background-color:red;
+color:white;
+border-radius:50%;
+text-align:center;
+`
   const ContentBox = styled("div")(({ theme }) => ({
     margin: "30px",
     [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -585,13 +594,14 @@ const ViewTicket = ({ onClose }) => {
                                 required={true}
                                 value={selectedAssignee}
                                 label="Assignee"
+                                className="isactiveDivStyle"
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
                               >
-                                {assignees?.filter(data=>data.is_active).map((d, i) => {
+                                {assignees?.filter(data=>data.is_active|| data.id === selectedAssignee).map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}
@@ -631,13 +641,14 @@ const ViewTicket = ({ onClose }) => {
                                 id="status"
                                 value={selectedStatus}
                                 label="Status"
+                                className="isactiveDivStyle"
                                 onChange={handleStatusChange}
                                 defaultValue={selectedStatus}
                               >
-                                {status?.filter(data=>data.is_active).map((d, i) => {
+                                {status?.filter(data=>data.is_active || data.id === selectedStatus).map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}
@@ -682,6 +693,7 @@ const ViewTicket = ({ onClose }) => {
                         value={values.fixVersion}
                         onChange={handleChange}
                         sx={{ mb: 1.5 }}
+                        className="isactiveDivStyle"
                         onBlur={(e) => {
                           updateTicketDetails(
                             e.target.value,
@@ -691,8 +703,8 @@ const ViewTicket = ({ onClose }) => {
                       >
                         {fixverions?.filter(data=> data.is_active || data.id == values.fixVersion)?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.fix_version}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.fix_version} {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}

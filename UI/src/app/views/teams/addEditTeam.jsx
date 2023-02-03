@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import Swal from 'sweetalert2'
 import moment from 'moment'
@@ -43,6 +43,15 @@ const AddEditTeam = ({ onClose, editDetails }) => {
   const MyErrorMessage = styled.div`
     color: red;
     font-size: 13px;
+`
+const ISactiveError = styled.div`
+  width:15px;
+  height:15px;
+  border:5px solid red;
+  background-color:red;
+  color:white;
+  border-radius:50%;
+  text-align:center;
 `
 
   React.useEffect(() => {
@@ -126,6 +135,7 @@ const AddEditTeam = ({ onClose, editDetails }) => {
     setSelectedDepartment(event.target.value);
   }
   const handleProjectChange = (event) => {
+    
     setSelectedProject(event.target.value);
   }
   const handleUserChange= (event)=>{
@@ -197,10 +207,11 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                           label="Department"
                           onChange={handleDepartmentChange}
                           defaultValue={selectedDepartment}
+                          className="isactiveDivStyle"
                         >
                           {
                             departments?.filter(department=>department.is_active||department.id===selectedDepartment)?.map((d, i) => {
-                              return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                              return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                             })
                           }
                         </Select>
@@ -217,10 +228,11 @@ const AddEditTeam = ({ onClose, editDetails }) => {
                           label="Project"
                           onChange={handleProjectChange}
                           defaultValue={selectedProject}
+                          className="isactiveDivStyle"
                         >
                           {
                             projects?.filter(data => data.is_active || data.id === selectedProject).map((d, i) => {
-                              return <MenuItem key={i} value={d.id}>{d.name}</MenuItem>
+                              return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                             })
                           }
                         </Select>
