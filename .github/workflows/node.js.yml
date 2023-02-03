@@ -31,7 +31,7 @@ jobs:
             ls
             pwd
             echo "Started Copying Build Files"
-            cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/UI/
+            cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/server/
             echo "Ended Copying Build Files"
       # - run: cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/UI/
 
