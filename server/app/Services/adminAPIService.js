@@ -444,6 +444,7 @@ exports.getTeamById = async (id, tenantId) => {
     }
     return response;
 }
+
 exports.executeRawSelectQuery = async (query) => {
     const queryResp = await db.sequelize.query(query, {
         type: db.sequelize.QueryTypes.SELECT,

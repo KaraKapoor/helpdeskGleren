@@ -459,6 +459,7 @@ exports.updateTicket = async (req, res) => {
             break;
         case 'lable_id':
             type = 'lable_id';
+            await ticketAPIService.CreateLable(input.lable_id,tenantId,input.id)
             updateObj.lable_id = input.lable_id;
             changedValue = input.lable_id;
             break;

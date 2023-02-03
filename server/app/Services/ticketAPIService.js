@@ -2,6 +2,7 @@ const db = require("../models");
 const ticketHistory = db.ticketHistory;
 const comment = db.comments;
 const ticket = db.ticket;
+const Lables = db.lables
 const emailTemplates = require("../emailTemplates/emailTemplate");
 const coreSettingsService = require("./coreSettingAPIService");
 const emailAPIService = require("./emailAPIService");
@@ -399,3 +400,12 @@ exports.getTicketLable = async (conditionArray, tenantId, limit, offset, page, s
     // return lableData
 
 }
+exports.CreateLable = async(lable,tenantId,ticketId) =>{
+
+    const obj={
+        lable : lable,
+        tenantId:tenantId
+    }
+    await Lables.create(obj)
+    
+}   

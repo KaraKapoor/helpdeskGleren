@@ -64,7 +64,7 @@ const ViewTicket = ({ onClose }) => {
   const [fileLoading, setfileLoading] = React.useState(false);
   const [parentticket, setparentticket] = React.useState([]);
   const navigate = useNavigate();
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedLabelValue, setselectedLabelValue] = useState([]);
 
   var host = window.location.protocol + "//" + window.location.host;
 
@@ -93,7 +93,7 @@ const ViewTicket = ({ onClose }) => {
   }));
 
   const updateTicketDetails = (value, fieldType) => {
-    if(value.length<=2){
+    if(value?.length<3 && fieldType === "lable_id"){
      return Swal.fire({
         icon: "error",
         title: "Error",
@@ -103,7 +103,6 @@ const ViewTicket = ({ onClose }) => {
         width: 400,
       });
     }
-    // if(value.)
     let reqBody = {
       field: fieldType,
       id: editData.id,
@@ -263,7 +262,7 @@ const ViewTicket = ({ onClose }) => {
         if (resp?.data?.due_dt !== null) {
           dueDate = moment(resp.data.due_dt).format("YYYY-MM-DD");
         }
-        setSelectedValue(resp?.data?.lable_id)
+        setselectedLabelValue(resp?.data?.lable_id)
 
         setInitialValues({
           issueDetails: resp?.data?.issue_details
@@ -348,20 +347,46 @@ const ViewTicket = ({ onClose }) => {
     linktickets?.splice(index, 1);
     updateTicketDetails(linktickets, "linked_tickets");
   };
-  const promiseOptions = (inputValue) => {
+  const promiseOptions1 = (inputValue) => {
     const queryParam = `?page=${page}&size=${rowsPerPage}&lable_id=${inputValue}`;
   return allTickets(queryParam).then((response) => {
+    console.log(response,"responseresponse")
     return response.pagingData
 });
   };
   const handleLableChange = value => {
-    setSelectedValue(value)
+    setselectedLabelValue(value)
     console.log(value,"valuevalue")
-    updateTicketDetails(
-      value,
-      "lable_id"
-    );
+    value.map((val)=>{
+      updateTicketDetails(
+        val?.lable_id,
+        "lable_id"
+      );
+    })
   }
+  const promiseOptions = (inputValue) =>
+  { 
+    const queryParam = `?page=${page}&size=${rowsPerPage}&linkTicket=${inputValue}`;
+    return allTickets(queryParam).then((response) => {
+      return response.pagingData
+  });
+  }
+  // const handleChange1 = value => {
+  //   setSelectedValue(value)
+  //   console.log(value,"valuevalue")
+  //     updateTicketDetails(
+  //       value,  
+  //         "linked_tickets"
+  //       )
+  //   // })
+  //   // })
+    
+  // }
+  // useEffect(()=>{
+  //   getTicketById({id:linktickets}).then((resp)=>{
+  //     setSelectedValue([resp?.data])
+  //   })
+  // },[linktickets])
   return (
     <>
       {!loading && (
@@ -777,16 +802,16 @@ const ViewTicket = ({ onClose }) => {
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
                             />
-                            {console.log(selectedValue,"selectedValueselectedValue")}
+                            {console.log(selectedLabelValue,"selectedValueselectedValue")}
                             <AsyncSelect
-                              isMulti
-                              loadOptions={promiseOptions}
+                              // isMulti
+                              loadOptions={promiseOptions1}
                               placeholder="Lables"
                               onChange={(e)=>handleLableChange(e)}
                               cacheOptions
-                              value={selectedValue}
+                              value={selectedLabelValue}
                               getOptionLabel={(e) =>  e.lable_id}
-                              defaultInputValue={selectedValue}
+                              defaultInputValue={selectedLabelValue}
                               onBlur={(e) => {
                                 updateTicketDetails(
                                   e.target.value,
