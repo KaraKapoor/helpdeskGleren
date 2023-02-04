@@ -16,6 +16,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with: 
+            cache: 'npm'
+            cache-dependency-path: UI/package-lock.json
       # - run: npm install
       #   working-directory: ./UI
       - run: npm run build
