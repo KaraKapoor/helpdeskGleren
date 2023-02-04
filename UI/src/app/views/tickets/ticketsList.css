@@ -80,3 +80,13 @@
 .parentticket-list{
     margin-top: 14px;
 }
+.isactive-error{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.isactiveDivStyle > div { 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

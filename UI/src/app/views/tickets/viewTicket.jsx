@@ -262,7 +262,7 @@ const ViewTicket = ({ onClose }) => {
         if (resp?.data?.due_dt !== null) {
           dueDate = moment(resp.data.due_dt).format("YYYY-MM-DD");
         }
-        setselectedLabelValue(resp?.data?.lable_id)
+        setselectedLabelValue(resp?.data?.lable?.name)
 
         setInitialValues({
           issueDetails: resp?.data?.issue_details
@@ -349,9 +349,9 @@ const ViewTicket = ({ onClose }) => {
   };
   const promiseOptions1 = (inputValue) => {
     const queryParam = `?page=${page}&size=${rowsPerPage}&lable_id=${inputValue}`;
-  return allTickets(queryParam).then((response) => {
+  return getTicketLable(queryParam).then((response) => {
     console.log(response,"responseresponse")
-    return response.pagingData
+    return response?.pagingData
 });
   };
   const handleLableChange = value => {
@@ -804,13 +804,13 @@ const ViewTicket = ({ onClose }) => {
                             />
                             {console.log(selectedLabelValue,"selectedValueselectedValue")}
                             <AsyncSelect
-                              // isMulti
+                              isMulti
                               loadOptions={promiseOptions1}
                               placeholder="Lables"
                               onChange={(e)=>handleLableChange(e)}
                               cacheOptions
                               value={selectedLabelValue}
-                              getOptionLabel={(e) =>  e.lable_id}
+                              getOptionLabel={(e) => e?.name}
                               defaultInputValue={selectedLabelValue}
                               onBlur={(e) => {
                                 updateTicketDetails(
@@ -818,7 +818,7 @@ const ViewTicket = ({ onClose }) => {
                                   "lable_id"
                                 );
                               }}
-                              getOptionValue={(e) => e.lable_id}
+                              getOptionValue={(e) => e.name}
                               className="async-select-class"
                             />
                             <FormControl

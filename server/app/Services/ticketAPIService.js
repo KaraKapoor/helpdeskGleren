@@ -8,7 +8,7 @@ const coreSettingsService = require("./coreSettingAPIService");
 const emailAPIService = require("./emailAPIService");
 const fileAPIService = require("./fileAPIService");
 const generalMethodAPIService = require("./generalMethodAPIService");
-const { user, ticketFiles, comments } = require("../models");
+const { user, ticketFiles, comments, lables } = require("../models");
 const Op = db.Sequelize.Op;
 const queries = require("../constants/queries");
 const constants = require("../constants/constants");
@@ -195,7 +195,8 @@ exports.getAllTickets = async (conditionArray, tenantId, limit, offset, page, se
             { model: db.project },
             { model: db.department },
             { model: db.status },
-            { model: db.user }
+            { model: db.user },
+            {model:db.lables}
         ]
     });
     const response = generalMethodAPIService.getPagingData(resp, page, limit);
@@ -277,7 +278,8 @@ exports.getTicketById = async (userId, tenantId, ticketId) => {
             { model: db.project },
             { model: db.department },
             { model: db.status },
-            { model: db.user }
+            { model: db.user },
+            { model: db.lables },
         ]
     });
     response = ticketResponse.dataValues;
@@ -372,38 +374,25 @@ exports.getTicketComments = async (userDetails, tenantId, ticketId) => {
     return response;
 }
 
-exports.getTicketLable = async (conditionArray, tenantId, limit, offset, page, searchParam) => {
+exports.getTicketLable = async (conditionArray, limit, offset, page) => {
     var conditions = { [Op.and]: conditionArray };
-    if (searchParam !== null) {
-        let projectIdCondition = null;//It is mandatory so that users can get tickets based on the projects on which they are assigned
-        for (let i of conditionArray) {
-            if (i.project_id) {
-                projectIdCondition = i;
-                break;
-            }
-        }
-        conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { tenant_id: tenantId }, projectIdCondition] }
-    }
-    const resp = await ticket.findAndCountAll({
+    console.log("Lable query:>>>>")
+    const resp = await lables.findAndCountAll({
         order: [['createdAt', 'DESC']],
-        limit, offset, where: conditions, include: [
-            { model: db.project },
-            { model: db.department },
-            { model: db.status },
-            { model: db.user }
-        ]
+        limit, offset, where: conditionArray
     });
     const response = generalMethodAPIService.getPagingData(resp, page, limit);
     return response;
-    // const lableData = await ticket.findAll({ attributes: ['lable_id'] }, { where: { [Op.and]: [{ tenant_id: tenantId }] } });
-    // return lableData
 
 }
-exports.CreateLable = async(lable,tenantId,ticketId) =>{
-    const obj={
-        lable : lable,
-        tenant_id:tenantId,
-        ticket_id:ticketId
+exports.CreateOrGetLable = async(lable) =>{
+    const lableData = await Lables?.findOne({ where: { name: { [Op.like]: `%${lable}%` } } } );
+
+    if(lableData){
+        return lableData?.id
+    }else{
+        const createdLable = await Lables.create({name:lable})
+        return createdLable?.id
     }
-    await Lables.create(obj)
+
 }   

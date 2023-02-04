@@ -43,9 +43,6 @@ db.user.belongsTo(db.tenant, {
 db.holidays.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
-db.lables.belongsTo(db.tenant, {
-    foreignKey: "tenant_id", //1:1
-});
 db.project.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
@@ -152,10 +149,6 @@ db.ticket.belongsTo(db.fix_version, {
     foreignKey: "fix_version_id", //1:1,
     onDelete: 'CASCADE',
 });
-db.ticket.belongsTo(db.lables, {
-    foreignKey: "lable_id", //1:1,
-    onDelete: 'CASCADE',
-});
 db.uploads.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
@@ -175,7 +168,10 @@ db.fix_version.belongsTo(db.tenant, {
     foreignKey: "tenant_id", //1:1
 });
 db.fix_version.belongsTo(db.project, {
-    foreignKey: "project_id", //1:1,
+    foreignKey: "project_id", //1:1
     onDelete: 'CASCADE',
 });
+db.ticket.belongsTo(db.lables, {
+    foreignKey:"lable_id", // 1:M
+})
 module.exports = db;

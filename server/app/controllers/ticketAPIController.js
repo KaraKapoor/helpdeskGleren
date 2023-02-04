@@ -5,7 +5,7 @@ const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
-const { project, user, status, ticket } = require("../models");
+const { project, user, status, ticket, lables } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const emailAPIService = require("../Services/emailAPIService");
@@ -246,6 +246,7 @@ exports.getTicketById = async (req, res) => {
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
     const parentData = await ticket.findAll({ where: { linked_tickets: [parseInt(input.id)] } })
+    
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
         return res.status(200).send({
             error: errorConstants.ID_ERROR,
@@ -459,9 +460,9 @@ exports.updateTicket = async (req, res) => {
             break;
         case 'lable_id':
             type = 'lable_id';
-            await ticketAPIService.CreateLable(input.lable_id,tenantId,input.id)
-            updateObj.lable_id = input.lable_id;
-            changedValue = input.lable_id;
+            const lable_id = await ticketAPIService.CreateOrGetLable(input?.lable_id)
+            updateObj.lable_id = lable_id;
+            changedValue = lable_id;
             break;
     }
 
@@ -571,19 +572,15 @@ exports.getTicketComments = async (req, res) => {
 exports.getTicketLable = async (req, res) => {
     const input = req.query;
 
-    const userDetails = await userAPIService.getUserById(req.user.user_id);
-    const tenantId = userDetails.tenant_id;
     const { limit, offset } = await generalMethodService.getPagination(input.page, input.size);
     let conditionArray = [];
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lable_id) !== null) {
 
-        conditionArray.push({ [Op.or]: [{ lable_id: { [Op.like]: `%${input.lable_id}%` } } ] });
+        conditionArray.push({ [Op.or]: [{ name: { [Op.like]: `${input.lable_id}%` } } ] });
     }
-    const searchParam = await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.searchParam);
 
     try {
-        const resp = await ticketAPIService.getTicketLable(conditionArray, tenantId, limit, offset, input.page, searchParam);
-        // const resp = await ticketAPIService.getTicketLable(userDetails, tenantId);
+        const resp = await ticketAPIService.getTicketLable(conditionArray, limit, offset, input.page);
         return res.status(200).send({ status: true, data: resp });
     } catch (exception) {
         console.log(exception);
