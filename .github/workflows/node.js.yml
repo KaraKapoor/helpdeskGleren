@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          path: './UI'
       - run: npm ci
         working-directory: ./UI
       - run: npm run build
