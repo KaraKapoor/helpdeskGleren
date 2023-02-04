@@ -16,10 +16,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      # - run: npm install
-      #   working-directory: ./UI
-      # - run: npm run build
-      #   working-directory: ./UI
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+        working-directory: ./UI
+      - run: npm run build
+        working-directory: ./UI
       - run: |
             pwd
             hostname
@@ -29,13 +34,10 @@ jobs:
             ls
             cd ubuntu
             ls
-            cd devHelpdeskGleren/helpdeskGleren
             pwd
-            git pull
-            Karan Kapoor
-      #      echo "Started Copying Build Files"
-      #      cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/server/
-       #     echo "Ended Copying Build Files"
+            echo "Started Copying Build Files"
+            cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/server/
+            echo "Ended Copying Build Files"
       # - run: cp -R actions-runner/_work/helpdeskGleren/helpdeskGleren/UI/build devHelpdeskGleren/helpdeskGleren/UI/
 
   
