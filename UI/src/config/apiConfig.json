@@ -60,7 +60,8 @@
         "update": "api/ticket/update",
         "getTicketHistory": "api/ticket/getTicketHistory",
         "saveTicketComment": "api/ticket/saveComment",
-        "getTicketComments": "api/ticket/getTicketComments"
+        "getTicketComments": "api/ticket/getTicketComments",
+        "getTicketLable": "api/ticket/getTicketLable"
     },
     "file": {
         "upload": "api/file/uploadFile",

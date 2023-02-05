@@ -5,7 +5,7 @@ const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
-const { project, user, status } = require("../models");
+const { project, user, status, ticket, lables } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const emailAPIService = require("../Services/emailAPIService");
@@ -74,7 +74,7 @@ exports.createTicket = async (req, res) => {
         });
     }
     try {
-        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files);
+        const resp = await ticketAPIService.createTicket(input.departmentId, input.projectId, input.assigneeId, input.category, input.statusId, input.priority, input.fixVersion, input.issueDetails, input.issueSummary, input.dueDate, input.storyPoints, userDetails.id, tenantId, input.files, input.linked_tickets);
         return res.status(200).send(resp);
     } catch (exception) {
         console.log(exception);
@@ -118,7 +118,7 @@ exports.getMyTickets = async (req, res) => {
         conditionArray.push({ status_id: { [Op.in]: generalMethodService.csvToArray(input.statusId) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixVersion) !== null) {
-        conditionArray.push({ fix_version_id:{ [Op.in]: generalMethodService.csvToArray(  input.fixVersion )}});
+        conditionArray.push({ fix_version_id: { [Op.in]: generalMethodService.csvToArray(input.fixVersion) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.dueDate) !== null) {
         conditionArray.push({ due_dt: input.dueDate });
@@ -182,7 +182,7 @@ exports.getAllTickets = async (req, res) => {
         conditionArray.push({ status_id: { [Op.in]: generalMethodService.csvToArray(input.statusId) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixVersion) !== null) {
-        conditionArray.push({ fix_version_id: { [Op.in]: generalMethodService.csvToArray(input.fixVersion ) } });
+        conditionArray.push({ fix_version_id: { [Op.in]: generalMethodService.csvToArray(input.fixVersion) } });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.dueDate) !== null) {
         conditionArray.push({ due_dt: input.dueDate });
@@ -204,6 +204,14 @@ exports.getAllTickets = async (req, res) => {
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.reportedBy) !== null) {
         conditionArray.push({ created_by: { [Op.in]: generalMethodService.csvToArray(input.reportedBy) } });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.linkTicket) !== null) {
+
+        conditionArray.push({ [Op.or]: [{ issue_details: { [Op.like]: `%${input.linkTicket}%` } }, { id: { [Op.like]: `%${input.linkTicket}%` } }] });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lable_id) !== null) {
+
+        conditionArray.push({ [Op.or]: [{ lable_id: { [Op.like]: `%${input.lable_id}%` } } ] });
     }
     conditionArray.push({ tenant_id: tenantId });
     try {
@@ -237,9 +245,9 @@ exports.getTicketById = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-
+    const parentData = await ticket.findAll({ where: { linked_tickets: [parseInt(input.id)] } })
+    
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
-
         return res.status(200).send({
             error: errorConstants.ID_ERROR,
             status: false
@@ -248,7 +256,7 @@ exports.getTicketById = async (req, res) => {
 
     try {
         const resp = await ticketAPIService.getTicketById(userDetails.id, tenantId, input.id);
-        return res.status(200).send({ status: true, data: resp });
+        return res.status(200).send({ status: true, data: resp, parentlinkticket: parentData });
     } catch (exception) {
         console.log(exception);
         return res.status(200).send({
@@ -371,7 +379,7 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
-            const fix_version_name=  await db.fix_version.findOne({where:  [{ id: input.fixVersion }]  }); 
+            const fix_version_name = await db.fix_version.findOne({ where: [{ id: input.fixVersion }] });
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(fix_version_name) == null) {
                 return res.status(200).send({
                     error: errorConstants.FIX_VERSION__ID_ERROR,
@@ -445,6 +453,17 @@ exports.updateTicket = async (req, res) => {
             updateObj.tested_by = input.testedBy;
             changedValue = testedBy.first_name + ' ' + testedBy.last_name;
             break;
+        case 'linked_tickets':
+            type = 'linked_tickets';
+            updateObj.linked_tickets = input.linktickets;
+            changedValue = input.linktickets;
+            break;
+        case 'lable_id':
+            type = 'lable_id';
+            const lable_id = await ticketAPIService.CreateOrGetLable(input?.lable_id)
+            updateObj.lable_id = lable_id;
+            changedValue = lable_id;
+            break;
     }
 
     try {
@@ -501,12 +520,12 @@ exports.saveTicketComments = async (req, res) => {
     }
 
     try {
-        const resp = await ticketAPIService.saveComments(userDetails, tenantId, input.ticketId, input.htmlComments,input.emailIds);
-        if(await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.emailIds) !== null){
+        const resp = await ticketAPIService.saveComments(userDetails, tenantId, input.ticketId, input.htmlComments, input.emailIds);
+        if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.emailIds) !== null) {
             const emailIds = input.emailIds;
-            emailIds.map(async id=>{
+            emailIds.map(async id => {
                 let mentionedInTicketTemplate = emailTemplates.MENTIONED_IN_TICKET_TEMPLATE;
-              //  mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{username}', userDetails.first_name);
+                //  mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{username}', userDetails.first_name);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace(/{ticketNumber}/g, input.ticketId);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{url}', process.env.BASE_URL);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{view_ticket}', VIEW_TICKET);
@@ -539,6 +558,29 @@ exports.getTicketComments = async (req, res) => {
 
     try {
         const resp = await ticketAPIService.getTicketComments(userDetails, tenantId, input.ticketId);
+        return res.status(200).send({ status: true, data: resp });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
+
+}
+
+exports.getTicketLable = async (req, res) => {
+    const input = req.query;
+
+    const { limit, offset } = await generalMethodService.getPagination(input.page, input.size);
+    let conditionArray = [];
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lable_id) !== null) {
+
+        conditionArray.push({ [Op.or]: [{ name: { [Op.like]: `${input.lable_id}%` } } ] });
+    }
+
+    try {
+        const resp = await ticketAPIService.getTicketLable(conditionArray, limit, offset, input.page);
         return res.status(200).send({ status: true, data: resp });
     } catch (exception) {
         console.log(exception);

@@ -2,12 +2,13 @@ const db = require("../models");
 const ticketHistory = db.ticketHistory;
 const comment = db.comments;
 const ticket = db.ticket;
+const Lables = db.lables
 const emailTemplates = require("../emailTemplates/emailTemplate");
 const coreSettingsService = require("./coreSettingAPIService");
 const emailAPIService = require("./emailAPIService");
 const fileAPIService = require("./fileAPIService");
 const generalMethodAPIService = require("./generalMethodAPIService");
-const { user, ticketFiles, comments } = require("../models");
+const { user, ticketFiles, comments, lables } = require("../models");
 const Op = db.Sequelize.Op;
 const queries = require("../constants/queries");
 const constants = require("../constants/constants");
@@ -94,9 +95,9 @@ exports.saveComments = async (userDetails, tenantId, ticketId, htmlComment) => {
     return response;
 }
 exports.createTicket = async (departmentId, projectId, assigneeId, category, statusId, priority, fixVersion, issueDetails, issueSummary, dueDate, storyPoints, loggedInId,
-    tenantId, files) => {
+    tenantId, files, linked_tickets) => {
     let response = null;
-    if(generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(dueDate)!== null){
+    if (generalMethodAPIService.do_Null_Undefined_EmptyArray_Check(dueDate) !== null) {
         var utcDueDate = await generalMethodAPIService.convertDateToUTC(dueDate);
     }
     const obj = {
@@ -114,11 +115,11 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
         level1SlaDue: dueDate,
         story_points: storyPoints,
         tenant_id: tenantId,
+        linked_tickets: linked_tickets
     }
-
     const createdTicket = await ticket.create(obj);
     const userDetails = await user.findOne({ where: { id: loggedInId } });
-    const assigneeDetails = await user.findOne({where: {id: assigneeId}});
+    const assigneeDetails = await user.findOne({ where: { id: assigneeId } });
 
     //<Start>Insert Entry in ticket history
     await this.saveTicketHistory(tenantId, createdTicket.id, await this.getTicketHistoryMessage('newTicket', userDetails.first_name + ' ' + userDetails.last_name, null, null));
@@ -142,15 +143,15 @@ exports.createTicket = async (departmentId, projectId, assigneeId, category, sta
     await emailAPIService.sendEmail(userDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createEmailTemplate);
     //<End>Send Email for Ticket Creation
 
-     //<Start>Send Email to assignee for Ticket Creation
-     let createassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
-     let ticketId = createdTicket.id;
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace(/{ticketNumber}/g, ticketId);
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{url}', process.env.BASE_URL);
-     createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
-     await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createassigneeEmailTemplate);
-     //<End>Send Email to assignee for Ticket Creation
+    //<Start>Send Email to assignee for Ticket Creation
+    let createassigneeEmailTemplate = emailTemplates.UPDATE_TICKET_ASSIGNEE_TEMPLATE;
+    let ticketId = createdTicket.id;
+    createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{username}', assigneeDetails.first_name);
+    createassigneeEmailTemplate = createassigneeEmailTemplate.replace(/{ticketNumber}/g, ticketId);
+    createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{url}', process.env.BASE_URL);
+    createassigneeEmailTemplate = createassigneeEmailTemplate.replace('{view_ticket}', VIEW_TICKET);
+    await emailAPIService.sendEmail(assigneeDetails.email, emailTemplates.NEW_TICKET_SUBJECT, null, null, null, createassigneeEmailTemplate);
+    //<End>Send Email to assignee for Ticket Creation
     response = {
         status: true,
         data: createdTicket
@@ -165,7 +166,7 @@ exports.getMyTickets = async (conditionArray, userId, tenantId, limit, offset, p
         conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { created_by: userId }, { tenant_id: tenantId }] }
     }
     const resp = await ticket.findAndCountAll({
-        order:[ ['createdAt', 'DESC'] ],
+        order: [['createdAt', 'DESC']],
         limit, offset, where: conditions, include: [
             { model: db.project },
             { model: db.department },
@@ -189,12 +190,13 @@ exports.getAllTickets = async (conditionArray, tenantId, limit, offset, page, se
         conditions = { [Op.and]: [{ [Op.or]: [{ id: `${searchParam}` }] }, { tenant_id: tenantId }, projectIdCondition] }
     }
     const resp = await ticket.findAndCountAll({
-        order:[ ['createdAt', 'DESC'] ],
+        order: [['createdAt', 'DESC']],
         limit, offset, where: conditions, include: [
             { model: db.project },
             { model: db.department },
             { model: db.status },
-            { model: db.user }
+            { model: db.user },
+            {model:db.lables}
         ]
     });
     const response = generalMethodAPIService.getPagingData(resp, page, limit);
@@ -276,7 +278,8 @@ exports.getTicketById = async (userId, tenantId, ticketId) => {
             { model: db.project },
             { model: db.department },
             { model: db.status },
-            { model: db.user }
+            { model: db.user },
+            { model: db.lables },
         ]
     });
     response = ticketResponse.dataValues;
@@ -304,6 +307,8 @@ exports.getTicketById = async (userId, tenantId, ticketId) => {
         ]
     })
     response.ticketFiles = ticketFilesList;
+    const tickets = response.linked_tickets
+    response.linked_tickets = tickets ? tickets.split(",") : null
 
     return response;
 }
@@ -319,8 +324,8 @@ exports.updateTicket = async (type, loggedInUserDetails, tenantId, updateObj, ti
         }
         //<End>Insert entry into ticketFiles table
     }
-    if(type=== 'assignee'){
-        const assigneeDetails = await user.findOne({where: {id: updateObj.assignee_id}});
+    if (type === 'assignee') {
+        const assigneeDetails = await user.findOne({ where: { id: updateObj.assignee_id } });
         console.log(assigneeDetails.first_name);
         const TicketId = ticketId;
         //<Start>Send Email to assignee for change in assignee
@@ -368,3 +373,26 @@ exports.getTicketComments = async (userDetails, tenantId, ticketId) => {
     }
     return response;
 }
+
+exports.getTicketLable = async (conditionArray, limit, offset, page) => {
+    var conditions = { [Op.and]: conditionArray };
+    console.log("Lable query:>>>>")
+    const resp = await lables.findAndCountAll({
+        order: [['createdAt', 'DESC']],
+        limit, offset, where: conditionArray
+    });
+    const response = generalMethodAPIService.getPagingData(resp, page, limit);
+    return response;
+
+}
+exports.CreateOrGetLable = async(lable) =>{
+    const lableData = await Lables?.findOne({ where: { name: { [Op.like]: `%${lable}%` } } } );
+
+    if(lableData){
+        return lableData?.id
+    }else{
+        const createdLable = await Lables.create({name:lable})
+        return createdLable?.id
+    }
+
+}   

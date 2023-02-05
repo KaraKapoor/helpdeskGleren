@@ -13,5 +13,6 @@ module.exports = (app) => {
     router.post("/getTicketHistory", ticketController.getTicketHistory);
     router.post("/saveComment", ticketController.saveTicketComments);
     router.post("/getTicketComments", ticketController.getTicketComments);
+    router.get("/getTicketLable", ticketController.getTicketLable);
     app.use("/api/ticket", auth, router);
 };

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+  import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -20,17 +20,23 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { getMasterDropdownData, getStatusByDepartment } from "app/services/adminService";
 import {
+  getMasterDropdownData,
+  getStatusByDepartment,
+} from "app/services/adminService";
+import {
+  allTickets,
   deleteFile,
   downloadFile,
   fileUpload,
   getFixVersionByProject,
   getTicketById,
+  getTicketLable,
   updateTicket,
 } from "app/services/ticketService";
 import CustomTabs from "./customTabs";
 import CircularProgress from "../../components/MatxLoading";
+import AsyncSelect from "react-select/async";
 
 const ViewTicket = ({ onClose }) => {
   const [assignees, setAssignee] = React.useState([]);
@@ -51,9 +57,16 @@ const ViewTicket = ({ onClose }) => {
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [fixverions, setFixverions] = React.useState([]);
-
+  const [linktickets, setLinkedTickets] = React.useState([]);
+  const [EditLinkedTickets, setEditLinkTickets] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [fileLoading, setfileLoading] = React.useState(false);
+  const [parentticket, setparentticket] = React.useState([]);
   const navigate = useNavigate();
+  const [selectedLabelValue, setselectedLabelValue] = useState([]);
+
+  var host = window.location.protocol + "//" + window.location.host;
 
   const HeaderTitle = styled.div`
     display: flex;
@@ -68,12 +81,28 @@ const ViewTicket = ({ onClose }) => {
     padding: 1rem 1rem 0 1rem;
     gap: 1rem;
   `;
+  const LinkedHeadFlex = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0px;
+  `;
   const ContentBox = styled("div")(({ theme }) => ({
     margin: "30px",
     [theme.breakpoints.down("sm")]: { margin: "16px" },
   }));
 
   const updateTicketDetails = (value, fieldType) => {
+    if(value?.length<3 && fieldType === "lable_id"){
+     return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Lable max length should be more than two",
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: 400,
+      });
+    }
     let reqBody = {
       field: fieldType,
       id: editData.id,
@@ -133,7 +162,14 @@ const ViewTicket = ({ onClose }) => {
       case "reviewedBy":
         reqBody.reviewedBy = value;
         break;
+      case "linked_tickets":
+        reqBody.linked_tickets = value?.map((data) => data?.id);
+        break;
+        case "lable_id":
+          reqBody.lable_id = value;
+          break;
     }
+    console.log("reqBody::",reqBody)
     updateTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
         return Swal.fire({
@@ -179,7 +215,6 @@ const ViewTicket = ({ onClose }) => {
         let users = resp?.data?.users;
         let combinedArray = agents.concat(users);
         setAssignee(combinedArray);
-        
         setPriority(resp?.data?.ticketPriorites);
       }
     });
@@ -189,13 +224,13 @@ const ViewTicket = ({ onClose }) => {
   }, []);
 
   const getStatusByDepId = async (departmentId) => {
-    await getStatusByDepartment({ departmentId }).then(async(response) => {
+    await getStatusByDepartment({ departmentId }).then(async (response) => {
       setStatus(response.data);
-    })
-  }
+    });
+  };
 
   const getTicketDetails = (id) => {
-    getTicketById({ id: id }).then(async(resp) => {
+    getTicketById({ id: id }).then(async (resp) => {
       if (resp?.status === false) {
         return Swal.fire({
           icon: "error",
@@ -210,9 +245,11 @@ const ViewTicket = ({ onClose }) => {
         setSelectedReporter(
           resp.data.createdBy.first_name + " " + resp.data.createdBy.last_name
         );
+
         setSelectedDepartment(resp.data.department.name);
-        console.log(resp.data);
         await getStatusByDepId(resp.data.department_id);
+        setLinkedTickets(resp.data.linked_tickets);
+        setparentticket(resp.parentlinkticket);
         setSelectedProject(resp.data.project);
         setSelectedAssignee(resp.data.assignee_id);
         setSelectedCategory(resp.data.category);
@@ -225,6 +262,8 @@ const ViewTicket = ({ onClose }) => {
         if (resp?.data?.due_dt !== null) {
           dueDate = moment(resp.data.due_dt).format("YYYY-MM-DD");
         }
+        setselectedLabelValue(resp?.data?.lable?.name)
+
         setInitialValues({
           issueDetails: resp?.data?.issue_details
             ? resp.data.issue_details
@@ -232,7 +271,9 @@ const ViewTicket = ({ onClose }) => {
           issueSummary: resp?.data?.issue_summary
             ? resp.data.issue_summary
             : "",
-          fixVersion: resp?.data?.fix_version_id ? resp.data.fix_version_id : "",
+          fixVersion: resp?.data?.fix_version_id
+            ? resp.data.fix_version_id
+            : "",
           storyPoints: resp?.data?.story_points ? resp.data.story_points : 0,
           dueDate: dueDate,
         });
@@ -270,7 +311,7 @@ const ViewTicket = ({ onClose }) => {
     updateTicketDetails(event.target.value, "priority");
   };
   const onChangeFile = (event) => {
-   setfileLoading(true);
+    setfileLoading(true);
     if (!event?.target?.files[0]) {
       return null;
     }
@@ -292,13 +333,60 @@ const ViewTicket = ({ onClose }) => {
       }
     });
   };
-  useEffect(()=>{
-    if(selectedProject){
-      getFixVersionByProject({project_id:selectedProject.id}).then((data)=>{
-        setFixverions(data?.data)
-      })
+  useEffect(() => {
+    if (selectedProject) {
+      getFixVersionByProject({ project_id: selectedProject.id }).then(
+        (data) => {
+          setFixverions(data?.data);
+        }
+      );
     }
-  },[selectedProject])
+  }, [selectedProject]);
+
+  const deleteLinkTicket = (index) => {
+    linktickets?.splice(index, 1);
+    updateTicketDetails(linktickets, "linked_tickets");
+  };
+  const promiseOptions1 = (inputValue) => {
+    const queryParam = `?page=${page}&size=${rowsPerPage}&lable_id=${inputValue}`;
+  return getTicketLable(queryParam).then((response) => {
+    console.log(response,"responseresponse")
+    return response?.pagingData
+});
+  };
+  const handleLableChange = value => {
+    setselectedLabelValue(value)
+    console.log(value,"valuevalue")
+    value.map((val)=>{
+      updateTicketDetails(
+        val?.lable_id,
+        "lable_id"
+      );
+    })
+  }
+  const promiseOptions = (inputValue) =>
+  { 
+    const queryParam = `?page=${page}&size=${rowsPerPage}&linkTicket=${inputValue}`;
+    return allTickets(queryParam).then((response) => {
+      return response.pagingData
+  });
+  }
+  // const handleChange1 = value => {
+  //   setSelectedValue(value)
+  //   console.log(value,"valuevalue")
+  //     updateTicketDetails(
+  //       value,  
+  //         "linked_tickets"
+  //       )
+  //   // })
+  //   // })
+    
+  // }
+  // useEffect(()=>{
+  //   getTicketById({id:linktickets}).then((resp)=>{
+  //     setSelectedValue([resp?.data])
+  //   })
+  // },[linktickets])
   return (
     <>
       {!loading && (
@@ -390,10 +478,21 @@ const ViewTicket = ({ onClose }) => {
                           />
                           <Card sx={{ px: 3, py: 2, mb: 3 }}>
                             <InputLabel>Attachments</InputLabel>
-                            {fileLoading && 
-                            <div style={{position: 'fixed',backgroundColor: '#00000075',width:'100%',top:'0',left:'0',zIndex:'999',height:'100vh'}}>
-                            <CircularProgress ></CircularProgress>                                          
-                           </div>  }                          
+                            {fileLoading && (
+                              <div
+                                style={{
+                                  position: "fixed",
+                                  backgroundColor: "#00000075",
+                                  width: "100%",
+                                  top: "0",
+                                  left: "0",
+                                  zIndex: "999",
+                                  height: "100vh",
+                                }}
+                              >
+                                <CircularProgress></CircularProgress>
+                              </div>
+                            )}
                             {editData.ticketFiles?.map((f, index) => {
                               return (
                                 <Fragment>
@@ -433,6 +532,57 @@ const ViewTicket = ({ onClose }) => {
                                 </Fragment>
                               );
                             })}
+                          </Card>
+                          <Card sx={{ px: 3, py: 2, mb: 3 }}>
+                            <LinkedHeadFlex>
+                              <InputLabel>Linked Ticket</InputLabel>
+                            </LinkedHeadFlex>
+                            {linktickets?.map((data, index) => {
+                              return (
+                                <div className="close-icon">
+                                  <a href={`${host}/view-ticket/${data}`}>
+                                    {host}/view-ticket/{data}
+                                  </a>
+                                  <Icon
+                                    className="icon"
+                                    onClick={() => deleteLinkTicket(index)}
+                                  >
+                                    close
+                                  </Icon>
+                                </div>
+                              );
+                            })}
+                            {parentticket?.length > 0 && (
+                              <div className="parentticket-list">
+                                <InputLabel>Parent Ticket</InputLabel>
+                                {parentticket?.map((data, index) => {
+                                  return (
+                                    <div className="close-icon">
+                                      <a
+                                        href={`${host}/view-ticket/${data?.id}`}
+                                      >
+                                        {host}/view-ticket/{data?.id}
+                                      </a>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                            {fileLoading && (
+                              <div
+                                style={{
+                                  position: "fixed",
+                                  backgroundColor: "#00000075",
+                                  width: "100%",
+                                  top: "0",
+                                  left: "0",
+                                  zIndex: "999",
+                                  height: "100vh",
+                                }}
+                              >
+                                <CircularProgress></CircularProgress>
+                              </div>
+                            )}
                           </Card>
                           <Card sx={{ px: 3, py: 2, mb: 3 }}>
                             <CustomTabs ticketId={editData.id}></CustomTabs>
@@ -495,13 +645,15 @@ const ViewTicket = ({ onClose }) => {
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
                               >
-                                {assignees?.filter(data=>data.is_active).map((d, i) => {
-                                  return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
-                                    </MenuItem>
-                                  );
-                                })}
+                                {assignees
+                                  ?.filter((data) => data.is_active)
+                                  .map((d, i) => {
+                                    return (
+                                      <MenuItem key={i} value={d.id}>
+                                        {d.first_name} {d.last_name}
+                                      </MenuItem>
+                                    );
+                                  })}
                               </Select>
                             </FormControl>
                             <FormControl
@@ -541,13 +693,15 @@ const ViewTicket = ({ onClose }) => {
                                 onChange={handleStatusChange}
                                 defaultValue={selectedStatus}
                               >
-                                {status?.filter(data=>data.is_active).map((d, i) => {
-                                  return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.name}
-                                    </MenuItem>
-                                  );
-                                })}
+                                {status
+                                  ?.filter((data) => data.is_active)
+                                  .map((d, i) => {
+                                    return (
+                                      <MenuItem key={i} value={d.id}>
+                                        {d.name}
+                                      </MenuItem>
+                                    );
+                                  })}
                               </Select>
                             </FormControl>
                             <FormControl
@@ -573,73 +727,62 @@ const ViewTicket = ({ onClose }) => {
                                 })}
                               </Select>
                             </FormControl>
-                            {/* <TextField
+                            <FormControl
                               fullWidth
                               size="small"
                               className="mt-2"
-                              name="fixVersion"
-                              type="text"
-                              label="Fix Version"
-                              variant="outlined"
-                              onBlur={(e) => {
-                                updateTicketDetails(
-                                  e.target.value,
-                                  "fixVersion"
-                                );
-                              }}
-                              value={values.fixVersion}
-                              onChange={handleChange}
-                              sx={{ mb: 1.5 }}
-                            /> */}
-                             <FormControl   fullWidth
-                              size="small"
-                              className="mt-2">
-                    <InputLabel required={true} id="fixVersion">
-                          fixVersion
-                        </InputLabel>
-                      <Select
-                        fullWidth
-                        size="large"
-                        name="fixVersion"
-                        type="text"
-                        label="Fix Version"
-                        variant="outlined"
-                        value={values.fixVersion}
-                        onChange={handleChange}
-                        sx={{ mb: 1.5 }}
-                        onBlur={(e) => {
-                          updateTicketDetails(
-                            e.target.value,
-                            "fixVersion"
-                          );
-                        }}
-                      >
-                        {fixverions?.filter(data=> data.is_active || data.id == values.fixVersion)?.map((d, i) => {
-                            return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.fix_version}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
+                            >
+                              <InputLabel required={true} id="fixVersion">
+                                fixVersion
+                              </InputLabel>
+                              <Select
+                                fullWidth
+                                size="large"
+                                name="fixVersion"
+                                type="text"
+                                label="Fix Version"
+                                variant="outlined"
+                                value={values.fixVersion}
+                                onChange={handleChange}
+                                sx={{ mb: 1.5 }}
+                                onBlur={(e) => {
+                                  updateTicketDetails(
+                                    e.target.value,
+                                    "fixVersion"
+                                  );
+                                }}
+                              >
+                                {fixverions
+                                  ?.filter(
+                                    (data) =>
+                                      data.is_active ||
+                                      data.id == values.fixVersion
+                                  )
+                                  ?.map((d, i) => {
+                                    return (
+                                      <MenuItem key={i} value={d.id}>
+                                        {d.fix_version}
+                                      </MenuItem>
+                                    );
+                                  })}
+                              </Select>
+                            </FormControl>
                             <TextField
                               fullWidth
                               size="small"
                               className="mt-2"
                               name="dueDate"
                               type="date"
-                               label="Due Date"
+                              label="Due Date"
                               variant="outlined"
                               onBlur={(e) => {
                                 updateTicketDetails(e.target.value, "dueDate");
                               }}
                               defaultValue={values.dueDate}
-                              value={values.dueDate  || '' }
+                              value={values.dueDate || ""}
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
-                               InputLabelProps={{ shrink: true }}  
-
+                              InputLabelProps={{ shrink: true }}
                             />
                             <TextField
                               fullWidth
@@ -658,6 +801,25 @@ const ViewTicket = ({ onClose }) => {
                               value={values.storyPoints}
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
+                            />
+                            {console.log(selectedLabelValue,"selectedValueselectedValue")}
+                            <AsyncSelect
+                              isMulti
+                              loadOptions={promiseOptions1}
+                              placeholder="Lables"
+                              onChange={(e)=>handleLableChange(e)}
+                              cacheOptions
+                              value={selectedLabelValue}
+                              getOptionLabel={(e) => e?.name}
+                              defaultInputValue={selectedLabelValue}
+                              onBlur={(e) => {
+                                updateTicketDetails(
+                                  e.target.value,
+                                  "lable_id"
+                                );
+                              }}
+                              getOptionValue={(e) => e.name}
+                              className="async-select-class"
                             />
                             <FormControl
                               fullWidth

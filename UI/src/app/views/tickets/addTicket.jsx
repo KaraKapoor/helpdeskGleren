@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect ,useState} from "react";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -26,6 +26,7 @@ import { Strings } from "config/strings";
 import { authRoles } from "app/auth/authRoles";
 import { getMasterDropdownData,getStatusByDepartment } from "app/services/adminService";
 import {
+  allTickets,
   createTicket,
   deleteFile,
   fileUpload,
@@ -33,6 +34,8 @@ import {
 } from "app/services/ticketService";
 import CircularProgress from "../../components/MatxLoading";
 import {getStatusByDepId} from "../../utils/utils";
+import AsyncSelect from "react-select/async";
+import { Box } from "@mui/system";
 
 const CreateTicket = ({ onClose }) => {
   const [valid, setValid] = React.useState(false);
@@ -52,6 +55,9 @@ const CreateTicket = ({ onClose }) => {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [fixverions, setFixverions] = React.useState([]);
   const [fileLoading, setfileLoading] = React.useState(false);
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [selectedValue, setSelectedValue] = useState(null);
   const navigate = useNavigate();
 
   const HeaderTitle = styled.div`
@@ -90,10 +96,8 @@ const CreateTicket = ({ onClose }) => {
       dueDate: values.dueDate,
       storyPoints: values.storyPoints,
       files: selectedFiles,
+      linked_tickets: selectedValue.map((data) => data.id),
     };
-
-
-    
     createTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
         return Swal.fire({
@@ -170,6 +174,7 @@ const CreateTicket = ({ onClose }) => {
   const handlePriorityChange = (event) => {
     setSelectedPriority(event.target.value);
   };
+
   const onChangeFile = (event) => {
     setfileLoading(true);
     if (!event?.target?.files[0]) {
@@ -200,6 +205,18 @@ useEffect(()=>{
     })
   }
 },[selectedProject])
+
+const handleChange1 = value => {
+  setSelectedValue(value)
+}
+
+const promiseOptions = (inputValue) =>
+{ 
+  const queryParam = `?page=${page}&size=${rowsPerPage}&linkTicket=${inputValue}`;
+  return allTickets(queryParam).then((response) => {
+    return response.pagingData
+});
+}
   return (
     <>
       <div>
@@ -436,7 +453,7 @@ useEffect(()=>{
                         variant="outlined"
                         onBlur={handleBlur}
                         value={values.storyPoints}
-                        inputProps={{ min: 1 }}
+                        inputProps={{ min: "0", step: "0.1" }}
                         onChange={handleChange}
                         error={Boolean(errors.storyPoints && touched.storyPoints)} 
                         helperText={touched.storyPoints && errors.storyPoints}
@@ -445,6 +462,25 @@ useEffect(()=>{
                           shrink: true,
                       }}
                       />
+                    </Grid>
+                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                    <FormControl fullWidth>
+                        <Box>
+                        <AsyncSelect
+                                isMulti
+                                loadOptions={promiseOptions}
+                                // onChange={handleChange1}
+                                placeholder="Linked ticket"
+                                onChange={handleChange1}
+                                cacheOptions
+                                value={selectedValue}
+                                getOptionLabel={e => e.issue_details}
+                                getOptionValue={e => e.id}
+                                className="async-select-class"
+                                />
+                                </Box>
+                      </FormControl>
+                     
                     </Grid>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                       <TextField
@@ -460,7 +496,10 @@ useEffect(()=>{
                         onChange={handleChange}
                         sx={{ mb: 1.5 }}
                       />
+                      
+        
                     </Grid>
+                    
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                       <TextareaAutosize
                         fullWidth
