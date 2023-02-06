@@ -1,9 +1,9 @@
 
 const db = require("../models");
 const project = db.project;
+const holidays = db.holidays;
 const status = db.status;
 const user = db.user;
-const holidays = db.holidays;
 const department = db.department;
 const team = db.team;
 const teamAgentAssociation = db.teamAgentAssociation;
@@ -109,35 +109,45 @@ exports.getHolidaysByName = async (holidayName, tenantId) => {
       },
     });
   };
+  exports.getHolidaysByDate = async (holidayDate, tenantId, projectId) => {
+    return await holidays.findOne({
+      where: {
+        [Op.and]: [{ holiday_date: holidayDate }, { tenant_id: tenantId },{project_id: projectId}],
+      },
+    });
+  };
   exports.getHolidaysById = async (id, tenantId) => {
     return await holidays.findOne({
       where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] },
     });
   };
-  exports.createHolidays = async (holidayName, holidayDate, tenantId, id) => {
+
+  exports.createHoliday = async (holidayName, holidayDate, tenantId, projectId, id, active) => {
     let response = null;
     const obj = {
       holiday_name: holidayName,
       holiday_date: holidayDate,
+      project_id: projectId,
+      is_active: true,
+      id : id,
       tenant_id: tenantId,
     };
-    if (
-      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id)) !== null
-    ) {
-      obj.id = id;
-      await holidays.update(obj, { where: { id: id } });
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null && await obj.id !==undefined)    {
+        obj.id = id;
+        obj.is_active = active;
+        await holidays.update(obj, { where: { id: id } });
     } else {
-      await holidays.create(obj);
+       await holidays.create(obj);
     }
-  
-    const createdHoliday = await this.getHolidaysByName(holidayName, tenantId);
+    const createdHoliday = this.getHolidaysByName(holidayName, tenantId);
+    console.log(createdHoliday);
     response = {
       status: true,
       data: createdHoliday,
     };
-  
     return response;
   };
+
   exports.getAllHolidaysWithPagination = async (page, size, tenantId) => {
     let response = null;
     const { limit, offset } = await generalMethodService.getPagination(
@@ -145,13 +155,14 @@ exports.getHolidaysByName = async (holidayName, tenantId) => {
       size
     );
     await holidays
-      .findAndCountAll({ limit, offset, where: { tenant_id: tenantId } })
+      .findAndCountAll({ limit, offset, where: { tenant_id: tenantId },include:[{model: db.project}] })
       .then(async (data) => {
         const res = await generalMethodService.getPagingData(data, page, limit);
         response = res;
       });
     return response;
   };
+  
 exports.bugReportEmail = async (bugDescription,attachmentId, tenantId,userDetails) => {
     let bugReportTemplate = emailTemplates.BUG_REPORT_EMAIL_TEMPLATE;
     bugReportTemplate = bugReportTemplate.replace('{tenantId}', tenantId);

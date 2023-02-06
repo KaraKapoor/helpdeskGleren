@@ -22,6 +22,7 @@ export const navigations = [
       { name: 'Projects', icon: 'assignment', path: '/project', auth: [authRoles.admin].toString() },
       { name: 'Status', icon: 'do_not_disturb', path: '/status', auth: [authRoles.admin].toString() },
       { name: 'Departments', icon: 'assistant', path: '/departments', auth: [authRoles.admin].toString() },
+      { name: 'Holidays', icon: 'assistant', path: '/holidays', auth: [authRoles.admin].toString() },
       { name: 'Fix Version', icon: 'build', path: '/fixedversion', auth: [authRoles.admin].toString() },
       // { name: 'Change Logo',icon:'image',path:'/ticket'},
     ],

@@ -5,6 +5,9 @@ const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const fixversionAPIService = require("../Services/fixversionAPIService");
+const db = require("../models");
+const e = require("express");
+
 exports.createProject = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
@@ -145,9 +148,6 @@ exports.createStatus = async (req, res) => {
             const resp = await adminAPIService.createStatus(input.statusName, input.id, input.is_active, tenantId, input.statusType, input.departmentId);
             return res.status(200).send(resp);
         }
-
-
-
     } catch (exception) {
         console.log("Exception is \n" + exception);
         return res.status(200).send({
@@ -241,63 +241,88 @@ exports.getAllStatus = async (req, res) => {
     }
 }
 
-exports.createHolidays = async (req, res) => {
-    console.log("creating holidaY");
+
+exports.createHoliday = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
-    let isNew = false;
-    if (
-      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(
-        input.holidayName
-      )) == null
-    ) {
-      return res.status(200).send({
-        error: errorConstants.HOLIDAY_NAME_ERROR,
-        status: false,
-      });
-    }
-    if (
-      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id)) ==
-      null
-    ) {
-      isNew = true;
-    }
+    let update = false;
+   
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
+        update = true;
+    }  
     try {
-      const response = await adminAPIService.getHolidaysByName(
-        input.holidayName,
-        tenantId
-      );
-      if (isNew && response?.holiday_name) {
-        return res.status(200).send({
-          error: errorConstants.HOLIDAY_SAME_NAME_ERROR,
-          status: false,
-        });
-      } else if (
-        !isNew &&
-        input?.holidayName === response?.holiday_name &&
-        response.id != input.id
-      ) {
-        return res.status(200).send({
-          error: errorConstants.HOLIDAY_SAME_NAME_ERROR,
-          status: false,
-        });
-      } else {
-        const resp = await adminAPIService.createHolidays(
-          input.holidayName,
-          input.holidayDate,
-          tenantId
+        const response = await adminAPIService.getHolidaysByDate(
+            input.holidayDate,
+            tenantId,
+            input.projectId
         );
-        return res.status(200).send(resp);
-      }
+        if (input.id) {
+            let dbDate ;
+            if(response != null)
+            dbDate = response.holiday_date;
+            console.log(input.holidayDate);
+            console.log(response);
+            if (response && dbDate === input.holidayDate && response.project_id == input.projectId && response.is_active === true && input.id != response.id) {
+              return res.status(200).send({
+                           error: errorConstants.HOLIDAY_ALREADY_EXIST,
+                status: false,
+              });
+            
+            } else  {
+              const resp = await adminAPIService.createHoliday(
+                input.holidayName,
+                input.holidayDate,
+                tenantId,
+                input.projectId,
+                input.id,
+                input.is_active
+              );
+              return res.status(200).send(resp);
+            }
+          }
+        //creating new HOLiday by comparing to database for holiday exists on that date or not and for that project
+        else if (response != null) {
+            console.log("New Holiday");
+            console.log(response.holiday_date , input.holidayDate)
+            console.log(response.is_active);
+            if (response.project_id == input.projectId && response.is_active == true)  {
+                  return res.status(200).send({
+                    error: errorConstants.HOLIDAY_ALREADY_EXIST,
+                    status: false,
+                  });
+            } else {
+                 const resp = await adminAPIService.createHoliday(
+                   input.holidayName,
+                   input.holidayDate,
+                   tenantId,
+                   input.projectId,
+                   input.id,
+                   input.is_active
+                 );
+                 return res.status(200).send(resp);
+             }
+        } else {
+            const resp = await adminAPIService.createHoliday(
+              input.holidayName,
+              input.holidayDate,
+              tenantId,
+              input.projectId,
+              input.is_active
+            );
+            return res.status(200).send(resp);
+           
+        }
+            
     } catch (exception) {
-      console.log(exception);
-      return res.status(200).send({
-        error: errorConstants.SOME_ERROR_OCCURRED,
-        status: false,
-      });
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
     }
-  };
+}
+
   exports.getHolidaysById = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
@@ -324,34 +349,6 @@ exports.createHolidays = async (req, res) => {
     }
   };
   
-  exports.getHolidaysByName = async (req, res) => {
-    const input = req.body;
-    const userDetails = await userAPIService.getUserById(req.user.user_id);
-    const tenantId = userDetails.tenant_id;
-    if (
-      (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id)) ==
-      null
-    ) {
-      return res.status(200).send({
-        error: errorConstants.ID_ERROR,
-        status: false,
-      });
-    }
-  
-    try {
-      const response = await adminAPIService.getHolidaysByName(
-        input.holidayName,
-        tenantId
-      );
-      return res.status(200).send({ status: true, data: response });
-    } catch (exception) {
-      console.log(exception);
-      return res.status(200).send({
-        error: errorConstants.SOME_ERROR_OCCURRED,
-        status: false,
-      });
-    }
-  };
   
   exports.getAllHolidays = async (req, res) => {
     const userDetails = await userAPIService.getUserById(req.user.user_id);
@@ -393,6 +390,7 @@ exports.createHolidays = async (req, res) => {
       });
     }
   };
+
 exports.bugReportEmail = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
@@ -424,6 +422,7 @@ exports.createDepartment = async (req, res) => {
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
     let isNew = false;
+    console.log(input);
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentName) == null) {
 
         return res.status(200).send({
@@ -434,6 +433,7 @@ exports.createDepartment = async (req, res) => {
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
         isNew = true;
     }
+    console.log(input.id);
     try {
         const response = await adminAPIService.getDepartmentByName(input.departmentName, tenantId);
         if (isNew && response?.name) {
