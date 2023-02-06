@@ -25,6 +25,7 @@ import {
  getStatusByDepartment
 } from "app/services/adminService";
 import {
+  allTickets,
   deleteFile,
   downloadFile,
   fileUpload,
@@ -57,11 +58,11 @@ const ViewTicket = ({ onClose }) => {
   const [fixverions, setFixverions] = React.useState([]);
   const [linktickets, setLinkedTickets]= React.useState([])
   const [selectedValue, setSelectedValue] = useState(null);
-  const [EditLinkedTickets,setEditLinkTickets] = useState(false)
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [fileLoading, setfileLoading] = React.useState(false);
   const [parentticket , setparentticket]=React.useState([])
+  const [LinkedeleteValue,setLinkedeleteValue] = React.useState(false)
   const navigate = useNavigate();
   var host = window.location.protocol + "//" + window.location.host;
   const HeaderTitle = styled.div`
@@ -96,7 +97,6 @@ text-align:center;
     margin: "30px",
     [theme.breakpoints.down("sm")]: { margin: "16px" },
   }));
-
   const updateTicketDetails = (value, fieldType) => {
     let reqBody = {
       field: fieldType,
@@ -158,7 +158,7 @@ text-align:center;
         reqBody.reviewedBy = value;
         break;
       case "linked_tickets":
-        reqBody.linked_tickets = value?.map((data) => data);;
+          reqBody.linked_tickets = value?.map((data) => data);
         break;
     }
     updateTicket(reqBody).then((resp) => {
@@ -236,10 +236,9 @@ text-align:center;
         setSelectedReporter(
           resp.data.createdBy.first_name + " " + resp.data.createdBy.last_name
         );
-
         setSelectedDepartment(resp.data.department.name);
         await getStatusByDepId(resp.data.department_id);
-         setLinkedTickets(resp.data.linked_tickets)
+        setLinkedTickets(resp.data.linked_tickets)
         setparentticket(resp.parentlinkticket )
         setSelectedProject(resp.data.project);
         setSelectedAssignee(resp.data.assignee_id);
@@ -329,11 +328,36 @@ text-align:center;
   },[selectedProject])
 
   const deleteLinkTicket=(index)=>{
+    setLinkedeleteValue(true)
    linktickets?.splice(index,1)
     updateTicketDetails(
       linktickets,
       "linked_tickets"
     );
+  }
+  const promiseOptions = (inputValue) =>
+  { 
+    const queryParam = `?page=${page}&size=${rowsPerPage}&linkTicket=${inputValue}`;
+    return allTickets(queryParam).then((response) => {
+      
+      return response.pagingData
+  });
+  }
+  const handleChange1 = value => {
+    setSelectedValue(value)
+      value?.map((data)=>{
+        if(linktickets === null){
+          updateTicketDetails(
+            [data?.id],  
+            "linked_tickets"
+            )
+        }else{
+          updateTicketDetails(
+            [...linktickets,data?.id],  
+            "linked_tickets"
+            )
+        }
+      })
   }
   return (
     <>
@@ -685,6 +709,19 @@ text-align:center;
                             );
                           })}
                         </Select>
+                      </FormControl>
+                      <FormControl fullWidth>
+                      <AsyncSelect
+                                isMulti
+                                loadOptions={promiseOptions}
+                                placeholder="Link tickets"
+                                onChange={handleChange1}
+                                cacheOptions
+                                value={selectedValue}
+                                getOptionLabel={e => `${e.issue_details}`}
+                                getOptionValue={e => `${e.id}`}
+                                className="async-select-class"
+                                />
                       </FormControl>
                             <TextField
                               fullWidth

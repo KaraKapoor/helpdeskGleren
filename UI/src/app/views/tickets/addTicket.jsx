@@ -485,7 +485,7 @@ const promiseOptions = (inputValue) =>
                                 isMulti
                                 loadOptions={promiseOptions}
                                 // onChange={handleChange1}
-                                placeholder="Linked ticket"
+                                placeholder="Link ticket"
                                 onChange={handleChange1}
                                 cacheOptions
                                 value={selectedValue}
