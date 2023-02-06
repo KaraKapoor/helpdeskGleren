@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/app/views/holidays/holidayList.css"],"names":[],"mappings":"AAAA,QACI,WAAY,CACZ,kBACJ","file":"14.e146247a.chunk.css","sourcesContent":[".addBtn{\r\n    float: right;\r\n    margin-bottom:10px ;\r\n}"]}

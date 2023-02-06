@@ -26,6 +26,12 @@
         "getById": "api/admin/department/getById",
         "getAllDepartments": "api/admin/department/getAllDepartments"
     },
+    "holiday":{
+        "create":"api/admin/holidays/create",
+        "getById":"api/admin/holidays/getById",
+        "getByName":"api/admin/holidays/getByName",
+        "getAllHolidays":"api/admin/holidays/getAllHolidays"
+    },
     "reportBug": {
         "reportBug": "api/admin/bugReport"
     },

@@ -59,7 +59,7 @@ const CreateTicket = ({ onClose }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [selectedValue, setSelectedValue] = useState(null);
   const navigate = useNavigate();
-
+console.log(status,"selectedStatus");
   const HeaderTitle = styled.div`
     display: flex;
     align-items: center;
@@ -77,6 +77,15 @@ const CreateTicket = ({ onClose }) => {
     color: red;
     font-size: 13px;
   `;
+  const ISactiveError = styled.div`
+width:15px;
+height:15px;
+border:5px solid red;
+background-color:red;
+color:white;
+border-radius:50%;
+text-align:center;
+`
 
   const validationSchema = Yup.object().shape({
     storyPoints: Yup.number()
@@ -96,7 +105,7 @@ const CreateTicket = ({ onClose }) => {
       dueDate: values.dueDate,
       storyPoints: values.storyPoints,
       files: selectedFiles,
-      linked_tickets: selectedValue.map((data) => data.id),
+      linked_tickets: selectedValue?selectedValue.map((data) => data.id):"",
     };
     createTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
@@ -261,11 +270,12 @@ const promiseOptions = (inputValue) =>
                           label="Department"
                           onChange={handleDepartmentChange}
                           defaultValue={selectedDepartment}
+                          className="isactiveDivStyle"
                         >
-                          {departments?.filter(department=>department.is_active)?.map((d, i) => {
+                          {departments?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.name}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.name} {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}
@@ -286,11 +296,12 @@ const promiseOptions = (inputValue) =>
                           label="Project"
                           onChange={handleProjectChange}
                           defaultValue={selectedProject}
+                          className="isactiveDivStyle"
                         >
-                          {projects?.filter((project)=>project.is_active === 1).map((d, i) => {
+                          {projects?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.name}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.name} {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}
@@ -310,11 +321,12 @@ const promiseOptions = (inputValue) =>
                           label="Assignee"
                           onChange={handleAssigneeChange}
                           defaultValue={selectedAssignee}
+                          className="isactiveDivStyle"
                         >
-                          {assignees?.filter(assignee=>assignee.is_active|| assignee.id === selectedAssignee)?.map((d, i) => {
+                          {assignees?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.first_name} {d.last_name}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.first_name} {d.last_name}  {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}
@@ -357,12 +369,13 @@ const promiseOptions = (inputValue) =>
                           value={selectedStatus}
                           label="Status"
                           onChange={handleStatusChange}
+                          className="isactiveDivStyle"
                           defaultValue={selectedStatus}
                         >
-                          {status?.filter(data=>data.is_active).map((d, i) => {
+                          {status?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.name}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.name} {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}
@@ -409,11 +422,13 @@ const promiseOptions = (inputValue) =>
                         value={values.fixVersion}
                         onChange={handleChange}
                         sx={{ mb: 1.5 }}
+                        className="isactiveDivStyle"
                       >
-                        {fixverions?.filter(data=>data.is_active)?.map((d, i) => {
+                        
+                        {fixverions?.map((d, i) => {
                             return (
-                              <MenuItem key={i} value={d.id}>
-                                {d.fix_version}
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.fix_version} {!d.is_active ? <ISactiveError />: ""}
                               </MenuItem>
                             );
                           })}
@@ -470,7 +485,7 @@ const promiseOptions = (inputValue) =>
                                 isMulti
                                 loadOptions={promiseOptions}
                                 // onChange={handleChange1}
-                                placeholder="Linked ticket"
+                                placeholder="Link ticket"
                                 onChange={handleChange1}
                                 cacheOptions
                                 value={selectedValue}

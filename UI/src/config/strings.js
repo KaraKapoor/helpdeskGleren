@@ -10,5 +10,6 @@ export const Strings = {
     STATUS_NAME_MANDATORY: "STATUS Name is Mandatory",
     FIX_VERSION_MANDATORY: "FIX VERSION is Mandatory",
     DATE_FORMAT: "DD/MM/YYYY",
+    DATE_HOLIDAYS_FORMAT:"YYYY/MM/DD",
     DATE_TIME_FORMAT: "DD/MM/YYYY hh:mm"
 }

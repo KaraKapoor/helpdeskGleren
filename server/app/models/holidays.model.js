@@ -4,8 +4,12 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(255),
       },
       holiday_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
+      is_active:{
+        type: Sequelize.BOOLEAN(),
+        defaultValue: true
+      }
     });
   
     return Holidays;

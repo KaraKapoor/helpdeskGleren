@@ -57,17 +57,17 @@ const ViewTicket = ({ onClose }) => {
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [fixverions, setFixverions] = React.useState([]);
-  const [linktickets, setLinkedTickets] = React.useState([]);
-  const [EditLinkedTickets, setEditLinkTickets] = useState(false);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [linktickets, setLinkedTickets]= React.useState([])
+  const [selectedValue, setSelectedValue] = useState(null);
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [fileLoading, setfileLoading] = React.useState(false);
-  const [parentticket, setparentticket] = React.useState([]);
+  const [parentticket , setparentticket]=React.useState([])
+  const [LinkedeleteValue,setLinkedeleteValue] = React.useState(false)
   const navigate = useNavigate();
   const [selectedLabelValue, setselectedLabelValue] = useState([]);
 
   var host = window.location.protocol + "//" + window.location.host;
-
   const HeaderTitle = styled.div`
     display: flex;
     align-items: center;
@@ -91,7 +91,6 @@ const ViewTicket = ({ onClose }) => {
     margin: "30px",
     [theme.breakpoints.down("sm")]: { margin: "16px" },
   }));
-
   const updateTicketDetails = (value, fieldType) => {
     console.log(value,"valuevalue");
     if(value?.length < 3 && fieldType === "lable_id"){
@@ -164,7 +163,7 @@ const ViewTicket = ({ onClose }) => {
         reqBody.reviewedBy = value;
         break;
       case "linked_tickets":
-        reqBody.linked_tickets = value?.map((data) => data?.id);
+          reqBody.linked_tickets = value?.map((data) => data);
         break;
         case "lable_id":
           reqBody.lable_id = value;
@@ -246,7 +245,6 @@ const ViewTicket = ({ onClose }) => {
         setSelectedReporter(
           resp.data.createdBy.first_name + " " + resp.data.createdBy.last_name
         );
-
         setSelectedDepartment(resp.data.department.name);
         await getStatusByDepId(resp.data.department_id);
         setLinkedTickets(resp.data.linked_tickets);
@@ -344,47 +342,38 @@ const ViewTicket = ({ onClose }) => {
     }
   }, [selectedProject]);
 
-  const deleteLinkTicket = (index) => {
-    linktickets?.splice(index, 1);
-    updateTicketDetails(linktickets, "linked_tickets");
-  };
-  const promiseOptions1 = (inputValue) => {
-    const queryParam = `?page=${page}&size=${rowsPerPage}&lable_id=${inputValue}`;
-  return getTicketLable(queryParam).then((response) => {
-    console.log(response,"responseresponse")
-    return response?.data?.pagingData
-});
-  };
-  const handleLableChange = value => {
-    setselectedLabelValue(value.name)
-      updateTicketDetails(
-        value.name,
-        "lable_id"
-      );
+  const deleteLinkTicket=(index)=>{
+    setLinkedeleteValue(true)
+   linktickets?.splice(index,1)
+    updateTicketDetails(
+      linktickets,
+      "linked_tickets"
+    );
   }
   const promiseOptions = (inputValue) =>
   { 
     const queryParam = `?page=${page}&size=${rowsPerPage}&linkTicket=${inputValue}`;
     return allTickets(queryParam).then((response) => {
+      
       return response.pagingData
   });
   }
-  // const handleChange1 = value => {
-  //   setSelectedValue(value)
-  //   console.log(value,"valuevalue")
-  //     updateTicketDetails(
-  //       value,  
-  //         "linked_tickets"
-  //       )
-  //   // })
-  //   // })
-    
-  // }
-  // useEffect(()=>{
-  //   getTicketById({id:linktickets}).then((resp)=>{
-  //     setSelectedValue([resp?.data])
-  //   })
-  // },[linktickets])
+  const handleChange1 = value => {
+    setSelectedValue(value)
+      value?.map((data)=>{
+        if(linktickets === null){
+          updateTicketDetails(
+            [data?.id],  
+            "linked_tickets"
+            )
+        }else{
+          updateTicketDetails(
+            [...linktickets,data?.id],  
+            "linked_tickets"
+            )
+        }
+      })
+  }
   return (
     <>
       {!loading && (
@@ -640,18 +629,17 @@ const ViewTicket = ({ onClose }) => {
                                 required={true}
                                 value={selectedAssignee}
                                 label="Assignee"
+                                className="isactiveDivStyle"
                                 onChange={handleAssigneeChange}
                                 defaultValue={selectedAssignee}
                               >
-                                {assignees
-                                  ?.filter((data) => data.is_active)
-                                  .map((d, i) => {
-                                    return (
-                                      <MenuItem key={i} value={d.id}>
-                                        {d.first_name} {d.last_name}
-                                      </MenuItem>
-                                    );
-                                  })}
+                                {assignees?.map((d, i) => {
+                                  return (
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
+                                    </MenuItem>
+                                  );
+                                })}
                               </Select>
                             </FormControl>
                             <FormControl
@@ -688,18 +676,17 @@ const ViewTicket = ({ onClose }) => {
                                 id="status"
                                 value={selectedStatus}
                                 label="Status"
+                                className="isactiveDivStyle"
                                 onChange={handleStatusChange}
                                 defaultValue={selectedStatus}
                               >
-                                {status
-                                  ?.filter((data) => data.is_active)
-                                  .map((d, i) => {
-                                    return (
-                                      <MenuItem key={i} value={d.id}>
-                                        {d.name}
-                                      </MenuItem>
-                                    );
-                                  })}
+                                {status?.map((d, i) => {
+                                  return (
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.name} {!d.is_active ? <ISactiveError />: ""}
+                                    </MenuItem>
+                                  );
+                                })}
                               </Select>
                             </FormControl>
                             <FormControl
@@ -728,43 +715,50 @@ const ViewTicket = ({ onClose }) => {
                             <FormControl
                               fullWidth
                               size="small"
-                              className="mt-2"
-                            >
-                              <InputLabel required={true} id="fixVersion">
-                                fixVersion
-                              </InputLabel>
-                              <Select
-                                fullWidth
-                                size="large"
-                                name="fixVersion"
-                                type="text"
-                                label="Fix Version"
-                                variant="outlined"
-                                value={values.fixVersion}
-                                onChange={handleChange}
-                                sx={{ mb: 1.5 }}
-                                onBlur={(e) => {
-                                  updateTicketDetails(
-                                    e.target.value,
-                                    "fixVersion"
-                                  );
-                                }}
-                              >
-                                {fixverions
-                                  ?.filter(
-                                    (data) =>
-                                      data.is_active ||
-                                      data.id == values.fixVersion
-                                  )
-                                  ?.map((d, i) => {
-                                    return (
-                                      <MenuItem key={i} value={d.id}>
-                                        {d.fix_version}
-                                      </MenuItem>
-                                    );
-                                  })}
-                              </Select>
-                            </FormControl>
+                              className="mt-2">
+                    <InputLabel required={true} id="fixVersion">
+                          fixVersion
+                        </InputLabel>
+                      <Select
+                        fullWidth
+                        size="large"
+                        name="fixVersion"
+                        type="text"
+                        label="Fix Version"
+                        variant="outlined"
+                        value={values.fixVersion}
+                        onChange={handleChange}
+                        sx={{ mb: 1.5 }}
+                        className="isactiveDivStyle"
+                        onBlur={(e) => {
+                          updateTicketDetails(
+                            e.target.value,
+                            "fixVersion"
+                          );
+                        }}
+                      >
+                        {fixverions?.map((d, i) => {
+                            return (
+                              <MenuItem key={i} value={d.id} className="isactive-error">
+                                {d.fix_version} {!d.is_active ? <ISactiveError />: ""}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <FormControl fullWidth>
+                      <AsyncSelect
+                                isMulti
+                                loadOptions={promiseOptions}
+                                placeholder="Link tickets"
+                                onChange={handleChange1}
+                                cacheOptions
+                                value={selectedValue}
+                                getOptionLabel={e => `${e.issue_details}`}
+                                getOptionValue={e => `${e.id}`}
+                                className="async-select-class"
+                                />
+                      </FormControl>
                             <TextField
                               fullWidth
                               size="small"
@@ -832,11 +826,12 @@ const ViewTicket = ({ onClose }) => {
                                 label="Resolved By"
                                 onChange={handleResolvedByChange}
                                 defaultValue={selectedResolvedBy}
+                                className="isactiveDivStyle"
                               >
                                 {assignees?.map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}
@@ -857,11 +852,12 @@ const ViewTicket = ({ onClose }) => {
                                 label="Reviewed By"
                                 onChange={handleReviewedByChange}
                                 defaultValue={selectedReviewedBy}
+                                className="isactiveDivStyle"
                               >
                                 {assignees?.map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}
@@ -880,11 +876,12 @@ const ViewTicket = ({ onClose }) => {
                                 label="Tested By"
                                 onChange={handleTestedByChange}
                                 defaultValue={selectedTestedBy}
+                                className="isactiveDivStyle"
                               >
                                 {assignees?.map((d, i) => {
                                   return (
-                                    <MenuItem key={i} value={d.id}>
-                                      {d.first_name} {d.last_name}
+                                    <MenuItem key={i} value={d.id} className="isactive-error">
+                                      {d.first_name} {d.last_name} {!d.is_active ? <ISactiveError />: ""}
                                     </MenuItem>
                                   );
                                 })}

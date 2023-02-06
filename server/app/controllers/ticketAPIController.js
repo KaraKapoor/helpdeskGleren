@@ -3,6 +3,7 @@ const coreSettingsService = require("../Services/coreSettingAPIService");
 const generalMethodService = require("../Services/generalMethodAPIService");
 const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
+const fixversionAPIService = require("../Services/fixversionAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
 const { project, user, status, ticket, lables } = require("../models");
@@ -17,22 +18,43 @@ exports.createTicket = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
+    const responseProject = await adminAPIService.getProjectById(input.projectId,tenantId)
+    const responseDepartment = await adminAPIService.getDepartmentById(input.departmentId,tenantId)
+    const responseStatus = await adminAPIService.getStatusById(input.statusId,tenantId)
+    const responseUserId =  await userAPIService.getUserById(input.assigneeId,tenantId)
+    const responsVersion = await fixversionAPIService?.getFixVersionById(input?.fixVersion,tenantId) 
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.departmentId) == null) {
-
+        if(!responseDepartment.is_active){
+            return res.status(200).send({
+                error: errorConstants.DEPARTMENT_NAME_INACTIVE,
+                status: false
+            });
+        }
         return res.status(200).send({
             error: errorConstants.DEPARTMENT_NAME_ERROR,
             status: false
         });
+       
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.projectId) == null) {
-
+        if(!responseProject.is_active){
+            return res.status(200).send({
+                error: errorConstants.PROJECT_NAME_INACTIVE,
+                status: false
+            });
+        }
         return res.status(200).send({
             error: errorConstants.PROJECT_NAME_ERROR,
             status: false
         });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.assigneeId) == null) {
-
+        if(!responseUserId.is_active){
+            return res.status(200).send({
+                error: errorConstants.ASSIGNEE_INACTIVE,
+                status: false
+            });
+        }
         return res.status(200).send({
             error: errorConstants.ASSIGNEE_NAME_ERROR,
             status: false
@@ -46,9 +68,20 @@ exports.createTicket = async (req, res) => {
         });
     }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.statusId) == null) {
-
+        if( !responseStatus.is_active){
+            return res.status(200).send({
+                error: errorConstants.STATUS_NAME_INACTIVE,
+                status: false
+            });
+        }
         return res.status(200).send({
             error: errorConstants.STATUS_NAME_ERROR,
+            status: false
+        });
+    }
+    if(!responsVersion.is_active ){
+        return res.status(200).send({
+            error: errorConstants.FIX_VERSION_INACTIVE,
             status: false
         });
     }
@@ -322,6 +355,7 @@ exports.updateTicket = async (req, res) => {
             changedValue = input.files;
             break;
         case 'assignee':
+            const assignee = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.assignee }] } });
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.assignee) == null) {
 
                 return res.status(200).send({
@@ -329,8 +363,13 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
+            else if(assignee.id === input.assignee || !assignee.is_active){
+                return res.status(200).send({
+                    error: errorConstants.ASSIGNEE_INACTIVE,
+                    status: false
+                });
+              }
             type = 'assignee';
-            const assignee = await user.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.assignee }] } });
             updateObj.assignee_id = input.assignee;
             changedValue = assignee.first_name + ' ' + assignee.last_name;
             break;
@@ -347,6 +386,7 @@ exports.updateTicket = async (req, res) => {
             changedValue = input.category;
             break;
         case 'status':
+            const statusDetails = await status.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.status }] } });
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.status) == null) {
 
                 return res.status(200).send({
@@ -354,8 +394,13 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
+            else if(statusDetails.id === input.status || !statusDetails.is_active){
+                return res.status(200).send({
+                    error: errorConstants.STATUS_NAME_INACTIVE,
+                    status: false
+                });
+            }
             type = 'status';
-            const statusDetails = await status.findOne({ where: { [Op.and]: [{ tenant_id: tenantId }, { id: input.status }] } });
             updateObj.status_id = input.status;
             changedValue = statusDetails.name;
             break;
@@ -379,10 +424,16 @@ exports.updateTicket = async (req, res) => {
                     status: false
                 });
             }
-            const fix_version_name = await db.fix_version.findOne({ where: [{ id: input.fixVersion }] });
+            const fix_version_name =  await db?.fix_version?.findOne({where:  [{ id: input?.fixVersion }]  }); 
             if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(fix_version_name) == null) {
                 return res.status(200).send({
                     error: errorConstants.FIX_VERSION__ID_ERROR,
+                    status: false
+                });
+            }
+            else if(fix_version_name.id === input?.fixVersion || !fix_version_name.is_active){
+                return res.status(200).send({
+                    error: errorConstants.FIX_VERSION_INACTIVE,
                     status: false
                 });
             }
@@ -455,8 +506,8 @@ exports.updateTicket = async (req, res) => {
             break;
         case 'linked_tickets':
             type = 'linked_tickets';
-            updateObj.linked_tickets = input.linktickets;
-            changedValue = input.linktickets;
+            updateObj.linked_tickets = input.linked_tickets;
+            changedValue = input.linked_tickets;
             break;
         case 'lable_id':
             type = 'lable_id';
@@ -480,6 +531,7 @@ exports.updateTicket = async (req, res) => {
 exports.getTicketHistory = async (req, res) => {
     const input = req.body;
     const userDetails = await userAPIService.getUserById(req.user.user_id);
+    const ticketData = await userAPIService.getTicketById(input.id);
     const tenantId = userDetails.tenant_id;
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
 
@@ -488,6 +540,13 @@ exports.getTicketHistory = async (req, res) => {
             status: false
         });
     }
+    if (ticketData == null) {
+        return res.status(200).send({
+            error: errorConstants.TICKET__ID_ERROR,
+            status: false
+        });
+    }
+
     try {
         const resp = await ticketAPIService.getTicketHistory(userDetails, tenantId, input.id);
         return res.status(200).send({ status: true, data: resp });

@@ -101,11 +101,12 @@ module.exports = (sequelize, Sequelize) => {
                 return data ? data.split(',') : null
             },
             set(link) {
-                return this.setDataValue('linked_tickets', link?.join(","));
+                return link?this.setDataValue('linked_tickets', link?.join(",")):"";
             }
         },
         lable_id:{
             type: Sequelize.INTEGER
+      
         }
     });
     return Ticket;
