@@ -213,7 +213,7 @@ editDetails?.is_active ? editDetails.is_active : true
                         defaultValue={Project}
                         className="isactiveDivStyle"
                       >
-                        {ProjectValue.filter(data => data.is_active || data.id === Project).map((d, i) => {
+                        {ProjectValue?.map((d, i) => {
                           return (
                             <MenuItem key={i} value={d.id}  className="isactive-error">
                               {d.name} {d.is_active === false ? <ISactiveError />: ""}

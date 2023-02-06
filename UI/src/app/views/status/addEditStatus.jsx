@@ -218,7 +218,7 @@ const ISactiveError = styled.div`
                                                 className="isactiveDivStyle"
                                             >
                                                 {
-                                                    departmentvalue?.filter((d,i) => (d.is_active === true || d.id === department )).map((d, i) => {
+                                                    departmentvalue?.map((d, i) => {
                                                         return <MenuItem key={i} value={d.id} className="isactive-error">{d.name} {d.is_active === false ? <ISactiveError />: ""}</MenuItem>
                                                     })
                                                 }

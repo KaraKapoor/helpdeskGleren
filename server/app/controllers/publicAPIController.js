@@ -39,11 +39,20 @@ exports.sendOTPEmail = async (req, res) => {
 
 exports.verifyOTP = async (req, res) => {
     const input = req.body;
-    if (generalMethodService.do_Null_Undefined_EmptyArray_Check(input.otp) == null) {
-
+    const user = await userAPIService.getUserByEmail(input.email);
+    const emailVerifyDetails = await userAPIService.getEmailVerifyByEmail(input.email);
+    
+    const regex_pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!regex_pattern.test(input?.email)) {
         return res.status(200).send({
-            error: errorConstants.OTP_MANDATORY_ERROR,
-            status: false
+            status: false,
+            message: errorConstants.INVALID_EMAIL_ID
+        }); 
+    } 
+    if(user == null){
+        return res.status(200).send({
+            status: false,
+            error: errorConstants.USER_DOES_NOT_EXIST_ERROR
         });
     }
     if (generalMethodService.do_Null_Undefined_EmptyArray_Check(input.email) == null) {
@@ -53,7 +62,26 @@ exports.verifyOTP = async (req, res) => {
             status: false
         });
     }
-
+    if (input.otp == null) {
+        return res.status(200).send({
+            status: false,
+            error: errorConstants.OTP_MANDATORY_ERROR
+        });
+    }
+    const regex_four = /^\d{4}$/
+    if (!regex_four.test(input?.otp)) {
+        return res.status(200).send({
+            status: false,
+            message: errorConstants.INVALID_OTP_ERROR
+        });
+    } 
+    if(emailVerifyDetails.is_verified){
+        return res.status(200).send({
+            status: true,
+            message: errorConstants.EMAIL_ALREADY_VERIFIED_ERROR
+        });
+    }
+   
     try {
         const response = await publicAPIService.verifyOTP(input.email, input.otp);
         return res.status(200).send({    data : response,
