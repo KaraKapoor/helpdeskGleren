@@ -57,12 +57,13 @@ const ViewTicket = ({ onClose }) => {
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [fixverions, setFixverions] = React.useState([]);
-  const [linktickets, setLinkedTickets]= React.useState([])
+  const [linktickets, setLinkedTickets] = React.useState([]);
+  const [EditLinkedTickets, setEditLinkTickets] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [parentticket, setparentticket] = React.useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
-  const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [fileLoading, setfileLoading] = React.useState(false);
-  const [parentticket , setparentticket]=React.useState([])
   const [LinkedeleteValue,setLinkedeleteValue] = React.useState(false)
   const navigate = useNavigate();
   const [selectedLabelValue, setselectedLabelValue] = useState([]);
@@ -82,11 +83,20 @@ const ViewTicket = ({ onClose }) => {
     gap: 1rem;
   `;
   const LinkedHeadFlex = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 0px;
-  `;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:5px 0px;
+`
+const ISactiveError = styled.div`
+width:15px;
+height:15px;
+border:5px solid red;
+background-color:red;
+color:white;
+border-radius:50%;
+text-align:center;
+`
   const ContentBox = styled("div")(({ theme }) => ({
     margin: "30px",
     [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -342,6 +352,20 @@ const ViewTicket = ({ onClose }) => {
     }
   }, [selectedProject]);
 
+
+  const promiseOptions1 = (inputValue) => {
+    const queryParam = `?page=${page}&size=${rowsPerPage}&lable_id=${inputValue}`;
+  return getTicketLable(queryParam).then((response) => {
+    return response?.data?.pagingData
+});
+  };
+  const handleLableChange = value => {
+    setselectedLabelValue(value.name)
+      updateTicketDetails(
+        value.name,
+        "lable_id"
+      );
+  }
   const deleteLinkTicket=(index)=>{
     setLinkedeleteValue(true)
    linktickets?.splice(index,1)
@@ -354,10 +378,26 @@ const ViewTicket = ({ onClose }) => {
   { 
     const queryParam = `?page=${page}&size=${rowsPerPage}&linkTicket=${inputValue}`;
     return allTickets(queryParam).then((response) => {
-      
       return response.pagingData
   });
   }
+  // const handleChange1 = value => {
+  //   setSelectedValue(value)
+  //   console.log(value,"valuevalue")
+  //     updateTicketDetails(
+  //       value,  
+  //         "linked_tickets"
+  //       )
+  //   // })
+  //   // })
+    
+  // }
+  // useEffect(()=>{
+  //   getTicketById({id:linktickets}).then((resp)=>{
+  //     setSelectedValue([resp?.data])
+  //   })
+  // },[linktickets])
+      
   const handleChange1 = value => {
     setSelectedValue(value)
       value?.map((data)=>{
@@ -756,7 +796,7 @@ const ViewTicket = ({ onClose }) => {
                                 value={selectedValue}
                                 getOptionLabel={e => `${e.issue_details}`}
                                 getOptionValue={e => `${e.id}`}
-                                className="async-select-class"
+                                className="async-select-class close-button"
                                 />
                       </FormControl>
                             <TextField
