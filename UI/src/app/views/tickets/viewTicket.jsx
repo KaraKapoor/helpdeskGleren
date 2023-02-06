@@ -93,7 +93,8 @@ const ViewTicket = ({ onClose }) => {
   }));
 
   const updateTicketDetails = (value, fieldType) => {
-    if(value?.length<3 && fieldType === "lable_id"){
+    console.log(value,"valuevalue");
+    if(value?.length < 3 && fieldType === "lable_id"){
      return Swal.fire({
         icon: "error",
         title: "Error",
@@ -351,18 +352,15 @@ const ViewTicket = ({ onClose }) => {
     const queryParam = `?page=${page}&size=${rowsPerPage}&lable_id=${inputValue}`;
   return getTicketLable(queryParam).then((response) => {
     console.log(response,"responseresponse")
-    return response?.pagingData
+    return response?.data?.pagingData
 });
   };
   const handleLableChange = value => {
-    setselectedLabelValue(value)
-    console.log(value,"valuevalue")
-    value.map((val)=>{
+    setselectedLabelValue(value.name)
       updateTicketDetails(
-        val?.lable_id,
+        value.name,
         "lable_id"
       );
-    })
   }
   const promiseOptions = (inputValue) =>
   { 
@@ -802,15 +800,13 @@ const ViewTicket = ({ onClose }) => {
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
                             />
-                            {console.log(selectedLabelValue,"selectedValueselectedValue")}
                             <AsyncSelect
-                              isMulti
                               loadOptions={promiseOptions1}
                               placeholder="Lables"
                               onChange={(e)=>handleLableChange(e)}
                               cacheOptions
                               value={selectedLabelValue}
-                              getOptionLabel={(e) => e?.name}
+                              getOptionLabel={e => e.name}
                               defaultInputValue={selectedLabelValue}
                               onBlur={(e) => {
                                 updateTicketDetails(
