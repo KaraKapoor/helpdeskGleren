@@ -24,7 +24,7 @@ import { allTickets, getFixVersionByProject } from "app/services/ticketService";
 import "./allTicketList.css";
 import { getMasterDropdownData } from "app/services/adminService";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useSearchParams,useParams} from "react-router-dom";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const StyledTable = styled(Table)(() => ({
@@ -108,6 +108,10 @@ const AllTickets = ({ setCurrentView }) => {
     const [handfixverions, sethandFixverions] = useState([]);
     const [searchData , setsearchdata] = useState('');
     const navigate = useNavigate()
+  let [searchParams] = useSearchParams();
+  const searchdata = searchParams.get("name");
+  const params_name = searchdata.split("/")[0]
+  
 
 
   const handleChangePage = (_, newPage) => {
@@ -210,6 +214,11 @@ const AllTickets = ({ setCurrentView }) => {
         width: 400,
       });
     }
+    setSelectedAssignee(event.target.value);
+    setSelectedResolvedBy(event.target.value);
+    setSelectedReviewedBy(event.target.value);
+    setSelectedTestedBy(event.target.value);
+    setSelectedReportedBy(event.target.value)
     setSelectedProject(event.target.value);
   };
   const handleAssigneeChange = (event) => {
@@ -258,6 +267,22 @@ const AllTickets = ({ setCurrentView }) => {
         setReviewedBy(resp?.data?.agents);
         if (resp?.data?.currentUserProjects.length > 0) {
           setSelectedProject([resp?.data?.currentUserProjects[0].id]);
+        }
+        let user = JSON.parse(localStorage.getItem('user'))
+        if (params_name == "assignTicket") {
+          setSelectedAssignee([user.userId])
+        }
+        if (params_name == "ticketResolvedByMe") {
+          setSelectedResolvedBy([user.userId])
+        }
+        if (params_name == "ticketReviewedByMe") {
+          setSelectedReviewedBy([user.userId])
+        }
+        if (params_name == "ticketTestedByMe") {
+          setSelectedTestedBy([user.userId])
+        }
+        if (params_name == "ticketCreatedByMe") {
+          setSelectedReportedBy([user.userId])
         }
       }
     });
