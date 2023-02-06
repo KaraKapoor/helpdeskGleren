@@ -6,7 +6,7 @@ const userAPIService = require("../Services/userAPIService");
 const fixversionAPIService = require("../Services/fixversionAPIService");
 const adminAPIService = require("../Services/adminAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
-const { project, user, status, ticket } = require("../models");
+const { project, user, status, ticket,lables  } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const emailAPIService = require("../Services/emailAPIService");
@@ -241,6 +241,10 @@ exports.getAllTickets = async (req, res) => {
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.linkTicket) !== null) {
         
         conditionArray.push({ [Op.or]: [{ issue_details: { [Op.like]:`%${input.linkTicket}%`} }, { id: { [Op.like]:`%${input.linkTicket}%`} }] });
+    }
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lable_id) !== null) {
+
+        conditionArray.push({ [Op.or]: [{ lable_id: { [Op.like]: `%${input.lable_id}%` } } ] });
     }
     conditionArray.push({ tenant_id: tenantId });
     try {
@@ -504,6 +508,12 @@ exports.updateTicket = async (req, res) => {
             updateObj.linked_tickets = input.linked_tickets;
             changedValue = input.linked_tickets;
             break;
+        case 'lable_id':
+            type = 'lable_id';
+            const lable_id = await ticketAPIService.CreateOrGetLable(input?.lable_id)
+            updateObj.lable_id = lable_id;
+            changedValue = lable_id;
+            break;
     }
 
     try {
@@ -615,4 +625,25 @@ exports.getTicketComments = async (req, res) => {
         });
     }
 
+}
+exports.getTicketLable = async (req, res) => {
+    const input = req.query;
+
+    const { limit, offset } = await generalMethodService.getPagination(input.page, input.size);
+    let conditionArray = [];
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.lable_id) !== null) {
+
+        conditionArray.push({ [Op.or]: [{ name: { [Op.like]: `${input.lable_id}%` } } ] });
+    }
+
+    try {
+        const resp = await ticketAPIService.getTicketLable(conditionArray, limit, offset, input.page);
+        return res.status(200).send({ status: true, data: resp });
+    } catch (exception) {
+        console.log(exception);
+        return res.status(200).send({
+            error: errorConstants.SOME_ERROR_OCCURRED,
+            status: false
+        });
+    }
 }
