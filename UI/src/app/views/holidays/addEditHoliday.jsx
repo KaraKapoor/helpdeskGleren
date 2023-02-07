@@ -73,19 +73,18 @@ useEffect(() => {
             is_active: isActive,
             projectId: Project,
         };
-        {console.log(reqBody);}
-        if (editDetails?.id) {
-            reqBody.id = editDetails.id
-        } else if (!values.holidayName) {
-            return Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: Strings.HOLIDAY_NAME_MANDATORY,
-                showCloseButton: true,
-                showConfirmButton: false,
-                width: 400,
-            })
-        }
+         if (editDetails?.id) {
+             reqBody.id = editDetails.id
+         } else if (!values.holidayName) {
+             return Swal.fire({
+                 icon: 'warning',
+                 title: 'Warning',
+                 text: Strings.HOLIDAY_NAME_MANDATORY,
+                 showCloseButton: true,
+                 showConfirmButton: false,
+                 width: 400,
+             })
+         }
         createHolidays(reqBody).then((resp) => {
             if (resp?.status === false) {
                 return Swal.fire({
@@ -189,8 +188,6 @@ useEffect(() => {
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                    
-
                                         />
                                         <br />
                                     </div>  

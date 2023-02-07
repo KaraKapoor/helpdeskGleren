@@ -248,9 +248,6 @@ exports.createHoliday = async (req, res) => {
     const tenantId = userDetails.tenant_id;
     let update = false;
    
-    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.id) == null) {
-        update = true;
-    }  
     try {
         const response = await adminAPIService.getHolidaysByDate(
             input.holidayDate,
@@ -261,8 +258,6 @@ exports.createHoliday = async (req, res) => {
             let dbDate ;
             if(response != null)
             dbDate = response.holiday_date;
-            console.log(input.holidayDate);
-            console.log(response);
             if (response && dbDate === input.holidayDate && response.project_id == input.projectId && response.is_active === true && input.id != response.id) {
               return res.status(200).send({
                            error: errorConstants.HOLIDAY_ALREADY_EXIST,
@@ -278,14 +273,12 @@ exports.createHoliday = async (req, res) => {
                 input.id,
                 input.is_active
               );
+              console.log(input.id,"input.id");
               return res.status(200).send(resp);
             }
           }
         //creating new HOLiday by comparing to database for holiday exists on that date or not and for that project
         else if (response != null) {
-            console.log("New Holiday");
-            console.log(response.holiday_date , input.holidayDate)
-            console.log(response.is_active);
             if (response.project_id == input.projectId && response.is_active == true)  {
                   return res.status(200).send({
                     error: errorConstants.HOLIDAY_ALREADY_EXIST,
@@ -293,12 +286,12 @@ exports.createHoliday = async (req, res) => {
                   });
             } else {
                  const resp = await adminAPIService.createHoliday(
-                   input.holidayName,
-                   input.holidayDate,
-                   tenantId,
-                   input.projectId,
-                   input.id,
-                   input.is_active
+                    input.holidayName,
+                    input.holidayDate,
+                    tenantId,
+                    input.projectId,
+                    input.id,
+                    input.is_active
                  );
                  return res.status(200).send(resp);
              }
@@ -308,6 +301,7 @@ exports.createHoliday = async (req, res) => {
               input.holidayDate,
               tenantId,
               input.projectId,
+              input.id,
               input.is_active
             );
             return res.status(200).send(resp);
