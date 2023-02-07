@@ -264,7 +264,7 @@ text-align:center;
         setSelectedResolvedBy(resp.data.resolved_by);
         setSelectedReviewedBy(resp.data.reviewed_by);
         setSelectedTestedBy(resp.data.tested_by);
-        setselectedLabelValue(resp?.data?.lable?.name)
+        setselectedLabelValue(resp?.data?.label?.name)
         let dueDate;
         if (resp?.data?.due_dt !== null) {
           dueDate = moment(resp.data.due_dt).format("YYYY-MM-DD");
@@ -770,7 +770,7 @@ text-align:center;
                               InputLabelProps={{ shrink: true }}/>
                               <AsyncSelect
                               loadOptions={promiseLabelOptions}
-                              placeholder="Lables"
+                              placeholder="Labels"
                               onChange={(e)=>handleLableChange(e)}
                               cacheOptions
                               value={selectedLabelValue}

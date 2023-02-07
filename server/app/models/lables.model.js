@@ -1,9 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-    const Lables = sequelize.define("lables", {
+    const Labels = sequelize.define("labels", {
         name: {
             type: Sequelize.STRING(255),
         }
     });
 
-    return Lables;
+    return Labels;
 };

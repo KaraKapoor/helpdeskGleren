@@ -2,13 +2,13 @@ const db = require("../models");
 const ticketHistory = db.ticketHistory;
 const comment = db.comments;
 const ticket = db.ticket;
-const Lables = db.lables
+const Labels = db.labels
 const emailTemplates = require("../emailTemplates/emailTemplate");
 const coreSettingsService = require("./coreSettingAPIService");
 const emailAPIService = require("./emailAPIService");
 const fileAPIService = require("./fileAPIService");
 const generalMethodAPIService = require("./generalMethodAPIService");
-const { user, ticketFiles, comments,lables  } = require("../models");
+const { user, ticketFiles, comments,labels  } = require("../models");
 const Op = db.Sequelize.Op;
 const queries = require("../constants/queries");
 const constants = require("../constants/constants");
@@ -172,7 +172,7 @@ exports.getMyTickets = async (conditionArray, userId, tenantId, limit, offset, p
             { model: db.department },
             { model: db.status },
             { model: db.user },
-            {model:db.lables}
+            {model:db.labels}
         ]
     });
     const response = generalMethodAPIService.getPagingData(resp, page, limit);
@@ -197,7 +197,7 @@ exports.getAllTickets = async (conditionArray, tenantId, limit, offset, page, se
             { model: db.department },
             { model: db.status },
             { model: db.user },
-            { model: db.lables }
+            { model: db.labels }
         ]
     });
     const response = generalMethodAPIService.getPagingData(resp, page, limit);
@@ -280,7 +280,7 @@ exports.getTicketById = async (userId, tenantId, ticketId) => {
             { model: db.department },
             { model: db.status },
             { model: db.user },
-            { model: db.lables }
+            { model: db.labels }
         ]
     });
     response = ticketResponse.dataValues;
@@ -378,7 +378,7 @@ exports.getTicketComments = async (userDetails, tenantId, ticketId) => {
 exports.getTicketLable = async (conditionArray, limit, offset, page) => {
     var conditions = { [Op.and]: conditionArray };
     console.log("Lable query:>>>>")
-    const resp = await lables.findAndCountAll({
+    const resp = await labels.findAndCountAll({
         order: [['createdAt', 'DESC']],
         limit, offset, where: conditionArray
     });
@@ -387,12 +387,12 @@ exports.getTicketLable = async (conditionArray, limit, offset, page) => {
 
 }
 exports.CreateOrGetLable = async(lable) =>{
-    const lableData = await Lables?.findOne({ where: { name: { [Op.like]: `%${lable}%` } } } );
+    const lableData = await Labels?.findOne({ where: { name: { [Op.like]: `%${lable}%` } } } );
 
     if(lableData){
         return lableData?.id
     }else{
-        const createdLable = await Lables.create({name:lable})
+        const createdLable = await Labels.create({name:lable})
         return createdLable?.id
     }
 
