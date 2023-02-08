@@ -24,6 +24,7 @@ export const navigations = [
       { name: 'Departments', icon: 'assistant', path: '/departments', auth: [authRoles.admin].toString() },
       { name: 'Holidays', icon: 'assistant', path: '/holidays', auth: [authRoles.admin].toString() },
       { name: 'Fix Version', icon: 'build', path: '/fixedversion', auth: [authRoles.admin].toString() },
+      { name: 'Tenant Settings', icon: 'manage_accounts', path: '/tenantSettings', auth: [authRoles.admin].toString() },
       // { name: 'Change Logo',icon:'image',path:'/ticket'},
     ],
   },

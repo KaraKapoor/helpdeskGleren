@@ -4,6 +4,7 @@ const project = db.project;
 const holidays = db.holidays;
 const status = db.status;
 const user = db.user;
+const tenant_settings = db.tenantSettings;
 const department = db.department;
 const team = db.team;
 const teamAgentAssociation = db.teamAgentAssociation;
@@ -16,6 +17,7 @@ const userAPIService = require("./userAPIService");
 const coreSettingsConstants = require("../constants/coreSettingsConstants");
 const { htmlToText } = require('html-to-text');
 const queries = require("../constants/queries");
+const { tenantSettings } = require("../models");
 
 exports.getProjectByName = async (projectName, tenantId) => {
 
@@ -24,6 +26,47 @@ exports.getProjectByName = async (projectName, tenantId) => {
 exports.getProjectById = async (id, tenantId) => {
     return await project.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
+
+exports.getTenantSettingsByName = async (settingName) => {
+
+    return await tenant_settings.findOne({ where:  { setting_name: settingName  }});
+}
+exports.getTenantSettingsById = async (id, tenantId) => {
+    return await tenant_settings.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
+}
+
+exports.createTenantSettings = async (id, setting_name, setting_value, tenantId) => {
+     let response = null;
+     const obj = {
+        setting_name: setting_name,
+        setting_value: setting_value,
+        tenant_id: tenantId
+     }
+     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
+        obj.id = id;
+        await tenant_settings.update(obj, { where: { id: id } });
+    }
+ else {
+    await tenant_settings.create(obj);
+}
+const createdTenantSettings = await this.getTenantSettingsByName(setting_name);
+response = {
+    status: true,
+    data: createdTenantSettings
+}
+
+     return response
+}
+exports.getAllTenantSetting = async (tenantid) => {
+    let response = null;
+    await tenant_settings.findAll({ where: { tenant_id: tenantid } })
+        .then(async (data) => {
+            // const res = await generalMethodService.getPagingData(data);
+            response = data;
+        })
+    return response;
+}
+
 exports.createProject = async (name, id, active, tenantId) => {
     let response = null;
     const obj = {

@@ -11,6 +11,7 @@ const apiConstants = require("../constants/apiConstants");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
+const adminAPIService = require("../Services/adminAPIService");
 
 exports.sendOTPEmail = async (email,tenant_name) => {
     const exisitingTenant = await tenantAPIService.findTenantByName(tenant_name);
@@ -100,14 +101,19 @@ exports.login = async (email, password, workplace) => {
             return response;
 
         }
-    
+        const tenantSetting = await adminAPIService.getTenantSettingsByName(apiConstants.SESSION_TIMEOUT)
+        let time = "2h"
+        if(await generalMethodService.do_Null_Undefined_EmptyArray_Check(tenantSetting) != null){
+            time = tenantSetting.setting_value    
+        }
+        
         if (user && (await bcrypt.compare(password, user.password))) {
             // Create token
             const JWTtoken = await jwt.sign(
                 { user_id: user.id, email },
                 process.env.JWT_TOKEN_KEY,
                 {
-                    expiresIn: "2h",
+                    expiresIn: time,
                 }
             );
             await userAPIService.updateUser(user.id, { last_login_dt: new Date() }, user.tenant_id)

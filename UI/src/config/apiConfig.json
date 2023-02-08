@@ -75,5 +75,10 @@
     },
     "master": {
         "getDropdownData": "api/admin/masterDropdownData"
+    },
+    "tenantSettings": {
+        "create": "api/admin/tenantSettings/create",
+        "getById": "api/admin/tenantSettings/getById",
+        "getAllTenantSettings": "api/admin/tenantSettings/getAllTenantSettings"
     }
 }

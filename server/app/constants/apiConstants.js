@@ -6,4 +6,5 @@ module.exports = {
     INVALID_OTP: "Invalid OTP",
     CREATED_SUCCESSFULLY: "Created Successfully",
     OTP_SENT_SUCCESSFULLY : "OTP Sent Successfully",
+    SESSION_TIMEOUT : "Session Timeout"
 };

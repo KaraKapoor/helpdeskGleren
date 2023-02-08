@@ -36,6 +36,7 @@ db.uploads = require("./uploads.model.js")(sequelize, Sequelize);
 db.ticketFiles = require("./ticketFiles.model.js")(sequelize, Sequelize);
 db.fix_version = require("./fixversion.model.js")(sequelize, Sequelize)
 db.holidays = require("./holidays.model")(sequelize, Sequelize);
+db.tenantSettings = require("./tenantSettings.model.js")(sequelize, Sequelize)
 
 db.holidays.belongsTo(db.tenant,{
     foreignKey: "tenant_id", //1:1
@@ -177,8 +178,7 @@ db.fix_version.belongsTo(db.project, {
     foreignKey: "project_id", //1:1,
     onDelete: 'CASCADE',
 });
-//not removing this as it might be needed in future
-// db.user.belongsTo(db.uploads, {
-//     foreignKey: "photo_id", //1:1,
-// });
+db.tenantSettings.belongsTo(db.tenant, {
+    foreignKey: "tenant_id", //1:1
+});
 module.exports = db;
