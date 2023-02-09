@@ -35,18 +35,16 @@ exports.getTenantSettingsById = async (id, tenantId) => {
     return await tenant_settings.findOne({ where: { [Op.and]: [{ id: id }, { tenant_id: tenantId }] } });
 }
 
-exports.createTenantSettings = async (id, setting_name, setting_value, tenantId) => {
+exports.createTenantSettings = async (setting_name, setting_value, tenantId) => {
      let response = null;
      const obj = {
         setting_name: setting_name,
         setting_value: setting_value,
-        tenant_id: tenantId
      }
-     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null) {
-        obj.id = id;
-        await tenant_settings.update(obj, { where: { id: id } });
-    }
- else {
+     const tenatSettings = await tenant_settings.findOne({where:{tenant_id: tenantId  }} );
+     if (tenatSettings) {
+        await tenant_settings.update(obj, { where:{tenant_id: tenantId } });
+    } else {
     await tenant_settings.create(obj);
 }
 const createdTenantSettings = await this.getTenantSettingsByName(setting_name);

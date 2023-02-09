@@ -15,10 +15,9 @@ exports.createTenantSettings = async (req, res) =>{
     const tenantId = userDetails.tenant_id;
     
     try {
-        const resp = await adminAPIService.createTenantSettings(input.id, input.settingName, input.setting_value, tenantId);
+        const resp = await adminAPIService.createTenantSettings(input.settingName, input.setting_value, tenantId);
         return res.status(200).send(resp);
     } catch (exception) {
-        console.log(exception);
         return res.status(200).send({
             error: errorConstants.SOME_ERROR_OCCURRED,
             status: false
@@ -42,7 +41,6 @@ exports.getTenantSettingsById = async (req, res) => {
         const response = await adminAPIService.getTenantSettingsById(input.id, tenantId);
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
-        console.log(exception);
         return res.status(200).send({
             error: errorConstants.SOME_ERROR_OCCURRED,
             status: false
@@ -53,14 +51,12 @@ exports.getAllTenantSettings = async (req, res) => {
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
     const input = req.query;
-    const { page, size } = req.query;
    
     try {
         const response = await adminAPIService.getAllTenantSetting( tenantId );
         return res.status(200).send({ status: true, data: response });
     } catch (exception) {
-        console.log(exception);
-        return res.status(200).send({
+        return res.status(400).send({
             error: errorConstants.SOME_ERROR_OCCURRED,
             status: false
         });

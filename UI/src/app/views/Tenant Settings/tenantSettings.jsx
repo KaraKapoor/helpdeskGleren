@@ -15,7 +15,7 @@ const TenantSettings = ({ onClose, editDetails }) => {
   const [selectedSessionTimeout, setSelectedSessionTimeout] = React.useState();
   const [sessionTimeout, setsessionTimeout] = React.useState();
   const [data, setData] = useState([])
-  
+  console.log(data,"vdatadata")
  
   const handleClose = (event) => {
     navigate('/dashboard/default')
@@ -74,10 +74,10 @@ const TenantSettings = ({ onClose, editDetails }) => {
       response?.data?.map((data, i) => {
         Object.assign(data)
         console.log(response.data,'hi')
+        setData(response?.data[0]?.setting_value)
       })     
-      setData(response?.data?.setting_value)
     })
-  })
+  },[])
 
   const SessionHours = [
     { name: '1h', value: '1h' },
@@ -139,7 +139,7 @@ const TenantSettings = ({ onClose, editDetails }) => {
                         value={selectedSessionTimeout}
                         onChange={handleSessionTimeoutChange}
                         label="Session Timeout"
-                        defaultValue={selectedSessionTimeout}
+                        defaultValue={data}
                       
                       >
                         {console.log(selectedSessionTimeout)}

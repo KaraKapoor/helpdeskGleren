@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
         setting_value: {
             type: Sequelize.STRING,
         },
+        tenant_id: {
+            type: Sequelize.INTEGER
+        }
     });
 
     return TenantSettings;
