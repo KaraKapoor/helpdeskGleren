@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { LoadingButton } from '@mui/lab'
 import { Card, Divider, FormControl, Grid, Icon, InputLabel, MenuItem, Select, TextField } from '@mui/material'
-import { createTenantSettings, getAllTenantSettings, getTenantSettingsById } from 'app/services/adminService'
+import { createTenantSettings, getAllTenantSettings } from 'app/services/adminService'
 import { Strings } from 'config/strings'
 import { Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
@@ -11,9 +11,7 @@ import Swal from 'sweetalert2'
 const TenantSettings = ({ onClose, editDetails }) => {
 
   const navigate = useNavigate();
-  const [valid, setValid] = React.useState(false)
   const [selectedSessionTimeout, setSelectedSessionTimeout] = React.useState();
-  const [sessionTimeout, setsessionTimeout] = React.useState();
   const [data, setData] = useState([])
   console.log(data,"vdatadata")
  
@@ -41,9 +39,6 @@ const TenantSettings = ({ onClose, editDetails }) => {
       setting_value: selectedSessionTimeout,
       settingName: 'Session Timeout'
     };
-    if (editDetails?.id) {
-      reqBody.id = editDetails.id
-    }
     createTenantSettings(reqBody).then((resp) => {
       if (resp?.status === false) {
         return Swal.fire({
@@ -58,7 +53,7 @@ const TenantSettings = ({ onClose, editDetails }) => {
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: editDetails?.id ? Strings.UPDATED_SUCCESSFULLY : Strings.CREATED_SUCCESSFULLY,
+          text: Strings.UPDATED_SUCCESSFULLY,
           showCloseButton: true,
           showConfirmButton: false,
           width: 400,
@@ -139,8 +134,7 @@ const TenantSettings = ({ onClose, editDetails }) => {
                         value={selectedSessionTimeout}
                         onChange={handleSessionTimeoutChange}
                         label="Session Timeout"
-                        defaultValue={data}
-                      
+                        defaultValue={data}                     
                       >
                         {console.log(selectedSessionTimeout)}
                         {SessionHours.map(({ name, value }, idx) => (
