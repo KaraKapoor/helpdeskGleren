@@ -23,6 +23,7 @@ module.exports = {
     STATUS_NAME_ERROR: "Status Name is mandatory",
     STATUS_NAME_INACTIVE: "Status Name is Inactive",
     STATUS_NAME_SAME_ERROR: "Status with same name already exist",
+    HOLIDAY_ALREADY_EXIST:"holiday on same date already exist",
     ID_ERROR: "ID is mandatory",
     TICKET__ID_ERROR : "Ticket ID does not exist",
     PROJECT_ID_ERROR: "Project Id is mandatory",

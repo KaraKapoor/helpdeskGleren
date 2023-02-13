@@ -129,18 +129,17 @@ exports.getHolidaysByName = async (holidayName, tenantId) => {
       holiday_date: holidayDate,
       project_id: projectId,
       is_active: true,
-      id : id,
+    //   id : id,
       tenant_id: tenantId,
     };
-    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null && await obj.id !==undefined)    {
+    if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(id) !== null )    {
         obj.id = id;
         obj.is_active = active;
         await holidays.update(obj, { where: { id: id } });
-    } else {
+    } else { 
        await holidays.create(obj);
     }
-    const createdHoliday = this.getHolidaysByName(holidayName, tenantId);
-    console.log(createdHoliday);
+    const createdHoliday = await this.getHolidaysByName(holidayName, tenantId);
     response = {
       status: true,
       data: createdHoliday,
