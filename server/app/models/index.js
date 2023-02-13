@@ -37,6 +37,8 @@ db.uploads = require("./uploads.model.js")(sequelize, Sequelize);
 db.ticketFiles = require("./ticketFiles.model.js")(sequelize, Sequelize);
 db.fix_version = require("./fixversion.model.js")(sequelize, Sequelize)
 db.holidays = require("./holidays.model")(sequelize, Sequelize);
+db.tenantSettings = require("./tenantSettings.model.js")(sequelize, Sequelize)
+db.labels = require("./lables.model")(sequelize, Sequelize);
 
 db.holidays.belongsTo(db.tenant,{
     foreignKey: "tenant_id", //1:1
