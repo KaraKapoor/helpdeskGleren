@@ -17,6 +17,7 @@ import teamRoutes from './views/teams/teamRoutes';
 import ticketRoutes from './views/tickets/ticketRoutes';
 import userRoutes from './views/users/userRoutes';
 import holidayRoutes from './views/holidays/holidayRoutes';
+import tenantSettingsRoutes from './views/Tenant Settings/tenantSettingsRoutes';
 
 const routes = [
   {
@@ -25,7 +26,7 @@ const routes = [
         <MatxLayout />
       </AuthGuard>
     ),
-    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes, ...projectRoutes, ...bugReportRoutes, ...myProfileRoutes, ...statusRoutes,...FixedVersionRoutes, ...userRoutes, ...departmentRoutes, ...escalationRoutes, ...teamRoutes, ...ticketRoutes, ...holidayRoutes],
+    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes, ...projectRoutes, ...bugReportRoutes, ...myProfileRoutes, ...statusRoutes,...FixedVersionRoutes, ...userRoutes, ...departmentRoutes, ...escalationRoutes, ...teamRoutes, ...ticketRoutes, ...holidayRoutes, ...tenantSettingsRoutes],
   },
   ...sessionRoutes,
   { path: '/', element: <Navigate to="dashboard/default" /> },

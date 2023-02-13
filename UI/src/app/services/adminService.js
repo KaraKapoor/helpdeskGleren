@@ -147,3 +147,23 @@ export const getVersionById = (formData)=>{
         data: formData,
     })
 }
+export const createTenantSettings = (formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.tenantSettings.create,
+        data: formData,
+    })
+}
+export const getTenantSettingsById=(formData)=>{
+    return appRequest({
+        method: RequestMethod.POST,
+        url: BASE_URL + config.tenantSettings.getById,
+        data: formData,
+    })
+}
+export const getAllTenantSettings=()=>{
+    return appRequest({
+        method: RequestMethod.GET,
+        url: BASE_URL + config.tenantSettings.getAllTenantSettings
+    })
+}

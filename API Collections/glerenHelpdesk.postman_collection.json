@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "17abb43f-b964-4c6a-8a3d-7c4e9332a812",
+		"_postman_id": "37bdb32e-14d8-4a79-9dc3-e31b875afa31",
 		"name": "glerenHelpdesk",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24552335"
 	},
 	"item": [
 		{
@@ -11,11 +12,21 @@
 				{
 					"name": "sendOTPEmail",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc0NjI3NTg0LCJleHAiOjE2NzQ2MzQ3ODR9.j7lbQbagPOtM6EZLycV00vfexUxzayVdzjR62ClGZr0",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\"\r\n}",
+							"raw": "{\r\n    \"email\":\"iron79641@gmail.com\",\r\n    \"tenant_name\":\"IT\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -38,11 +49,21 @@
 				{
 					"name": "verifyOTP",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc0NjIzMzcwLCJleHAiOjE2NzQ2MzA1NzB9.eSBKtxm2DwgLWmy7OqsxnAQ934ZM7tHyATxhLpNAGpQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\",\r\n    \"otp\":\"6545 \"\r\n}",
+							"raw": "{\r\n    \"email\":\"iron79641@gmail.com\",\r\n    \"otp\":\"9634\"\r\n    \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -96,7 +117,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"karan.kapoor+admin@gleren.com\",\r\n    \"password\":\"123456\"\r\n}",
+							"raw": "{\r\n    \"email\":\"iron79641@gmail.com\",\r\n    \"password\":\"Shreetil$29\",\r\n     \"workplace\":\"developer\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -122,211 +143,23 @@
 			"name": "Admin",
 			"item": [
 				{
-					"name": "fix version",
-					"item": [
-						{
-							"name": "createfixversion",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"fixversion\": \"1.2.2.2\",\r\n    \"project_id\": 26,\r\n    \"is_active\": true\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/api/admin/fixversion/createfixversion",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"admin",
-										"fixversion",
-										"createfixversion"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "editfixversion",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"fixversion\": \"fdhfgh\",\r\n    \"project_id\": 25,\r\n    \"is_active\": true,\r\n    \"id\": 5\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/api/admin/fixversion/createfixversion",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"admin",
-										"fixversion",
-										"createfixversion"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "getAllversion",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/api/admin/fixversion/getallfixversion",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"admin",
-										"fixversion",
-										"getallfixversion"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "getByID",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"id\":\"\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/api/admin/fixversion/getById",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"admin",
-										"fixversion",
-										"getById"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "getByProject",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJwb29qYS5taXNocmFAZ2xlcmVuLmNvbSIsImlhdCI6MTY3Mjg5NTkzNSwiZXhwIjoxNjcyOTAzMTM1fQ.vNwqFwsF3OqGJAzVEMfCUJQPDCqiEpo10IYjsDJ0fqU",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/api/admin/fixversion/getByProject?project_id=26",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"admin",
-										"fixversion",
-										"getByProject"
-									],
-									"query": [
-										{
-											"key": "project_id",
-											"value": "26"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
 					"name": "createStatus",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjcxNTEyNjcxLCJleHAiOjE2NzE1MTk4NzF9.4seXNMSql8blA5x2IwuUbfmnqK1cYoick6nQAPAEFG8",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"statusName\":\"To Do\"\r\n}",
+							"raw": "{\r\n    \"statusName\":\"progressss\",\r\n    \"departmentId\":5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -350,11 +183,21 @@
 				{
 					"name": "StatusGetById",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjcxNTEyNjcxLCJleHAiOjE2NzE1MTk4NzF9.4seXNMSql8blA5x2IwuUbfmnqK1cYoick6nQAPAEFG8",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":1\r\n}",
+							"raw": "{\r\n    \"id\":10\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -381,6 +224,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjcxNDI4NDkwLCJleHAiOjE2NzE0MzU2OTB9.6TsHU4Fm3pS7Cy6aGasbz4KAHghpujZ14-WTqbxpdxQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -437,11 +290,21 @@
 				{
 					"name": "createProject",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc0NTUzOTAwLCJleHAiOjE2NzQ1NjExMDB9.0G7ZOs-bsox5xvLuldvmvqefBIFOA5zEj6DMxDhOwPo",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"projectName\":\"Test1\"\r\n}",
+							"raw": "{\r\n    \"projectName\":\"Testing\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -820,10 +683,107 @@
 					"response": []
 				},
 				{
-					"name": "getById",
+					"name": "createTenantSettings",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc2MDA1NTIxLCJleHAiOjE2NzYwMjcxMjF9.jxKYdMXRmarjaZT6VtJ554aWLA0-2GPHPrXRGMjFFHg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n     \"settingName\":\"Session Timeout\",\r\n    \"setting_value\":\"5h\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/tenantSettings/create",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"tenantSettings",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTenantSettingsById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc2MDA1NTIxLCJleHAiOjE2NzYwMjcxMjF9.jxKYdMXRmarjaZT6VtJ554aWLA0-2GPHPrXRGMjFFHg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/tenantSettings/getById",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"tenantSettings",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllTenantSettings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc2MDA1NTIxLCJleHAiOjE2NzYwMjcxMjF9.jxKYdMXRmarjaZT6VtJ554aWLA0-2GPHPrXRGMjFFHg",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/admin/tenantSettings/getAllTenantSettings",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"tenantSettings",
+								"getAllTenantSettings"
+							]
+						}
 					},
 					"response": []
 				}
@@ -884,7 +844,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"karan.kapoor@gleren.com\"\r\n}",
+							"raw": "{\r\n    \"email\":\"iron79641@gmail.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -911,7 +871,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"resetTokenId\":\"1fb9aa46-7742-490c-b5d0-bde6ae74f95c\",\r\n    \"password\":\"password\"\r\n}",
+							"raw": "{\r\n    \"resetTokenId\":\"b5aa151d-79d1-4feb-82d4-80fbe4989e05\",\r\n    \"password\":\"121212\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1014,8 +974,56 @@
 					"response": []
 				},
 				{
-					"name": "getProfileURL",
+					"name": "{{url}}api/file/uploadFile",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjcxMTkyMDA2LCJleHAiOjE2NzExOTkyMDZ9.XhayMaINrtXerdiFM5EC47pQTk_CFimbjghK-BH1QOE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/black/Desktop/error.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}api/file/uploadFile",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"file",
+								"uploadFile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{url}}api/user/getProfileURL",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImthcmFuLmthcG9vcithZG1pbkBnbGVyZW4uY29tIiwiaWF0IjoxNjcxMTkwNTM4LCJleHAiOjE2NzExOTc3Mzh9.NctCqiUu9Du0QU16fPvOP59Dd_YR_knFCSlUpYtoP2U",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1039,21 +1047,11 @@
 				{
 					"name": "createTicket",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImthcmFuLmthcG9vcithZG1pbkBnbGVyZW4uY29tIiwiaWF0IjoxNjcxMDIzMDUyLCJleHAiOjE2NzEwMzAyNTJ9.P9TUCE8F2nN12rSNovuv35apoyKEm3wwPABlKuIxRg0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"departmentId\":\"5\",\r\n    \"projectId\":\"23\",\r\n    \"assigneeId\":\"10\",\r\n    \"category\":\"Improvement\",\r\n    \"statusId\":\"2\",\r\n    \"priority\":\"Critical\",\r\n    \"fixVersion\":\"2.1\",\r\n    \"issueDetails\":\"1212\",\r\n    \"issueSummary\":\"It is my new value\",\r\n    \"dueDate\":\"2022-12-25 00:00:00\",\r\n    \"closedBy\":\"\",\r\n    \"reviewedBy\":\"6\",\r\n    \"testedBy\":\"5\",\r\n    \"resolvedBy\":\"4\",\r\n    \"storyPoints\":\"23\"\r\n}",
+							"raw": "{\r\n    \"departmentId\":\"\",\r\n    \"projectId\":\"\",\r\n    \"assigneeId\":\"\",\r\n    \"category\":\"\",\r\n    \"statusId\":\"\",\r\n    \"priority\":\"\",\r\n    \"fixVersion\":\"\",\r\n    \"issueDetails\":\"\",\r\n    \"issueSummary\":\"\",\r\n    \"dueDate\":\"\",\r\n    \"closedBy\":\"\",\r\n    \"reviewedBy\":\"\",\r\n    \"testedBy\":\"\",\r\n    \"resolvedBy\":\"\",\r\n    \"storyPoints\":\"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1076,21 +1074,11 @@
 				{
 					"name": "updateTicket",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImthcmFuLmthcG9vcithZG1pbkBnbGVyZW4uY29tIiwiaWF0IjoxNjcxMDIzMDUyLCJleHAiOjE2NzEwMzAyNTJ9.P9TUCE8F2nN12rSNovuv35apoyKEm3wwPABlKuIxRg0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"id\":1,\r\n   \"assignee\":\"10\",\r\n   \"field\":\"assignee\"\r\n}",
+							"raw": "{\r\n   \"id\":1,\r\n   \"issueDetails\":\"NEW vALUE\",\r\n   \"field\":\"issueDetails\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1113,6 +1101,16 @@
 				{
 					"name": "uploadFile",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjczNjAyMDg4LCJleHAiOjE2NzM2MDkyODh9.yK1ZSENKsW6d7TD9FyU8D9n1i_4FGHlI2eIL1T7dfY4",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1121,7 +1119,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Karan Kapoor/Downloads/BoardingPass.pdf"
+									"src": "/C:/Users/black/Desktop/api/Untitled.png"
 								}
 							]
 						},
@@ -1182,10 +1180,20 @@
 				{
 					"name": "getAllTickets",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc0MjA1MjAxLCJleHAiOjE2NzQyMTI0MDF9.ShWcVp1SfybEKp-CFEAfbjzATRljs6pISUkTwTfd8Xw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}api/ticket/allTickets?page=0&size=10&projectId=24",
+							"raw": "{{url}}api/ticket/allTickets?page=0&size=100&searchParam=test jiten",
 							"host": [
 								"{{url}}api"
 							],
@@ -1200,11 +1208,12 @@
 								},
 								{
 									"key": "size",
-									"value": "10"
+									"value": "100"
 								},
 								{
-									"key": "projectId",
-									"value": "24"
+									"key": "issueDetails",
+									"value": "22",
+									"disabled": true
 								},
 								{
 									"key": "dueDate",
@@ -1213,8 +1222,7 @@
 								},
 								{
 									"key": "searchParam",
-									"value": "1",
-									"disabled": true
+									"value": "test jiten"
 								}
 							]
 						}
@@ -1293,11 +1301,21 @@
 				{
 					"name": "getTicketHistory",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc0MDE1Mzc1LCJleHAiOjE2NzQwMjI1NzV9.vBAtvZz8cX422GYJh1HAZWblDCtDOt__BgoewZdVnOs",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":1\r\n}",
+							"raw": "{\r\n    \"id\":25\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1332,11 +1350,21 @@
 				{
 					"name": "saveTicketComment",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjczNTg0ODMxLCJleHAiOjE2NzM1OTIwMzF9.OkrQzEphgl76yBuBGcV2_GidLVpIyoogojiIW3V6kDg",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ticketId\":1,\r\n    \"htmlComments\":\"<p>sasd</p>\"\r\n}",
+							"raw": "{\r\n    \"ticketId\":24,\r\n    \"htmlComments\":\"<p>good</p>\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1371,11 +1399,21 @@
 				{
 					"name": "getTicketComments",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjczNjEyMzQyLCJleHAiOjE2NzM2MTk1NDJ9.UJ05qoo9krAq0rZ9WlYPpRYrD0XLKF8N1e3JlI8KbZE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ticketId\":1\r\n}",
+							"raw": "{\r\n    \"ticketId\":24\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1383,11 +1421,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}api/ticket/getTicketComments",
+							"raw": "http://localhost:8080/api/ticket/getTicketComments",
+							"protocol": "http",
 							"host": [
-								"{{url}}api"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
+								"api",
 								"ticket",
 								"getTicketComments"
 							],
@@ -1449,11 +1490,21 @@
 				{
 					"name": "deleteFile",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjczNjAyMDg4LCJleHAiOjE2NzM2MDkyODh9.yK1ZSENKsW6d7TD9FyU8D9n1i_4FGHlI2eIL1T7dfY4",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"uploadId\":\"\",\r\n    \"keyName\":\"ticket/16703531778578edb8cb9-762b-4194-b291-1407efd77a42/BoardingPass.pdf\"\r\n}",
+							"raw": "{\r\n    \"uploadId\":\"116\",\r\n    \"keyName\":\"ticket/16736080800806ee5c6eb-1f94-431c-a6e7-ed95907dc340/Untitled.png\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1468,6 +1519,82 @@
 							"path": [
 								"file",
 								"deleteFile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getStatusByDepartmentId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjcyMjIzNzk1LCJleHAiOjE2NzIyMzA5OTV9.TolcwNrM6PBVSQ4q7wjEWwd0SG2LZPHP8IGjgNisRTQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"departmentId\":5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/department/getStatus",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"department",
+								"getStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createfixversion",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZW1haWwiOiJpcm9uNzk2NDFAZ21haWwuY29tIiwiaWF0IjoxNjc0NDU2Mzg4LCJleHAiOjE2NzQ0NjM1ODh9.WkuY0mVAX6SuhpsQnspRyI5QQTknx9b-IMmyzNsRzqA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"fixversion\":\"1.0.9\",\r\n    \"project_id\":\"24\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/admin/fixversion/createfixversion",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"admin",
+								"fixversion",
+								"createfixversion"
 							]
 						}
 					},
@@ -1504,6 +1631,12 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8080/"
 		}
 	]
 }
