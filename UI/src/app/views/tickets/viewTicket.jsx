@@ -31,6 +31,7 @@ import {
   fileUpload,
   getFixVersionByProject,
   getTicketById,
+  getTicketLable,
   updateTicket,
 } from "app/services/ticketService";
 import CustomTabs from "./customTabs";
@@ -56,13 +57,15 @@ const ViewTicket = ({ onClose }) => {
   const [initialValues, setInitialValues] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [fixverions, setFixverions] = React.useState([]);
-  const [linktickets, setLinkedTickets]= React.useState([])
+  const [linktickets, setLinkedTickets]= React.useState([]);
+  const [EditLinkedTickets, setEditLinkTickets] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [fileLoading, setfileLoading] = React.useState(false);
   const [parentticket , setparentticket]=React.useState([])
   const [LinkedeleteValue,setLinkedeleteValue] = React.useState(false)
+  const [selectedLabelValue, setselectedLabelValue] = useState([]);
   const navigate = useNavigate();
   var host = window.location.protocol + "//" + window.location.host;
   const HeaderTitle = styled.div`
@@ -98,6 +101,16 @@ text-align:center;
     [theme.breakpoints.down("sm")]: { margin: "16px" },
   }));
   const updateTicketDetails = (value, fieldType) => {
+    if(value?.length < 3 && fieldType === "lable_id"){
+      return Swal.fire({
+         icon: "error",
+         title: "Error",
+         text: "Lable max length should be more than two",
+         showCloseButton: true,
+         showConfirmButton: false,
+         width: 400,
+       });
+     }
     let reqBody = {
       field: fieldType,
       id: editData.id,
@@ -160,6 +173,9 @@ text-align:center;
       case "linked_tickets":
           reqBody.linked_tickets = value?.map((data) => data);
         break;
+        case "lable_id":
+          reqBody.lable_id = value;
+          break;
     }
     updateTicket(reqBody).then((resp) => {
       if (resp?.status === false) {
@@ -248,6 +264,7 @@ text-align:center;
         setSelectedResolvedBy(resp.data.resolved_by);
         setSelectedReviewedBy(resp.data.reviewed_by);
         setSelectedTestedBy(resp.data.tested_by);
+        setselectedLabelValue(resp?.data?.label?.name)
         let dueDate;
         if (resp?.data?.due_dt !== null) {
           dueDate = moment(resp.data.due_dt).format("YYYY-MM-DD");
@@ -335,11 +352,23 @@ text-align:center;
       "linked_tickets"
     );
   }
+  const promiseLabelOptions = (inputValue) => {
+    const queryParam = `?page=${page}&size=${rowsPerPage}&lable_id=${inputValue}`;
+  return getTicketLable(queryParam).then((response) => {
+    return response?.data?.pagingData
+});
+  };
+  const handleLableChange = value => {
+    setselectedLabelValue(value?.name)
+      updateTicketDetails(
+        value?.name,
+        "lable_id"
+      );
+  }
   const promiseOptions = (inputValue) =>
   { 
     const queryParam = `?page=${page}&size=${rowsPerPage}&linkTicket=${inputValue}`;
     return allTickets(queryParam).then((response) => {
-      
       return response.pagingData
   });
   }
@@ -738,7 +767,24 @@ text-align:center;
                               value={values.dueDate  || '' }
                               onChange={handleChange}
                               sx={{ mb: 1.5 }}
-                              InputLabelProps={{ shrink: true }}                         />
+                              InputLabelProps={{ shrink: true }}/>
+                              <AsyncSelect
+                              loadOptions={promiseLabelOptions}
+                              placeholder="Labels"
+                              onChange={(e)=>handleLableChange(e)}
+                              cacheOptions
+                              value={selectedLabelValue}
+                              getOptionLabel={e => e.name}
+                              defaultInputValue={selectedLabelValue}
+                              onBlur={(e) => {
+                                updateTicketDetails(
+                                  e.target.value,
+                                  "lable_id"
+                                );
+                              }}
+                              getOptionValue={(e) => e.name}
+                              className="async-select-class"
+                            />
                             <TextField
                               fullWidth
                               size="small"
@@ -809,6 +855,7 @@ text-align:center;
                                 })}
                               </Select>
                             </FormControl>
+                            
                             <FormControl
                               fullWidth
                               size="small"
