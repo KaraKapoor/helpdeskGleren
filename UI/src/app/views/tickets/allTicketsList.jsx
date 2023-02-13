@@ -110,7 +110,7 @@ const AllTickets = ({ setCurrentView }) => {
     const navigate = useNavigate()
   let [searchParams] = useSearchParams();
   const searchdata = searchParams.get("name");
-  const params_name = searchdata.split("/")[0]
+  const params_name = searchdata?.split("/")[0]
   
 
 

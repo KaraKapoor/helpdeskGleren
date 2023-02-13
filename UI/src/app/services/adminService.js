@@ -10,7 +10,6 @@ export const reportBug=(formData)=>{
     })
 }
 export const createHolidays=(formData)=>{
-    {console.log("called")};
     return appRequest({
         method: RequestMethod.POST,
         url: BASE_URL + config.holiday.create,

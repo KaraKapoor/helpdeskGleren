@@ -103,6 +103,10 @@ module.exports = (sequelize, Sequelize) => {
         set(link) {
             return link?this.setDataValue('linked_tickets', link?.join(",")):"";
         }
+        } ,
+        lable_id:{
+            type: Sequelize.INTEGER
+
         }
     });
     return Ticket;
