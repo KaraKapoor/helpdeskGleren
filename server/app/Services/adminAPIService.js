@@ -40,6 +40,7 @@ exports.createTenantSettings = async (setting_name, setting_value, tenantId) => 
      const obj = {
         setting_name: setting_name,
         setting_value: setting_value,
+        tenant_id: tenantId
      }
      const tenatSettings = await tenant_settings.findOne({where:{tenant_id: tenantId  }} );
      if (tenatSettings) {
