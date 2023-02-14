@@ -129,6 +129,19 @@ const TenantSettings = ({ onClose, editDetails }) => {
                     <FormControl fullWidth>
                       <InputLabel id="Session_timeout">Session Timeout</InputLabel>
                       <Select
+                        MenuProps={{
+                          PaperProps: {
+                            onScroll: () => {                             
+                            }
+                          },
+                          style: { maxHeight: 300 },
+                          id: "id-menu",
+                          anchorOrigin: {
+                            vertical: "bottom",
+                            horizontal: "center"
+                          },
+                          getContentAnchorEl: null
+                        }}
                         labelId="Session_timeout"
                         id="Session_timeout"
                         value={selectedSessionTimeout}
