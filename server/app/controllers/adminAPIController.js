@@ -301,24 +301,41 @@ exports.createHoliday = async (req, res) => {
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenantId = userDetails.tenant_id;
     let update = false;
-   
+
     try {
         const response = await adminAPIService.getHolidaysByDate(
             input.holidayDate,
             tenantId,
             input.projectId
         );
+        
         if (input.id) {
             let dbDate ;
-            if(response != null)
-            dbDate = response.holiday_date;
-            if (response && dbDate === input.holidayDate && response.project_id == input.projectId && response.is_active === true && input.id != response.id) {
+            if(response != null){
+                dbDate = response.holiday_date.split("-");
+                var newdate = dbDate[0] + '/' + dbDate[1] + '/' + dbDate[2];
+                
+                console.log(newdate ,input.holidayDate);
+            if (response && newdate === input.holidayDate && response.project_id == input.projectId && response.is_active === true && input.id != response.id) {
               return res.status(200).send({
                            error: errorConstants.HOLIDAY_ALREADY_EXIST,
                 status: false,
               });
             
-            } else  {
+            }
+            else  {
+                const resp = await adminAPIService.createHoliday(
+                  input.holidayName,
+                  input.holidayDate,
+                  tenantId,
+                  input.projectId,
+                  input.id,
+                  input.is_active
+                );
+                console.log(input.id,"input.id");
+                return res.status(200).send(resp);
+              }
+         } else  {
               const resp = await adminAPIService.createHoliday(
                 input.holidayName,
                 input.holidayDate,
@@ -331,6 +348,7 @@ exports.createHoliday = async (req, res) => {
               return res.status(200).send(resp);
             }
           }
+        
         //creating new HOLiday by comparing to database for holiday exists on that date or not and for that project
         else if (response != null) {
             if (response.project_id == input.projectId && response.is_active == true)  {
