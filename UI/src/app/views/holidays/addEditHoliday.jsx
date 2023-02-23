@@ -58,9 +58,6 @@ useEffect(() => {
       }
     });
   }, []);
-
-
-
     const validationSchema = Yup.object().shape({
         holidayName: Yup.string()
           .max(20, 'Holiday Name can not be more than 20 characters long'),
@@ -69,7 +66,7 @@ useEffect(() => {
     const onSubmit = (values) => {
         const reqBody = {
             holidayName: values.holidayName,
-            holidayDate: values.holidayDate!==null?moment(values.holidayDate).format(Strings.DATE_HOLIDAYS_FORMAT):"/",
+            holidayDate: values.holidayDate!==null?moment(values.holidayDate).format(Strings.DATE_HOLIDAYS_FORMAT):"-",
             is_active: isActive,
             projectId: Project,
         };
@@ -128,7 +125,7 @@ useEffect(() => {
     return (
         <>
             <div>
-                <Card elevation={3} sx={{ pt: 0, mb: 0, minHeight: '40vh' }}>
+                <Card elevation={3} sx={{ pt: 0, mb: 0, minHeight: '55vh' }}>
                     <HeaderTitle>
                         <div>
                             {editDetails?.id ? 'Edit Holiday' : 'Add Holiday'}
@@ -170,7 +167,8 @@ useEffect(() => {
                                             sx={{ mb: 1.5 }}
                                         />
                                         <br />
-                                        
+                                        </div>
+                                        <div>
                                         <TextField
                                             fullWidth
                                             size="large"
@@ -233,7 +231,7 @@ useEffect(() => {
                                         type="submit"
                                         color="primary"
                                         variant="contained"
-                                        sx={{ my: 2, top: "100", marginRight: "10px", marginTop: "45vh" }}
+                                        sx={{ my: 2, top: "100", marginRight: "10px", marginTop: "40vh" }}
                                     >
                                         Submit
                                     </LoadingButton>

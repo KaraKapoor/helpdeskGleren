@@ -52,7 +52,7 @@ import {
     },
   }))
   
-  const HolidaysList = ({ onEditClick, onCreateClick, setCurrentView }) => {
+    const HolidaysList = ({ onEditClick, onCreateClick, setCurrentView }) => {
     const [data, setData] = useState([])
     const [page, setPage] = useState(0)
     const [totalRecords, setTotalRecords] = useState(0)
@@ -88,16 +88,15 @@ import {
                         title="Holidays"
                         columns={[
                             { title: 'Holiday Name', field: 'holidayName'},
-                            { title: 'Holiday Date', field: 'holidayDate'},
+                            { title: 'Holiday Date', field: 'holidayDate'}, 
+                            { title: 'Project', field:'project'},
                             { title: 'Active', field: 'status'},
-                            { title: 'Project', field:'project'}
-
                         ]}
                         data={data.map((e) => {
                             console.log(e)
                             return {
                                 holidayName: e.holiday_name,
-                                holidayDate : e.holiday_date!==null?moment(e.holiday_date).format(Strings.DATE_HOLIDAYS_FORMAT):"-",
+                                holidayDate : e.holiday_date!==null?moment(e.holiday_date).format(Strings.DATE_FORMAT):"-",
                                 status: e.is_active,
                                 holidayId: e.id,
                                 projectId: e.project_id,
