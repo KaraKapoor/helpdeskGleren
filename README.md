@@ -1,3 +1,4 @@
+This project is tested with BrowserStack.
 # React App
 1. Open folder with name "reactApp" in cmd.
 2. Run "npm install" command to install node modules.
