@@ -589,13 +589,6 @@ exports.createFixVersion = async (req, res) => {
     const input = req.body
     const userDetails = await userAPIService.getUserById(req.user.user_id);
     const tenant_id = userDetails.tenant_id;
-    // const fix_data= await fixversionAPIService.getFixVersionByProjectSingle(input.project_id,tenant_id)
-    // if (await fix_data !=null) {
-    //     return res.status(200).send({
-    //         error: errorConstants.PROJECT_ALREADY_ERROR,
-    //         status: false
-    //     });
-    // }
     if (await generalMethodService.do_Null_Undefined_EmptyArray_Check(input.fixversion) == null) {
 
         return res.status(200).send({
