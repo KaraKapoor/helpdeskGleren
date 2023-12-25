@@ -506,7 +506,6 @@ exports.saveTicketComments = async (req, res) => {
             const emailIds = input.emailIds;
             emailIds.map(async id=>{
                 let mentionedInTicketTemplate = emailTemplates.MENTIONED_IN_TICKET_TEMPLATE;
-              //  mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{username}', userDetails.first_name);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace(/{ticketNumber}/g, input.ticketId);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{url}', process.env.BASE_URL);
                 mentionedInTicketTemplate = mentionedInTicketTemplate.replace('{view_ticket}', VIEW_TICKET);
