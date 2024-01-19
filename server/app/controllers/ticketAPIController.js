@@ -1,16 +1,12 @@
 const errorConstants = require("../constants/errorConstants");
-const coreSettingsService = require("../Services/coreSettingAPIService");
 const generalMethodService = require("../Services/generalMethodAPIService");
-const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
-const adminAPIService = require("../Services/adminAPIService");
 const ticketAPIService = require("../Services/ticketAPIService");
 const { project, user, status } = require("../models");
 const db = require("../models");
 const Op = db.Sequelize.Op;
 const emailAPIService = require("../Services/emailAPIService");
 const emailTemplates = require("../emailTemplates/emailTemplate");
-const moment = require("moment");
 const { VIEW_TICKET } = require("../constants/constants")
 
 exports.createTicket = async (req, res) => {

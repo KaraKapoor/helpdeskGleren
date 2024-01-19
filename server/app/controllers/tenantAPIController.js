@@ -1,6 +1,4 @@
 const errorConstants = require("../constants/errorConstants");
-const coreSettingsService = require("../Services/coreSettingAPIService");
-const generalMethodService = require("../Services/generalMethodAPIService");
 const tenantAPIService = require("../Services/tenantAPIService");
 const userAPIService = require("../Services/userAPIService");
 

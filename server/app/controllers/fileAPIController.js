@@ -7,9 +7,7 @@ const userAPIService = require("../Services/userAPIService");
 const fileAPIService = require("../Services/fileAPIService");
 const generalMethodAPIService = require("../Services/generalMethodAPIService");
 const uploads = db.uploads;
-const comment = db.comments;
 const Op = db.Sequelize.Op;
-const ticket = db.ticket
 
 exports.uploadFile = async (req, res) => {
     try {
