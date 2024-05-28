@@ -140,7 +140,7 @@ exports.createStatus = async (req, res) => {
 
 
     } catch (exception) {
-        console.log("Exception is \n" + exception);
+        console.log(exception);
         return res.status(200).send({
             error: errorConstants.SOME_ERROR_OCCURRED,
             status: false
